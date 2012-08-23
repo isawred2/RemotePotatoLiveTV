@@ -1,0 +1,14 @@
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\bin\Debug\MSEPG.dll
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\bin\Debug\MSEPG.pdb
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\bin\Debug\CommonEPG.dll
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\bin\Debug\CommonEPG.pdb
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\obj\Debug\MSEPG.dll
+C:\Users\carl\Visual Studio\Projects\MSEPGDataSource\MSEPGDataSource\obj\Debug\MSEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Debug\MSEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Debug\MSEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Debug\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Debug\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Debug\MSEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Debug\MSEPG.pdb
