@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 using FatAttitude.MediaStreamer.HLS;
+using System.Globalization;
 
 
 namespace FatAttitude.MediaStreamer
@@ -17,7 +18,6 @@ namespace FatAttitude.MediaStreamer
         public bool SettingsDefaultDebugAdvanced { get; set; }
         public bool Transcode { get; set; }
         public bool IsRunning;
-        private bool LiveTv = true;
         Thread thrdOnEOSTranscodeNextPart;
         int StartAtSeconds;
         
@@ -25,12 +25,14 @@ namespace FatAttitude.MediaStreamer
         SegmentStore Store;
         private ShellCmdRunner shellRunner;
         private CommandArguments cmdArguments;
-        
+
         private CommandArguments segmentArguments;
         public VideoEncodingParameters EncodingParameters;
         public string MapArgumentsString;
         private string PathToTools;
-        
+
+        private bool IsEOSDetected;
+        private double EOSTime;
 
         public FFHLSRunner(string pathToTools, SegmentStore segStore)
         {
@@ -61,14 +63,14 @@ namespace FatAttitude.MediaStreamer
                 Abort();
             }
 
-            if (LiveTv)
+            if (VideoEncodingParameters.LiveTV)
             {
                 if (thrdOnEOSTranscodeNextPart != null)
                 {
                     thrdOnEOSTranscodeNextPart.Abort();
                 }
                 thrdOnEOSTranscodeNextPart = new Thread(new ThreadStart(OnEOSTranscodeNextPart));
-                thrdOnEOSTranscodeNextPart.Priority = ThreadPriority.BelowNormal;
+                thrdOnEOSTranscodeNextPart.Priority = ThreadPriority.Highest;
                 thrdOnEOSTranscodeNextPart.Start();
                 IsRunning = true;
             }
@@ -82,12 +84,13 @@ namespace FatAttitude.MediaStreamer
 
             return IsRunning;
         }
-        void Initialise(int offset)
+        
+        void Initialise(double offset)
         {
             shellRunner = new ShellCmdRunner();
             shellRunner.ProcessFinished += new EventHandler<GenericEventArgs<processfinishedEventArgs>>(shellRunner_ProcessFinished);
             shellRunner.FileName = Path.Combine(PathToTools, "ffmpeg.exe");
-            shellRunner.StandardErrorReceivedLine += new EventHandler<GenericEventArgs<string>>(shellRunner_StandardErrorReceivedLine);
+            shellRunner.StandardErrorReceivedLine += new EventHandler<GenericEventArgs<string>>(shellRunner_StandardErrorReceivedLine);  // also used for EOS detection
             shellRunner.StandardOutputReceived += new EventHandler<GenericEventArgs<byte[]>>(shellRunner_StandardOutputReceived);
 
             // Incoming data from ffmpeg STDOUt - mangements
@@ -104,26 +107,35 @@ namespace FatAttitude.MediaStreamer
 
         void OnEOSTranscodeNextPart()
         {
-            //                DateTime endAt = DateTime.Now.AddSeconds(6);
-//            Initialise(StartAtSeconds);
             IsReStarting = false;
 
-            DateTime endAt = DateTime.Now;
-            int i = 0;
+            EOSTime = 0;
+            IsEOSDetected = true;
+            string txtResult="";
+
+            SendDebugMessage("Going to play Live TV");
             while (true)  //have to find a stop condition, e.g. when user hits backspace on android
             {
-                if ((DateTime.Now.CompareTo(endAt) > 0))//EOSdetected)
-                {
-                    endAt = DateTime.Now.AddSeconds(60);
-                    SendDebugMessage("Going to run another ffmpeg at "+i+" seconds");
+                    if (IsEOSDetected)
+                    {
+                        //First stop old runner, if any
+                        if (IsRunning)
+                        {
+                            IsReStarting = true;
+                            Abort();
+                        }
 
-                    Initialise(i); //EOSTime;
-                    i += 60;
+                        SendDebugMessage("Going to run another ffmpeg at " + EOSTime + " seconds");
 
-                    string txtResult="";
-                    IsRunning = shellRunner.Start(ref txtResult);
-                }
+                        Initialise(EOSTime);
+
+                        IsReStarting = false;
+                        IsRunning = shellRunner.Start(ref txtResult);
+                        IsEOSDetected = false;
+                    }
             }
+            Abort();
+            VideoEncodingParameters.LiveTV = false; //wrong 1.now next stream no livetv 2. should be per stream!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
         public void Abort()
@@ -193,6 +205,7 @@ namespace FatAttitude.MediaStreamer
             if (Delimiter == null) Delimiter = System.Text.UTF8Encoding.UTF8.GetBytes("-SEGBREAK-");
             delimiterLength = 10;
         }
+
         void shellRunner_StandardOutputReceived(object sender, GenericEventArgs<byte[]> e)
         {
             if (sender != shellRunner) return;  // an old shell runner
@@ -227,9 +240,12 @@ namespace FatAttitude.MediaStreamer
                     {
                         if (bw.BaseStream.Position < MaxIncomingDataSize)
                         {
-                            // dequeue the first byte (FIFO) and write it to disk
-                            bw.Write(byteHoldingBuffer[0]);
-                            byteHoldingBuffer.RemoveAt(0);
+                            if (byteHoldingBuffer.Count > 0)
+                            {
+                                // dequeue the first byte (FIFO) and write it to disk
+                                bw.Write(byteHoldingBuffer[0]);
+                                byteHoldingBuffer.RemoveAt(0);
+                            }
                         }
                         else
                         {
@@ -243,16 +259,19 @@ namespace FatAttitude.MediaStreamer
         }
         void processRemainingBytes()
         {
-            while (byteHoldingBuffer.Count > 0)
+            lock (byteHoldingBuffer)
             {
-                if (bw.BaseStream.Position < MaxIncomingDataSize)
+                while (byteHoldingBuffer.Count > 0)
                 {
-                    // dequeue the first byte (FIFO) and write it to disk
-                    bw.Write(byteHoldingBuffer[0]);
-                    byteHoldingBuffer.RemoveAt(0);
+                    if (bw.BaseStream.Position < MaxIncomingDataSize)
+                    {
+                        // dequeue the first byte (FIFO) and write it to disk
+                        bw.Write(byteHoldingBuffer[0]);
+                        byteHoldingBuffer.RemoveAt(0);
+                    }
+                    else
+                        SendDebugMessage("WARNING: Data spill; segment exceeded max (" + MaxIncomingDataSize.ToString() + ") size.");
                 }
-                else
-                    SendDebugMessage("WARNING: Data spill; segment exceeded max (" + MaxIncomingDataSize.ToString() + ") size.");
             }
         }
         void switchToNextSegment()
@@ -328,7 +347,7 @@ namespace FatAttitude.MediaStreamer
          * -ar 48000
          * -ac 2 
          */
-        void ConstructArguments(int offset)
+        void ConstructArguments(double offset)
         {
             // Use either the standard ffmpeg template or a custom one
             string strFFMpegTemplate = (string.IsNullOrWhiteSpace(EncodingParameters.CustomFFMpegTemplate)) ?
@@ -458,13 +477,30 @@ namespace FatAttitude.MediaStreamer
 
         #region Debug
         public event EventHandler<GenericEventArgs<string>> DebugMessage;
+        private bool FirstSignOfEOS=false;
         void shellRunner_StandardErrorReceivedLine(object sender, GenericEventArgs<string> e)
         {
             if (sender != shellRunner) return;
             if (e.Value == null) return; // this is actually required.  wow.
 
+
             if (SettingsDefaultDebugAdvanced)
                 SendDebugMessage("[C]" + e.Value);
+
+
+            FirstSignOfEOS = (FirstSignOfEOS || (e.Value.Contains("Warning MVs not available")));//||(e.Value.Contains("Error while decoding stream"));
+            if (FirstSignOfEOS) 
+            {
+                if (e.Value.Contains("time=")) 
+                {
+                    string doubleValue = e.Value.Substring(e.Value.IndexOf("time=") + 5);
+                    doubleValue = doubleValue.Substring(0,doubleValue.IndexOf("bitrate")-1);
+                    double.TryParse(doubleValue, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out EOSTime);//extract the time
+
+                    IsEOSDetected = true;
+                    FirstSignOfEOS = false;
+                }
+            }
         }
 
         void SendDebugMessage(string txtDebug)

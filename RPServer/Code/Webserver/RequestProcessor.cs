@@ -1239,8 +1239,14 @@ namespace RemotePotatoServer
 
                     XMLresponse = XMLHelper.Serialize<MediaStreamingResult>(streamResult);
                 }
+                else if (action.StartsWith("xml/livetvstop"))
+                {
+                    VideoEncodingParameters.LiveTV = false; // should be per stream!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    XMLresponse = XMLHelper.Serialize<string>("For now LiveTV does not really stop, but makes sure old reliable transcoder is used next time.");
+                }
                 else if (action.StartsWith("xml/livetv"))
                 {
+                    VideoEncodingParameters.LiveTV = true;// should be per stream!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     RecordingRequest newRR = null;
 
                     bool failedValidation = false;

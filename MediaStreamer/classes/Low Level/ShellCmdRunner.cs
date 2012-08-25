@@ -18,6 +18,7 @@ namespace FatAttitude.MediaStreamer
 
         // Private members
         public bool IsRunning;
+
         private Process runningProcess;
         Thread thrdReadStandardOut;
         object RunningProcessLock = new object();
@@ -40,8 +41,8 @@ namespace FatAttitude.MediaStreamer
                 string strQuotedFileName = @"""" + shortFN + @"""";
                 psi.FileName = strQuotedFileName;
 
-                string strStartTime = "";
-                psi.Arguments = this.Arguments.Replace("{STARTTIME}", strStartTime);
+                string strstarttime = "";
+                psi.Arguments = this.Arguments.Replace("{starttime}", strstarttime);
 
                 // Redirect error
                 psi.RedirectStandardError = true;

@@ -28,6 +28,7 @@ namespace FatAttitude.MediaStreamer
         public int SegmentDuration { get; set; }
         public bool OutputSquarePixels { get; set; }
         public bool DeInterlace { get; set; }
+        public static bool LiveTV { get; set; }
 
         public VideoEncodingParameters()
         {

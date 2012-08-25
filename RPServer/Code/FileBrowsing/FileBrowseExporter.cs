@@ -6,6 +6,7 @@ using System.Text;
 using CommonEPG;
 using FatAttitude.HTML;
 using RemotePotatoServer.Properties;
+using FatAttitude.MediaStreamer;
 
 
 namespace RemotePotatoServer
@@ -386,6 +387,8 @@ namespace RemotePotatoServer
         }
         public static TimeSpan DurationOfMediaFile_OSSpecific(string FN)
         {
+            if (VideoEncodingParameters.LiveTV) return new TimeSpan(1, 0, 0, 0);
+            
             CreateShellHelperIfNull();
 
             if (Functions.OSSupportsMediaDurationInShell)
