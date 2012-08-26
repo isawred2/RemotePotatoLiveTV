@@ -117,10 +117,10 @@ namespace FatAttitude.MediaStreamer
 
             
             
-            Thread.Sleep(3000); // tijdelijk s.t. eosdetected canb be reda fro erorrs
+            Thread.Sleep(3000); // tijdelijk s.t. eosdetected can be reed from erorrsinputstream
 
 
-            if (VideoEncodingParameters.EOSDetected)
+            if (VideoEncodingParameters.LiveTV)// VideoEncodingParameters.EOSDetected)
             {
                 VideoEncodingParameters.EOSDetected = false;
                 SendDebugMessage("FF Runner: Shell process is finished in live TV.  (");

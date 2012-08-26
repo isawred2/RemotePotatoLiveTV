@@ -39,3 +39,14 @@ D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Stud
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\RPKeySender\obj\x86\Release\RPKeySender.csproj.GenerateResource.Cache
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\RPKeySender\obj\x86\Release\RPKeySender.exe
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\RPKeySender\obj\x86\Release\RPKeySender.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.exe.config
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.exe
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\InputSimulator.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.Form1.resources
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.Properties.Resources.resources
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.exe
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.pdb

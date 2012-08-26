@@ -16,3 +16,15 @@ D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Stud
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\UltraID3Lib.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb

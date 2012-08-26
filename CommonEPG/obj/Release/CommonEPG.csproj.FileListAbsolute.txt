@@ -11,3 +11,8 @@ D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Stud
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\CommonEPG\bin\Release\CommonEPG.pdb
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\CommonEPG\obj\Release\CommonEPG.dll
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\CommonEPG\obj\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\ResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.pdb
