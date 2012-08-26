@@ -29,6 +29,7 @@ namespace FatAttitude.MediaStreamer
         public bool OutputSquarePixels { get; set; }
         public bool DeInterlace { get; set; }
         public static bool LiveTV { get; set; }
+        public static bool EOSDetected { get; set; }
 
         public VideoEncodingParameters()
         {
@@ -57,6 +58,8 @@ namespace FatAttitude.MediaStreamer
             DeInterlace = false;
             CustomFFMpegTemplate = "";
             AudioVolumePercent = 100;
+
+            EOSDetected = false;
         }
 
         // Derived

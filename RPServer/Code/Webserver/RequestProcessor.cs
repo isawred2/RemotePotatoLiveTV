@@ -1229,8 +1229,8 @@ namespace RemotePotatoServer
                 }
                 else if (action.StartsWith("xml/mediastream/start/bymediastreamingrequest"))
                 {
-                    MediaStreamingResult streamResult;
                     MediaStreamingRequest streamRq = XMLHelper.Deserialize<MediaStreamingRequest>(PostObjects);
+                    MediaStreamingResult streamResult;
 
                     if (streamRq != null)
                         streamResult = StreamingManager.Default.StartStreamer(streamRq, Request.UserHostName);

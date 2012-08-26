@@ -27,7 +27,6 @@ namespace FatAttitude.MediaStreamer.HLS
         {
             lock (syncLock)
             {
-
                 bool stopWaiting = false;
                 if (!DoesFileExistForSegmentNumber(SegNumber))
                 {
@@ -37,7 +36,7 @@ namespace FatAttitude.MediaStreamer.HLS
                     {
                         Monitor.Wait(syncLock);
 
-                        stopWaiting = (! segmentsWaiting.Contains(SegNumber));
+                        stopWaiting = (!segmentsWaiting.Contains(SegNumber));
                     }
                     while (
                     (!DoesFileExistForSegmentNumber(SegNumber)) &&
@@ -55,6 +54,7 @@ namespace FatAttitude.MediaStreamer.HLS
                 return true;
             }
         }
+
         public void CancelWaitingSegments()
         {
             lock (syncLock)

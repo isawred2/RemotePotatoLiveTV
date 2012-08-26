@@ -19,6 +19,7 @@ namespace FatAttitude.MediaStreamer.HLS
         FFHLSRunner Runner;
 
         const int NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON = 5;
+        const int NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV = 1;
 
         // Constructor
         internal SegmentStoreBroker(string ID, MediaStreamingRequest _request, string pathToTools)
@@ -155,14 +156,17 @@ namespace FatAttitude.MediaStreamer.HLS
                         string txtResult = "";
                         if (!Start(SegmentNumber, ref txtResult))
                         {
+                            SendDebugMessage("Segment could not be retrieved due to the FFRunner failing to start : " + txtResult);
                             txtError = "Segment could not be retrieved due to the FFRunner failing to start : " + txtResult;
                             return false;
                         }
 
                         // RUNNER re-started, so let's recurse as the segment availability will now be 'coming soon'
                         // Recurse
-                        if ((recurseLevel++) < 4)
+                        if ((recurseLevel++) < 4) {
+                            SendDebugMessage("GetSegment recursing level: " + recurseLevel);
                             return GetSegment(recurseLevel, SegmentNumber, ref Data, ref txtError);
+                        }
                         else
                         {
                             txtError = "Recursion level overflow.";
@@ -204,7 +208,7 @@ namespace FatAttitude.MediaStreamer.HLS
                 segAvailability = SegmentAvailabilities.RequiresSeek;
                 return false;
             }
-            if (difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON)
+            if ((!VideoEncodingParameters.LiveTV && difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON) || (VideoEncodingParameters.LiveTV && difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV))
             {
                 SendDebugMessage("Broker] Seg " + segmentNumber.ToString() + " is a huge " + difference + " segs away from arrival - require seek.");
                 segAvailability = SegmentAvailabilities.RequiresSeek;
