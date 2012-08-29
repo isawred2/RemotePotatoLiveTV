@@ -22,6 +22,7 @@ using FatAttitude.WTVTranscoder;
 using FatAttitude.MediaStreamer;
 using FatAttitude;
 using FatAttitude.HTML;
+using Microsoft.MediaCenter.TV.Scheduling;
 
 namespace RemotePotatoServer
 {
@@ -1768,24 +1769,24 @@ namespace RemotePotatoServer
                 return "TV is not configured.";
 
             ////// Following code: Note can only cancel up to 6 from now (but also those scheduled recordings that are "occurring"=running), only works on windows 7?
-            ////// Filename should be unique, otherwise onle one (arbitrary) occurence of fiulename will be canceled.
+            ////// Filename should be unique, otherwise onle one (arbitrary) occurence of filename will be canceled.
             //EventSchedule m_eventSchedule;
             //List<ScheduleEvent> events = null;
             //List<ScheduleEvent> events2 = null;
 
-            //try
-            //{
-            //    m_eventSchedule = new EventSchedule();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return "Error: " + ex.Message.ToString();
-            //}
+            ////try
+            ////{
+            ////    m_eventSchedule = new EventSchedule();
+            ////}
+            ////catch (Exception ex)
+            ////{
+            ////    return "Error: " + ex.Message.ToString();
+            ////}
 
             //try
             //{
-            //    events = m_eventSchedule.GetScheduleEvents(DateTime.MinValue, DateTime.MaxValue, ScheduleEventStates.IsOccurring) as List<ScheduleEvent>;
-            //    events2 = m_eventSchedule.GetScheduleEvents(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(6), ScheduleEventStates.WillOccur) as List<ScheduleEvent>;
+            //    events = GetScheduleEvents(DateTime.MinValue, DateTime.MaxValue, ScheduleEventStates.IsOccurring) as List<ScheduleEvent>;
+            //    events2 = GetScheduleEvents(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(6), ScheduleEventStates.WillOccur) as List<ScheduleEvent>;
 
             //    foreach (ScheduleEvent item in events2)
             //        events.Add(item);
@@ -1802,9 +1803,9 @@ namespace RemotePotatoServer
             //}
             //catch (Exception ex)
             //{
-            return "Error cancelling recording: ";// + ex.Message.ToString();
+            //return "Error cancelling recording: ";// + ex.Message.ToString();
             //}
-            //return FilenameContainingTitle + " not found.";
+            return FilenameContainingTitle + " not found.";
         }
 
         bool fileNameStartsWithAnyRecordedTVFolder(string txtFilename)

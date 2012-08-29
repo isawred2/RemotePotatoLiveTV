@@ -12,6 +12,7 @@ using CommonEPG;
 using System.Globalization;
 
 using System.Diagnostics;
+using ehiProxy;
 
 /*
  *  The lowest-level methods for interfacing with native WMC .NET classes
@@ -42,7 +43,7 @@ namespace CommonEPG
                 os.Dispose();
             }
 
-            
+
         }
         public bool Init()
         {
@@ -58,7 +59,7 @@ namespace CommonEPG
                 string providerPassword = Convert.ToBase64String(epgHashed);
                 DebugNormal("Opening store.");
                 os = ObjectStore.Open(providerName, providerPassword);
-                DebugNormal("Store opened.");               
+                DebugNormal("Store opened.");
 
                 DebugNormal("Creating scheduler.");
                 recScheduler = new Scheduler(os, ScheduleConflictSource.AutomaticUpdate);
@@ -83,7 +84,7 @@ namespace CommonEPG
         EventWaitHandle ewhScheduleRecording = null; // WAIT HANDLE to convert async to sync
         public RecordingResult ScheduleInitialFailureResult;
         public bool ScheduleInitialSucceeded;
-        public Request requestInProgress; 
+        public Request requestInProgress;
 
         //Request rqInProgress;
         public void ScheduleRecording(RecordingRequest rr, EventWaitHandle _ewh)
@@ -95,7 +96,7 @@ namespace CommonEPG
             ScheduleInitialSucceeded = false;
 
             // Channel check
-            if (rr.MCChannelID < 1 )
+            if (rr.MCChannelID < 1)
             {
                 ScheduleInitialFailureResult.ErrorMessage = "No MC Channel ID was specified.";
                 ScheduleInitialFailureResult.RequestResult = RecordingResult.RequestResults.FailedWithError;
@@ -104,7 +105,7 @@ namespace CommonEPG
             }
 
             // Too much padding
-            if ((rr.Postpadding > 1800) && (rr.Prepadding > 1800) )
+            if ((rr.Postpadding > 1800) && (rr.Prepadding > 1800))
             {
                 ScheduleInitialFailureResult.ErrorMessage = "Pre or Post padding must be less than 30 minutes.";
                 ScheduleInitialFailureResult.RequestResult = RecordingResult.RequestResults.FailedWithError;
@@ -139,7 +140,7 @@ namespace CommonEPG
 
                 schedEntry = (ScheduleEntry)sto;
             }
-            
+
             // Store request
             requestInProgress = null;
             switch (rr.RequestType)
@@ -186,7 +187,7 @@ namespace CommonEPG
                     //sreq.Airtime
                     //sreq.DaysOfWeek
                     // sreq.ScheduleLimit - maximum number to schedule
-                    
+
 
                     // If keep until is 'latest episodes', set the number here...
                     if (rr.KeepUntil == KeepUntilTypes.LatestEpisodes)
@@ -194,9 +195,9 @@ namespace CommonEPG
                         if (rr.KeepNumberOfEpisodes > 0)
                             sreq.RecordingLimit = rr.KeepNumberOfEpisodes;
                     }
-                    
 
-                    
+
+
                     requestInProgress = (Request)sreq;
                     break;
 
@@ -208,7 +209,7 @@ namespace CommonEPG
                     break;
 
                 case RecordingRequestType.Manual:
-                    
+
                     ManualRequest mreq = recScheduler.CreateManualRequest(rr.StartTime, TimeSpan.FromMinutes(rr.Duration), channel, rr.ManualRecordingName, "", "", "", (System.Globalization.CultureInfo.CurrentCulture.LCID), false);
                     requestInProgress = (Request)mreq;
                     break;
@@ -220,7 +221,8 @@ namespace CommonEPG
             // Keep Until
             if (rr.KeepUntil != KeepUntilTypes.NotSet)
             {
-                try {
+                try
+                {
                     DebugNormal("OSM: Setting 7MC request keeplength using string " + rr.KeepUntil.ToString());
                     requestInProgress.KeepLength = (KeepLength)Enum.Parse(typeof(KeepLength), rr.KeepUntil.ToString(), true);
                     DebugNormal("OSM: 7MC request keepLength is now " + requestInProgress.KeepLength.ToString());
@@ -314,7 +316,7 @@ namespace CommonEPG
                 if (
                     (recRequest is OneTimeRequest) ||
                     (recRequest is ManualRequest)
-                    ) 
+                    )
                 {
 
                     if (!FoundAnyRequestedProgrammesThatWillRecord)
@@ -337,7 +339,7 @@ namespace CommonEPG
 
                     // Conflicts mean nothing, it comes down to what will actually record, so it's possible
                     // that everything is actually okay. Check now:
-                    if (numberOfRequestedProgrammesThatWillRecord < numberOfRequestedProgrammes)  
+                    if (numberOfRequestedProgrammesThatWillRecord < numberOfRequestedProgrammes)
                     {
                         // Calculate how many are in conflict and warn user
                         recResult.ConflictInfo = "Out of " + numberOfRequestedProgrammes.ToString() + " shows found, " +
@@ -538,14 +540,14 @@ namespace CommonEPG
                         if (rec.Abandoned) continue;  // Not abandoned recordings
                         if (!rec.ShouldRecord)
                         {
-                         //   DebugNormal("Found recording that won't record: " + rec.Id.ToString());
+                            //   DebugNormal("Found recording that won't record: " + rec.Id.ToString());
                             continue; // Not recordings that aren't going to happen
                         }
                         //if (!((rec.StartTime >= dateRange.StartTime) && (rec.StartTime < dateRange.StopTime))) continue;
 
                         RPRecording mcr = Conversion.RPRecordingFromRecording(rec);
                         output.Add(mcr);
-                        
+
                     }
                 }
             }
@@ -554,7 +556,7 @@ namespace CommonEPG
             {
                 DebugNormal("Couldn't get recordings: " + ex.Message);
             }
-        
+
 
             return output;
 
@@ -611,11 +613,11 @@ namespace CommonEPG
             Recording rec = GetRecordingWithID(recordingID);
             if (rec == null) return false;
 
-            RecordingState recState = rec.State;
+            Microsoft.MediaCenter.Pvr.RecordingState recState = rec.State;
             if (
-                (recState == RecordingState.Scheduled) ||
-                (recState == RecordingState.Initializing) ||
-                (recState == RecordingState.None)
+                (recState == Microsoft.MediaCenter.Pvr.RecordingState.Scheduled) ||
+                (recState == Microsoft.MediaCenter.Pvr.RecordingState.Initializing) ||
+                (recState == Microsoft.MediaCenter.Pvr.RecordingState.None)
                 )
             {
                 // Not scheduled - cancel
@@ -624,27 +626,34 @@ namespace CommonEPG
                 else
                     return false;
             }
-            else if (recState == RecordingState.Recording)
+            else if (recState == Microsoft.MediaCenter.Pvr.RecordingState.Recording)  
             {
-                /*
+                if (rec.RequestedProgram != null)
+                {
+                    rec.RequestedProgram.Cancel();
+                    recScheduler.Schedule();
+                    rec.RequestedProgram.Refresh();
+                }
+
+                else
+                    return false;
                 // using ehiproxy
                 //rec.ProgramContent
-                Assignment ass = rec.Assignment;                                
-                ContentRecorder crecorder = ass.ContentRecorder ;
 
-                IRecorder irec = (IRecorder)crecorder;
-                irec.Stop();
+                //Assignment ass = rec.Assignment;
+                //ContentRecorder crecorder = ass.ContentRecorder;
 
-                Devices devs = crecorder.Devices;
-                
-                foreach (Device dv in devs)
-                {
-                    string rID = dv.RecorderId;
-                    DebugInfoOnly("recorder ID: " + rID);
+                //IRecorder irec = (IRecorder)crecorder;
+                //irec.Stop();
 
-                }
-                */
-                return false;
+                //Devices devs = crecorder.Devices;
+
+                //foreach (Device dv in devs)
+                //{
+                //    string rID = dv.RecorderId;
+                //    DebugInfoOnly("recorder ID: " + rID);
+
+                //}
             }
 
             return true;
@@ -730,11 +739,11 @@ namespace CommonEPG
                         if (!String.IsNullOrEmpty(p.Title))
                             lstSearchFields.Add(p.Title);
 
-                    if ( (searchTextType == EPGSearchTextType.TitleAndEpisodeTitle) || (searchTextType == EPGSearchTextType.TitlesAndDescription) || (searchTextType == EPGSearchTextType.AllTextFields) )
+                    if ((searchTextType == EPGSearchTextType.TitleAndEpisodeTitle) || (searchTextType == EPGSearchTextType.TitlesAndDescription) || (searchTextType == EPGSearchTextType.AllTextFields))
                         if (!String.IsNullOrEmpty(p.EpisodeTitle))
                             lstSearchFields.Add(p.EpisodeTitle);
 
-                    if ((searchTextType == EPGSearchTextType.TitlesAndDescription) || (searchTextType == EPGSearchTextType.AllTextFields) )
+                    if ((searchTextType == EPGSearchTextType.TitlesAndDescription) || (searchTextType == EPGSearchTextType.AllTextFields))
                         if (!string.IsNullOrEmpty(p.Description))
                             lstSearchFields.Add(p.Description);
 
@@ -761,10 +770,10 @@ namespace CommonEPG
                 if (limiter < 1) break;
             }
 
-                // Sort by start time (prob not necessary)
-                CommonEPG.Comparers.TVProgrammeStartTimeComparer comparer = new CommonEPG.Comparers.TVProgrammeStartTimeComparer();
-                mainOutput.Sort(comparer);
-            
+            // Sort by start time (prob not necessary)
+            CommonEPG.Comparers.TVProgrammeStartTimeComparer comparer = new CommonEPG.Comparers.TVProgrammeStartTimeComparer();
+            mainOutput.Sort(comparer);
+
 
             timePerformance.Stop();
             DebugNormal("Time to search EPG programmes : " + timePerformance.Elapsed.TotalMilliseconds.ToString() + "ms");
@@ -802,7 +811,7 @@ namespace CommonEPG
         }
         #endregion
 
-        #region Channels 
+        #region Channels
         // Top Level - Data Retrieval
         public Dictionary<string, TVService> GetAllServices(bool mergeLineUps, bool includeInternetTV, bool includeHiddenChannels, bool blockUserHidden, bool blockUserAdded, bool blockUserMapped, bool blockUnknown, bool DebugChannelList)
         {
@@ -821,11 +830,11 @@ namespace CommonEPG
                     Service svc = c.Service;
                     string svdID = (svc != null) ? svc.Id.ToString() : "<NULL>";
                     int svcType = (svc != null) ? svc.ServiceType : -1;
-                    DebugNormal("Found channel:Callsign:" + c.CallSign + "|ChannelType:" + 
-                        ct.ToString() + "|ServiceType:" + svcType.ToString() +  "|UserBlockedState:" + c.UserBlockedState.ToString() + 
+                    DebugNormal("Found channel:Callsign:" + c.CallSign + "|ChannelType:" +
+                        ct.ToString() + "|ServiceType:" + svcType.ToString() + "|UserBlockedState:" + c.UserBlockedState.ToString() +
                         "|Visibility:" + c.Visibility.ToString() + "|Number:" + c.ChannelNumber.ToString() +
                         "." + c.SubNumber.ToString() + "|ChanNumberPriority:" + c.ChannelNumberPriority.ToString() +
-                        "|ServiceID:" + svdID  + "|ServiceString:" + svc.ToString() + ".");
+                        "|ServiceID:" + svdID + "|ServiceString:" + svc.ToString() + ".");
                 }
 
 
@@ -880,11 +889,11 @@ namespace CommonEPG
                 if (allowChannel)
                 {
                     TVService tvs = Conversion.TVServiceFromChannel(c);
-                    lstOutput.Add(tvs);                        
+                    lstOutput.Add(tvs);
                 }
                 else
                 {
-                    if (DebugChannelList)     DebugNormal("(channel " + c.CallSign + " not added due to settings restrictions)");
+                    if (DebugChannelList) DebugNormal("(channel " + c.CallSign + " not added due to settings restrictions)");
                 }
             }
 
@@ -893,7 +902,7 @@ namespace CommonEPG
 
             // Now sort by channel number
             lstOutput.Sort(new CommonEPG.Comparers.TVCServiceNumComparer());
-            
+
             // Now add into dictionary, ensuring unique
             Dictionary<string, TVService> output = new Dictionary<string, TVService>();
             foreach (TVService tvs in lstOutput)
@@ -914,13 +923,13 @@ namespace CommonEPG
             if (faves == null) return;
             foreach (FavoriteLineup lineup in faves)
             {
-                if ( (lineup == null) || (string.IsNullOrEmpty(lineup.Name ) ) ) continue;
+                if ((lineup == null) || (string.IsNullOrEmpty(lineup.Name))) continue;
 
                 List<Channel> chans = lineup.Channels.ToList();
                 foreach (Channel chan in chans)
                 {
                     if (chan == null) continue;
-                    if (! chan.IsLatestVersion) continue;
+                    if (!chan.IsLatestVersion) continue;
 
                     Service svc = chan.Service;
                     if (svc == null) continue;
@@ -982,7 +991,7 @@ namespace CommonEPG
 
         public void RemoveAllServicesFromRemotePotatoLineUp()
         {
-            if (!DoesRemotePotatoLineUpExist())  return;
+            if (!DoesRemotePotatoLineUpExist()) return;
 
             FavoriteLineup rpFaveLineUp = RemotePotatoFavoriteLineup;
             if (rpFaveLineUp == null) return;
@@ -1003,12 +1012,12 @@ namespace CommonEPG
             {
                 AddRemotePotatoLineUp();
             }
-            
+
             FavoriteLineup rpFaveLineUp = RemotePotatoFavoriteLineup;
             if (rpFaveLineUp == null) return;
 
             Lineup defaultLineup = Util.GetFirstLineup(os);
-            
+
             // CHANNELS TO ADD ***************
             List<StoredObject> channelsToAdd = new List<StoredObject>();
             if (servicesToAdd != null)
@@ -1095,7 +1104,7 @@ namespace CommonEPG
             if (DoesRemotePotatoLineUpExist()) return; // already exists
 
             Lineup lu = Util.GetFirstLineup(os);
-            
+
             FavoriteLineup newFave = new FavoriteLineup(false);
             newFave.Name = "Remote Potato Favorites";
 
@@ -1140,7 +1149,7 @@ namespace CommonEPG
             {
                 if (
                     (lineup != null) &&
-                    (! string.IsNullOrEmpty(lineup.Name ) )
+                    (!string.IsNullOrEmpty(lineup.Name))
                     )
                     FavoriteLineUpNames.Add(lineup.Name);
             }
@@ -1151,7 +1160,7 @@ namespace CommonEPG
         {
             FavoriteLineup flu = new FavoriteLineup(false);
             flu.Name = "Remote Potato Favorites";
-            
+
         }
 
         Service GetServiceByID(string uid)
@@ -1170,7 +1179,7 @@ namespace CommonEPG
                 return null;
             }
         }
-        
+
 
         #endregion
 
@@ -1220,7 +1229,7 @@ namespace CommonEPG
                         if (tvp != null)
                             svcOutput.Add(tvp);
                     }
-                
+
                 }
 
                 // Sort each service's lineup by start time (prob not necessary)
@@ -1228,7 +1237,7 @@ namespace CommonEPG
                 svcOutput.Sort(comparer);
 
                 mainOutput.AddRange(svcOutput);
-                
+
                 svcOutput.Clear();
                 svcOutput = null;
             }
@@ -1244,7 +1253,7 @@ namespace CommonEPG
             ScheduleEntry se;
             if (!GetScheduleEntryWithID(progUID, out se)) return null;
 
-            TVProgramme tvp = Conversion.TVProgrammeFromScheduleEntry(se); 
+            TVProgramme tvp = Conversion.TVProgrammeFromScheduleEntry(se);
 
             return tvp;
         }
@@ -1270,7 +1279,7 @@ namespace CommonEPG
             infoblob.Description = p.Description;  // Also grab programme description - if client is running in turbo mode it will not have this
             infoblob.TVProgrammeId = p.Id.ToString();
             infoblob.Crew = Conversion.TVProgrammeCrewFromProgram(p);
-            
+
             // Other showings in this series
             SeriesInfo series = p.Series;
             if (series != null)
@@ -1393,7 +1402,7 @@ namespace CommonEPG
                             output.Add(c);
                     }
                 }
-                    
+
             }
 
             return output;
