@@ -42,7 +42,7 @@ namespace FatAttitude.MediaStreamer
                 psi.FileName = strQuotedFileName;
 
                 string strstarttime = "";
-                psi.Arguments = this.Arguments.Replace("{starttime}", strstarttime);
+                psi.Arguments = this.Arguments.Replace("{STARTTIME}", strstarttime);
 
                 // Redirect error
                 psi.RedirectStandardError = true;

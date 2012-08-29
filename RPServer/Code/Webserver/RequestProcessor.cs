@@ -22,7 +22,6 @@ using FatAttitude.WTVTranscoder;
 using FatAttitude.MediaStreamer;
 using FatAttitude;
 using FatAttitude.HTML;
-using Microsoft.MediaCenter.TV.Scheduling;
 
 namespace RemotePotatoServer
 {
@@ -1230,8 +1229,8 @@ namespace RemotePotatoServer
                 }
                 else if (action.StartsWith("xml/mediastream/start/bymediastreamingrequest"))
                 {
-                    MediaStreamingRequest streamRq = XMLHelper.Deserialize<MediaStreamingRequest>(PostObjects);
                     MediaStreamingResult streamResult;
+                    MediaStreamingRequest streamRq = XMLHelper.Deserialize<MediaStreamingRequest>(PostObjects);
 
                     if (streamRq != null)
                         streamResult = StreamingManager.Default.StartStreamer(streamRq, Request.UserHostName);

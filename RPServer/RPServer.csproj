@@ -56,10 +56,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ehRecObj, Version=6.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Windows\ehome\ehRecObj.dll</HintPath>
-    </Reference>
     <Reference Include="InputSimulator">
       <HintPath>..\Libraries\InputSimulator.dll</HintPath>
     </Reference>

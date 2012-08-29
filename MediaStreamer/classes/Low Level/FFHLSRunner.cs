@@ -114,14 +114,12 @@ namespace FatAttitude.MediaStreamer
         void shellRunner_ProcessFinished(object sender, GenericEventArgs<processfinishedEventArgs> e)
         {
             if (sender != shellRunner) return;
-
-            
-            
-            Thread.Sleep(3000); // tijdelijk s.t. eosdetected can be reed from erorrsinputstream
-
-
-            if (VideoEncodingParameters.LiveTV)// VideoEncodingParameters.EOSDetected)
+            if (VideoEncodingParameters.LiveTV)
             {
+
+                //Thread.Sleep(3000); // tijdelijk s.t. eosdetected can be reed from erorrsinputstream
+                //if (VideoEncodingParameters.EOSDetected)
+
                 VideoEncodingParameters.EOSDetected = false;
                 SendDebugMessage("FF Runner: Shell process is finished in live TV.  (");
                 shellRunner = null;

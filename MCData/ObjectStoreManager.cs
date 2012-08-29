@@ -12,7 +12,6 @@ using CommonEPG;
 using System.Globalization;
 
 using System.Diagnostics;
-using ehiProxy;
 
 /*
  *  The lowest-level methods for interfacing with native WMC .NET classes
