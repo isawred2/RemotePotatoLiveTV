@@ -1,12 +1,3 @@
-C:\Users\carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\bin\Debug\MediaStreamer.dll
-C:\Users\carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\bin\Debug\MediaStreamer.pdb
-C:\Users\carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\obj\Debug\MediaStreamer.dll
-C:\Users\carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\obj\Debug\MediaStreamer.pdb
-D:\Users\Carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\bin\Debug\MediaStreamer.dll
-D:\Users\Carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\bin\Debug\MediaStreamer.pdb
-D:\Users\Carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\obj\Debug\MediaStreamer.dll
-D:\Users\Carl\Visual Studio\Projects\MediaStreamer\MediaStreamer\obj\Debug\MediaStreamer.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MediaStreamer\bin\Debug\MediaStreamer.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MediaStreamer\bin\Debug\MediaStreamer.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MediaStreamer\obj\Debug\ResolveAssemblyReference.cache

@@ -36,7 +36,7 @@ namespace FatAttitude.MediaStreamer
         /// <param name="pathToTools"></param>
         /// <param name="timeToKeepAlive"></param>
         /// <param name="debugAdvanced"></param>
-        public MediaStreamer(int _ID, MediaStreamingRequest request, string pathToTools, int timeToKeepAlive, bool debugAdvanced)
+        public MediaStreamer(Object caller, int _ID, MediaStreamingRequest request, string pathToTools, int timeToKeepAlive, bool debugAdvanced)
         {
             // Store variables
             ID = _ID;

@@ -84,6 +84,16 @@ namespace FatAttitude
             }
 
             // Calculated properties
+            public double AVSyncDifference
+            {
+                get
+                {
+                    if (Streams == null) return 0.0;
+                    if (Streams.Count < 1) return 0.0;
+
+                    return Streams[0].VideoAudioSync;
+                }
+            }
             public TimeSpan Duration
             {
                 get

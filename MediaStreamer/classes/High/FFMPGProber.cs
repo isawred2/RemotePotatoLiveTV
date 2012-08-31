@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace FatAttitude.MediaStreamer
 {
@@ -240,6 +241,7 @@ nb_frames=6623
             //string[] outputBuffer = str.Split(Environment.NewLine.ToCharArray());
             List<string> outputBuffer = splitByDelimiter(str, Environment.NewLine);
             TimeSpan tsDuration = TimeSpan.FromSeconds(0);
+            double Start = 0.0;
 
             // First get the duration
             foreach (string s in outputBuffer)
@@ -247,9 +249,12 @@ nb_frames=6623
                 string txtOutput = s.ToLowerInvariant();
                 if (txtOutput.Length < 3) continue;
 
-                
+
                 if (txtOutput.StartsWith("duration"))
+                {
                     ProcessDurationLine(txtOutput, out tsDuration);
+                    ProcessStartInLine(txtOutput, out Start);
+                }
             }
 
             // Now loop back through and capture the streams
@@ -267,6 +272,7 @@ nb_frames=6623
                     if (getStreamByParsingLine(txtOutput, out newStream))
                     {
                         newStream.DurationSeconds = tsDuration.TotalSeconds;
+                        newStream.VideoAudioSync = Start;
                         AVStreams.Add(newStream);
                     }
                 }
@@ -455,6 +461,17 @@ nb_frames=6623
             s.StreamIndex = iIndex;
             return true;
         }
+        void ProcessStartInLine(string strText, out double Start){
+            List<string> parts = splitByDelimiter(strText, ",");
+            if (parts.Count < 2)
+            {
+                Start = 0.0;
+                return;
+            }
+            parts[1] = parts[1].Replace("start:", "");
+            double.TryParse(parts[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out Start);//extract the time
+        }
+
         void ProcessDurationLine(string strText, out TimeSpan tsDuration)
         {
             strText = strText.Replace("duration:","");

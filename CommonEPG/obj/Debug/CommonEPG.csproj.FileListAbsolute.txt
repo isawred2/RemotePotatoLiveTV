@@ -1,8 +1,3 @@
-C:\Users\carl\Visual Studio\Projects\CommonEPG\bin\Debug\CommonEPG.dll
-C:\Users\carl\Visual Studio\Projects\CommonEPG\bin\Debug\CommonEPG.pdb
-C:\Users\carl\Visual Studio\Projects\CommonEPG\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\carl\Visual Studio\Projects\CommonEPG\obj\Debug\CommonEPG.dll
-C:\Users\carl\Visual Studio\Projects\CommonEPG\obj\Debug\CommonEPG.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Debug\CommonEPG.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Debug\CommonEPG.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Debug\ResolveAssemblyReference.cache

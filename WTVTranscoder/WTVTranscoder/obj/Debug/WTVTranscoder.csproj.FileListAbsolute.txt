@@ -1,10 +1,3 @@
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\bin\Debug\WTVTranscoder.dll
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\bin\Debug\WTVTranscoder.pdb
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\obj\Debug\WTVTranscoder.dll
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\obj\Debug\WTVTranscoder.pdb
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\bin\Debug\DirectShowLib-2005.dll
-C:\Users\carl\Visual Studio\Projects\WTVTranscoding\Current Solution\WTVTranscoder\bin\Debug\WindowsMediaLib.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Debug\WTVTranscoder.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Debug\WTVTranscoder.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Debug\DirectShowLib-2005.dll

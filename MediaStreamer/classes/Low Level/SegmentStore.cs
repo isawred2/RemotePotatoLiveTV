@@ -55,6 +55,12 @@ namespace FatAttitude.MediaStreamer.HLS
             }
         }
 
+        public string ToString()
+        {
+            return workingFolderPath;
+        }
+
+
         public void CancelWaitingSegments()
         {
             lock (syncLock)

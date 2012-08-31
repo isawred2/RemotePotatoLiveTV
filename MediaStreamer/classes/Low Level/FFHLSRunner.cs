@@ -5,7 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 using FatAttitude.MediaStreamer.HLS;
-
+using System.Globalization;
 
 namespace FatAttitude.MediaStreamer
 {
@@ -28,7 +28,6 @@ namespace FatAttitude.MediaStreamer
         public VideoEncodingParameters EncodingParameters;
         public string MapArgumentsString;
         private string PathToTools;
-        
 
         public FFHLSRunner(string pathToTools, SegmentStore segStore)
         {
@@ -62,6 +61,7 @@ namespace FatAttitude.MediaStreamer
             Initialise();
 
             IsReStarting = false;
+            SendDebugMessage("Running: " + shellRunner.FileName + " " + shellRunner.Arguments);
             IsRunning = shellRunner.Start(ref txtResult);
             return IsRunning;
         }
@@ -124,9 +124,22 @@ namespace FatAttitude.MediaStreamer
                 SendDebugMessage("FF Runner: Shell process is finished in live TV.  (");
                 shellRunner = null;
                 IsRunning = false;
-                string txtResult = "";
-                SendDebugMessage("FF Runner: Restart runner for the final segment and following segments");
-                this.Start(incomingSegment.Number, ref txtResult); 
+                if (!e.Value.WasAborted) //finished normally
+                {
+                    string txtResult = "";
+                    SendDebugMessage("FF Runner: Restart runner for the final segment and following segments");
+
+                    //// for liveTV resolve AV sync issue:
+                    //LiveTVHelpers lth = new LiveTVHelpers();
+                    //DirectoryInfo TempDir = new DirectoryInfo(Store.ToString());
+                    //TempDir = TempDir.Parent;
+                    //EncodingParameters.AVSyncDifference = lth.GetMediaSyncDifference(PathToTools, TempDir.FullName, InputFile); //for LiveTV
+
+                    processRemainingBytes();
+                    finaliseCurrentSegment(); 
+                    this.Start(incomingSegment.Number, ref txtResult);
+                 ///??????   beginNextSegment();
+                }
             }
             else
             {
@@ -135,7 +148,7 @@ namespace FatAttitude.MediaStreamer
                     processRemainingBytes();
                     finaliseCurrentSegment();
                 }
-                SendDebugMessage("FF Runner: Shell process is finished in normal video.  (");
+                SendDebugMessage("FF Runner: Shell process is finished in non-live tv.  (");
                 shellRunner = null;
                 IsRunning = false;
             }
@@ -304,10 +317,14 @@ namespace FatAttitude.MediaStreamer
          */
         void ConstructArguments()
         {
+            string args;
+//            if (VideoEncodingParameters.LiveTV)
+//                args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {AUDIOSYNC} {STARTTIME} {INPUTFILE} {STARTTIME} {INPUTFILE} {ITOFFSET} -map 1:0 -map 0:1 {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
+//            else // never change a winning team:
+            args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
+
             // Use either the standard ffmpeg template or a custom one
-            string strFFMpegTemplate = (string.IsNullOrWhiteSpace(EncodingParameters.CustomFFMpegTemplate)) ?
-                @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y {AUDIOSYNC} -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}" :                
-                EncodingParameters.CustomFFMpegTemplate;
+            string strFFMpegTemplate = (string.IsNullOrWhiteSpace(EncodingParameters.CustomFFMpegTemplate)) ? args :  EncodingParameters.CustomFFMpegTemplate;
 
             // Segment length and offset
             segmentArguments.AddArgCouple("--segment-length", EncodingParameters.SegmentDuration.ToString());
@@ -335,6 +352,10 @@ namespace FatAttitude.MediaStreamer
             // Start at : MUST BE BEFORE INPUT FILE FLAG -i *** !!! 
             string strStartTime = (StartAtSeconds <= 0) ? "" :  ("-ss " + StartAtSeconds.ToString());
             strFFMpegTemplate = strFFMpegTemplate.Replace("{STARTTIME}", strStartTime);
+
+            // for liveTV, -async 1 alone does not seem to work, so:
+            string strVideoAudioSync = (EncodingParameters.AVSyncDifference <= 0) ? "" : ("-itsoffset " + EncodingParameters.AVSyncDifference.ToString(CultureInfo.InvariantCulture));
+            strFFMpegTemplate = strFFMpegTemplate.Replace("{ITOFFSET}", strVideoAudioSync);
 
             // Input file - make short to avoid issues with UTF-8 in batch files  IT IS VERY IMPORTANT WHERE THIS GOES; AFTER SS BUT BEFORE VCODEC AND ACODEC
             string shortInputFile = Functions.FileWriter.GetShortPathName(InputFile);
@@ -452,6 +473,55 @@ namespace FatAttitude.MediaStreamer
         {
             SendDebugMessage(e.Value);
         }
+        //void grabber_DebugMessage(object sender, GenericEventArgs<string> e)
+        //{
+        //    WriteLineToLogFile(e.Value);
+        //}
+        //static object writeLogLock = new object();
+        //public static string DebugLogFileFN;
+        //static List<string> StoredLogEntries;
+        //public static void WriteLineToLogFile(string txtLine)
+        //{
+        //    Monitor.Enter(writeLogLock);
+        //    string logLine = System.String.Format("{0:G}: {1}.", System.DateTime.Now, txtLine);
+
+        //    System.IO.StreamWriter sw;
+        //    try
+        //    {
+        //        sw = System.IO.File.AppendText(DebugLogFileFN);
+        //    }
+        //    catch
+        //    {
+        //        // Store the log entry for later
+        //        if (StoredLogEntries.Count < 150)  // limit
+        //            StoredLogEntries.Add(logLine);
+
+        //        Monitor.Exit(writeLogLock);
+        //        return;
+        //    }
+
+        //    try
+        //    {
+        //        // Write any pending log entries
+        //        if (StoredLogEntries.Count > 0)
+        //        {
+        //            foreach (string s in StoredLogEntries)
+        //            {
+        //                sw.WriteLine(s);
+        //            }
+        //            StoredLogEntries.Clear();
+        //        }
+
+        //        sw.WriteLine(logLine);
+        //    }
+        //    finally
+        //    {
+        //        sw.Close();
+        //    }
+
+        //    Monitor.Exit(writeLogLock);
+        //}
+
         #endregion
     }
 

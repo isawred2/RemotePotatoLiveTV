@@ -11,8 +11,8 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
-using RemotePotatoServer.Properties;
 using Microsoft.Win32;
+using RemotePotatoServer.Properties;
 using System.Runtime.Serialization.Formatters.Binary;
 
 

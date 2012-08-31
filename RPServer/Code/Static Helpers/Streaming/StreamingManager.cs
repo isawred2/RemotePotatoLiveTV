@@ -14,14 +14,14 @@ namespace RemotePotatoServer
 {
     public sealed class StreamingManager
     {
-        Dictionary<int,MediaStreamer> mediaStreamers;
+        Dictionary<int, MediaStreamer> mediaStreamers;
         Timer JanitorTimer;
 
 
         StreamingManager()
         {
             // Set up streamers
-            mediaStreamers = new Dictionary<int,MediaStreamer>();
+            mediaStreamers = new Dictionary<int, MediaStreamer>();
 
             // Delete all streaming files
             DeleteAllStreamingFiles();
@@ -64,11 +64,11 @@ namespace RemotePotatoServer
         }
         int newUniqueID()
         {
-            int newID ;
+            int newID;
             do
             {
                 Random r = new Random();
-                newID = r.Next(10000,99999);
+                newID = r.Next(10000, 99999);
             }
             while (mediaStreamers.ContainsKey(newID));
 
@@ -180,7 +180,7 @@ namespace RemotePotatoServer
         public bool StopStreamer(int streamerID)
         {
             if (Settings.Default.DebugStreaming)
-                Functions.WriteLineToLogFile("StreamingManager: Received stop command for streamer " + streamerID.ToString() );
+                Functions.WriteLineToLogFile("StreamingManager: Received stop command for streamer " + streamerID.ToString());
             try
             {
 
@@ -232,7 +232,7 @@ namespace RemotePotatoServer
 
             try
             {
-                
+
 
                 // Legacy clients (e.g. iOS client) don't have any custom parameters - set them now based on 'Quality'
                 if (!request.UseCustomParameters) // if there are no custom parameters
@@ -249,8 +249,8 @@ namespace RemotePotatoServer
                     request.CustomParameters.AudioVolumePercent = Convert.ToInt32(Settings.Default.StreamingVolumePercent);
 
                 // 2. Custom FFMPEG template
-                if ( (Settings.Default.UseCustomFFMpegTemplate) &  (!string.IsNullOrWhiteSpace(Settings.Default.CustomFFMpegTemplate))  )
-                        request.CustomParameters.CustomFFMpegTemplate = Settings.Default.CustomFFMpegTemplate.Trim();
+                if ((Settings.Default.UseCustomFFMpegTemplate) & (!string.IsNullOrWhiteSpace(Settings.Default.CustomFFMpegTemplate)))
+                    request.CustomParameters.CustomFFMpegTemplate = Settings.Default.CustomFFMpegTemplate.Trim();
 
                 // 3. iPhone 3G requires profile constraints
                 if (request.ClientDevice.ToLowerInvariant() == "iphone3g")
@@ -267,9 +267,12 @@ namespace RemotePotatoServer
                 {
                     request.CustomParameters.DeInterlace = true;
                 }
-                
+
+                // for liveTV resolve AV sync issue:
+                LiveTVHelpers lth = new LiveTVHelpers();
+                request.CustomParameters.AVSyncDifference = lth.GetMediaSyncDifference(Functions.ToolkitFolder, Functions.StreamBaseFolder, request.InputFile); //for LiveTV
                 // Create the streamer
-                MediaStreamer mediaStreamer = new MediaStreamer(newStreamerID, request, Functions.ToolkitFolder, Settings.Default.MediaStreamerSecondsToKeepAlive, Settings.Default.DebugAdvancedStreaming);
+                MediaStreamer mediaStreamer = new MediaStreamer(this, newStreamerID, request, Functions.ToolkitFolder, Settings.Default.MediaStreamerSecondsToKeepAlive, Settings.Default.DebugAdvancedStreaming);
                 mediaStreamer.DebugMessage += new EventHandler<FatAttitude.GenericEventArgs<string>>(mediaStreamer_DebugMessage);
 
                 mediaStreamer.AutoDied += new EventHandler(mediaStreamer_AutoDied);
@@ -310,7 +313,7 @@ namespace RemotePotatoServer
 
             RemoveStreamer(ms.ID);
 
-            
+
         }
         void mediaStreamer_DebugMessage(object sender, FatAttitude.GenericEventArgs<string> e)
         {
@@ -340,7 +343,7 @@ namespace RemotePotatoServer
             MediaStreamer ms = GetStreamerByID(StreamerID);
             TimeSpan mediaDuration = FileBrowseExporter.DurationOfMediaFile_OSSpecific(ms.Request.InputFile);
             int msSegmentDuration = ms.Request.ActualSegmentDuration;
-            
+
             StringBuilder sbIndexFile = new StringBuilder(1000);
 
             sbIndexFile.AppendLine("#EXTM3U");
@@ -369,10 +372,11 @@ namespace RemotePotatoServer
 
             return sbIndexFile.ToString();
         }
-        
+
         #endregion
 
         #region Probing
+
         public TimeSpan GetMediaDuration(string fileName)
         {
             MediaInfoGrabber grabber = new MediaInfoGrabber(Functions.ToolkitFolder, Path.Combine(Functions.StreamBaseFolder, "probe_results"), fileName);
@@ -380,19 +384,19 @@ namespace RemotePotatoServer
             grabber.GetInfo();
             grabber.DebugMessage -= grabber_DebugMessage;
 
-            TimeSpan duration =  (grabber.Info.Success) ? grabber.Info.Duration : new TimeSpan(0);
+            TimeSpan duration = (grabber.Info.Success) ? grabber.Info.Duration : new TimeSpan(0);
 
             return duration;
         }
 
         void grabber_DebugMessage(object sender, FatAttitude.GenericEventArgs<string> e)
         {
-            Functions.WriteLineToLogFileIfSetting(Settings.Default.DebugStreaming, e.Value);   
+            Functions.WriteLineToLogFileIfSetting(Settings.Default.DebugStreaming, e.Value);
         }
         public List<AVStream> ProbeFile(string fileName)
         {
             FFMPGProber prober = new FFMPGProber();
-            
+
             string strTempDirName = "probe_results";
             string OutputBasePath = Path.Combine(Functions.StreamBaseFolder, strTempDirName);
             prober.DebugMessage += new EventHandler<FatAttitude.GenericEventArgs<string>>(prober_DebugMessage);

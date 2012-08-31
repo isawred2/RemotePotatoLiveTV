@@ -100,12 +100,12 @@
     <Compile Include="Code\Low-level objects\RecordingQueue.cs" />
     <Compile Include="Code\Low-level objects\SerializableDictionary.cs" />
     <Compile Include="Code\Static Helpers\AuthSessionHelper.cs" />
+    <Compile Include="Code\Static Helpers\Functions.cs" />
     <Compile Include="Code\Static Helpers\Streaming\DSStreamingManager.cs" />
     <Compile Include="Code\Static Helpers\DNSHelper.cs" />
     <Compile Include="Code\Static Helpers\ErrorHandler.cs" />
     <Compile Include="Code\Static Helpers\ExtensionMethods.cs" />
     <Compile Include="Code\Static Helpers\FileCache.cs" />
-    <Compile Include="Code\Static Helpers\Functions.cs" />
     <Compile Include="Code\Static Helpers\GenericEventArgs.cs" />
     <Compile Include="Code\Static Helpers\HTMLHelper.cs" />
     <Compile Include="Code\Static Helpers\ImageResizer.cs" />

@@ -639,8 +639,6 @@ D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Stud
 D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\RemotePotatoUI\obj\Release\RemotePotatoUI.csproj.GenerateResource.Cache
 C:\Users\stefan verhagen\Downloads\carlospuk-remotepotato-4333062\Server\RemotePotatoUI\bin\Release\RemotePotatoUI.exe.config
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\RemotePotatoUI.exe.config
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.exe
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\static\clientaccesspolicy.xml
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\static\images\btnSaveSong.png
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\static\images\btnStreamSong.png
@@ -847,3 +845,5 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.Properties.Resources.resources
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\GenerateResource.read.1.tlog
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\GenerateResource.write.1.tlog
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.exe
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.pdb

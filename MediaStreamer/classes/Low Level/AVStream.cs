@@ -17,6 +17,7 @@ namespace FatAttitude.MediaStreamer
         public int Width;
         public int Height;
         public double DurationSeconds;
+        public double VideoAudioSync; // used by livetv
         public string SampleAspectRatio;
         public string DisplayAspectRatio;
         public string Language;
