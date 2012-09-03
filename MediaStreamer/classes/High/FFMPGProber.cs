@@ -253,7 +253,7 @@ nb_frames=6623
                 if (txtOutput.StartsWith("duration"))
                 {
                     ProcessDurationLine(txtOutput, out tsDuration);
-                    ProcessStartInLine(txtOutput, out Start);
+                    //ProcessStartInLine(txtOutput, out Start);
                 }
             }
 
@@ -461,16 +461,16 @@ nb_frames=6623
             s.StreamIndex = iIndex;
             return true;
         }
-        void ProcessStartInLine(string strText, out double Start){
-            List<string> parts = splitByDelimiter(strText, ",");
-            if (parts.Count < 2)
-            {
-                Start = 0.0;
-                return;
-            }
-            parts[1] = parts[1].Replace("start:", "");
-            double.TryParse(parts[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out Start);//extract the time
-        }
+        //void ProcessStartInLine(string strText, out double Start){
+        //    List<string> parts = splitByDelimiter(strText, ",");
+        //    if (parts.Count < 2)
+        //    {
+        //        Start = 0.0;
+        //        return;
+        //    }
+        //    parts[1] = parts[1].Replace("start:", "");
+        //    double.TryParse(parts[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out Start);//extract the time
+        //}
 
         void ProcessDurationLine(string strText, out TimeSpan tsDuration)
         {

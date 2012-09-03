@@ -16,6 +16,12 @@ namespace FatAttitude.MediaStreamer
         public string AspectRatio { get; set; } // For older iOS clients
         public string ClientID { get; set; }
         public string ClientDevice { get; set; }
+
+        public bool LiveTV { get; set; }
+        public Int32 DurationLiveTVBlocks { get; set; }
+        //public double AVSyncDifference { get; set; } // for livetv
+        //public static bool EOSDetected { get; set; }
+
         public VideoEncodingParameters CustomParameters { get; set; }
         
 
@@ -24,6 +30,11 @@ namespace FatAttitude.MediaStreamer
             UseAudioStreamIndex = -1;
             ClientID = "";
             ClientDevice = "";
+
+            LiveTV = false;
+            DurationLiveTVBlocks = 1; //minutes
+            //AVSyncDifference = 0.0; // for livetv
+            //EOSDetected = false;
         }
 
         // Derived Property - depends on whether there are Custom Parameters.  

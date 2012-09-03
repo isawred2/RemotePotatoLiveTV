@@ -36,7 +36,7 @@ namespace FatAttitude.MediaStreamer
         /// <param name="pathToTools"></param>
         /// <param name="timeToKeepAlive"></param>
         /// <param name="debugAdvanced"></param>
-        public MediaStreamer(Object caller, int _ID, MediaStreamingRequest request, string pathToTools, int timeToKeepAlive, bool debugAdvanced)
+        public MediaStreamer(int _ID, MediaStreamingRequest request, string pathToTools, int timeToKeepAlive, bool debugAdvanced)
         {
             // Store variables
             ID = _ID;
@@ -152,12 +152,20 @@ namespace FatAttitude.MediaStreamer
 
         #region Auto Stop
         DateTime lastContactAtTime;
-        const int SECONDS_BEFORE_AUTO_PAUSE = 35;
+        int SECONDS_BEFORE_AUTO_PAUSE;
         const int SECONDS_BEFORE_AUTO_DIE = 6000; // 10 minutes
         bool isPaused;
         public event EventHandler AutoDied;
         void AutoPause_Tick()
         {
+            if (Request.LiveTV)
+            {
+                SECONDS_BEFORE_AUTO_PAUSE = 100;
+            }
+            else
+            {
+                SECONDS_BEFORE_AUTO_PAUSE = 35;
+            }
             if (! everStartedRunner) return;  // Don't die before we've even started!
 
             if (!isAborted)

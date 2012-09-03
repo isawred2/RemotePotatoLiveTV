@@ -387,8 +387,8 @@ namespace RemotePotatoServer
         }
         public static TimeSpan DurationOfMediaFile_OSSpecific(string FN)
         {
-            if (VideoEncodingParameters.LiveTV) return new TimeSpan(1, 0, 0, 0);
-            
+            //if (parameters.LiveTV) return new TimeSpan(1, 0, 0, 0);
+
             CreateShellHelperIfNull();
 
             if (Functions.OSSupportsMediaDurationInShell)

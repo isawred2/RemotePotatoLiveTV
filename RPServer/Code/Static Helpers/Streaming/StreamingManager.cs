@@ -269,10 +269,10 @@ namespace RemotePotatoServer
                 }
 
                 // for liveTV resolve AV sync issue:
-                LiveTVHelpers lth = new LiveTVHelpers();
-                request.CustomParameters.AVSyncDifference = lth.GetMediaSyncDifference(Functions.ToolkitFolder, Functions.StreamBaseFolder, request.InputFile); //for LiveTV
+                //LiveTVHelpers lth = new LiveTVHelpers();
+                //request.CustomParameters.AVSyncDifference = lth.GetMediaSyncDifference(Functions.ToolkitFolder, Functions.StreamBaseFolder, request.InputFile); //for LiveTV
                 // Create the streamer
-                MediaStreamer mediaStreamer = new MediaStreamer(this, newStreamerID, request, Functions.ToolkitFolder, Settings.Default.MediaStreamerSecondsToKeepAlive, Settings.Default.DebugAdvancedStreaming);
+                MediaStreamer mediaStreamer = new MediaStreamer(newStreamerID, request, Functions.ToolkitFolder, Settings.Default.MediaStreamerSecondsToKeepAlive, Settings.Default.DebugAdvancedStreaming);
                 mediaStreamer.DebugMessage += new EventHandler<FatAttitude.GenericEventArgs<string>>(mediaStreamer_DebugMessage);
 
                 mediaStreamer.AutoDied += new EventHandler(mediaStreamer_AutoDied);
@@ -341,7 +341,7 @@ namespace RemotePotatoServer
         public string IndexFileForStreamer(int StreamerID)
         {
             MediaStreamer ms = GetStreamerByID(StreamerID);
-            TimeSpan mediaDuration = FileBrowseExporter.DurationOfMediaFile_OSSpecific(ms.Request.InputFile);
+            TimeSpan mediaDuration = (!ms.Request.LiveTV ? FileBrowseExporter.DurationOfMediaFile_OSSpecific(ms.Request.InputFile) : new TimeSpan (0,ms.Request.DurationLiveTVBlocks,0));
             int msSegmentDuration = ms.Request.ActualSegmentDuration;
 
             StringBuilder sbIndexFile = new StringBuilder(1000);

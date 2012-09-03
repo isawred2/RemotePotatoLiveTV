@@ -19,7 +19,7 @@ namespace FatAttitude.MediaStreamer.HLS
         FFHLSRunner Runner;
 
         const int NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON = 5;
-        const int NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV = 1;
+        const int NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV = 5;
 
         // Constructor
         internal SegmentStoreBroker(string ID, MediaStreamingRequest _request, string pathToTools)
@@ -86,7 +86,7 @@ namespace FatAttitude.MediaStreamer.HLS
 
             SendDebugMessage("broker] Creating new runner.");
 
-            Runner = new FFHLSRunner(PathToTools, store, Request.CustomParameters);
+            Runner = new FFHLSRunner(PathToTools, store, Request);
 
             // Set runner variables
             Runner.SettingsDefaultDebugAdvanced = SettingsDefaultDebugAdvanced;
@@ -208,8 +208,9 @@ namespace FatAttitude.MediaStreamer.HLS
                 segAvailability = SegmentAvailabilities.RequiresSeek;
                 return false;
             }
-            if ((!VideoEncodingParameters.LiveTV && difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON) || (VideoEncodingParameters.LiveTV && difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV))
-            {
+//            if (difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON)
+                if ((!Request.LiveTV && (difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON)) || (Request.LiveTV && (difference >= NUMBER_OF_SEGMENTS_CONSIDERED_COMING_SOON_LIVETV)))
+                {
                 SendDebugMessage("Broker] Seg " + segmentNumber.ToString() + " is a huge " + difference + " segs away from arrival - require seek.");
                 segAvailability = SegmentAvailabilities.RequiresSeek;
                 return false;

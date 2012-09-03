@@ -1241,12 +1241,10 @@ namespace RemotePotatoServer
                 }
                 else if (action.StartsWith("xml/livetvstop"))
                 {
-                    VideoEncodingParameters.LiveTV = false; // should be per stream!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    XMLresponse = XMLHelper.Serialize<string>("For now LiveTV does not really stop, but makes sure old reliable transcoder is used next time.");
+                    XMLresponse = XMLHelper.Serialize<string>("LiveTV does not really stop.");
                 }
                 else if (action.StartsWith("xml/livetv"))
                 {
-                    VideoEncodingParameters.LiveTV = true;// should be per stream!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     RecordingRequest newRR = null;
 
                     bool failedValidation = false;
@@ -1254,13 +1252,14 @@ namespace RemotePotatoServer
 
                     string filenameID = "RMCLiveTV";
 
-                    // DURATION
-                    Int32 tryDuration = 720;
-
-                    // GET SERVICE ID (Channel)
+                    // GET SERVICE ID (Channel) and length
                     action = action.Replace("xml/livetv/", "");
 
-                    string serviceID = action;
+                    string serviceID = action.Substring(0,action.IndexOf("length="));
+
+                    // DURATION
+                    Int32 tryDuration;
+                    Int32.TryParse(action.Substring(action.IndexOf("length=")+7), out tryDuration);
 
                     //  Schedule manual recording
                     {
@@ -1324,7 +1323,7 @@ namespace RemotePotatoServer
                                 if (DateTime.Compare(Begin.AddSeconds(WaitTimeForFileToAppear), DateTime.Now) < 0) break;
                             } while (true);
 
-
+                            //I'm aware this is not as it should be done, should wait for event (for file to appear) instead...
                         }
 
                     }

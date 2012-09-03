@@ -72,7 +72,6 @@
     <Compile Include="classes\High\MediaStreamer.cs" />
     <Compile Include="classes\Low Level\AVStream.cs" />
     <Compile Include="classes\Low Level\Functions2.cs" />
-    <Compile Include="classes\Low Level\LiveTVHelpers.cs" />
     <Compile Include="classes\Low Level\SimpleConcurrentDictionary.cs" />
     <Compile Include="classes\High\FFMPGProber.cs" />
     <Compile Include="classes\Low Level\FFHLSRunner.cs" />
