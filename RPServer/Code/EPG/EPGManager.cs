@@ -557,7 +557,7 @@ namespace RemotePotatoServer
                 if (tvp == null)
                 {
                     Functions.WriteLineToLogFile("Could not find a TV Programme for the recording: " + rec.Title);
-                    continue;  
+                    continue;
                 }
                 if (rec.TVProgramme().StartTimeDT().ToLocalTime().Date == localDate.Date)
                     output.Add(rec);
@@ -565,6 +565,41 @@ namespace RemotePotatoServer
 
             // Sort by start time ascending
             output.Sort(new RPRecordingStartTimeComparer());
+
+            return output;
+        }
+        public static List<RPRecording> AllRecordingsRunningInTimeFrame(DateRange dr)
+        {
+            ReloadAllRecordings();
+            List<RPRecording> output = new List<RPRecording>();
+            foreach (RPRecording rec in AllRecordings.Values)
+            {
+                TVProgramme tvp = rec.TVProgramme();
+                if (tvp == null)
+                {
+                    Functions.WriteLineToLogFile("Could not find a TV Programme for the recording: " + rec.Title);
+                    continue;
+                }
+                if (rec.TVProgramme().StartTimeDT().ToUniversalTime().CompareTo(dr.StopTime) <=0  && rec.TVProgramme().StopTimeDT().ToUniversalTime().CompareTo(dr.StartTime)>=0)
+                    output.Add(rec);
+            }
+
+            // Sort by start time ascending
+            output.Sort(new RPRecordingStartTimeComparer());
+
+            return output;
+        }
+        public static List<RPRecording> AllRecordingsContainsTitle(string contains)
+        {
+            List<RPRecording> output = new List<RPRecording>();
+            foreach (RPRecording rec in AllRecordings.Values)
+            {
+                if (rec.Title.Contains(contains))
+                    output.Add(rec);
+            }
+
+            // Sort by start time ascending
+//            output.Sort(new RPRecordingStartTimeComparer());
 
             return output;
         }
@@ -658,7 +693,7 @@ namespace RemotePotatoServer
             {
                 if (AllRequests.ContainsKey(request.ID))
                     AllRequests.Remove(request.ID);
-
+               
                 AllRequests.Add(request.ID, request);
             }
         }

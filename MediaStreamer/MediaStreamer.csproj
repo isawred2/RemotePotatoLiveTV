@@ -105,6 +105,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShellUtilities\ShellUtilities\ShellUtilities.csproj">
+      <Project>{D9E56E48-9C52-4B10-9955-ED1FFA354BA4}</Project>
+      <Name>ShellUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -297,7 +297,7 @@ namespace RemotePotatoServer
                     target = "http://www.remotepotato.com/changelog.aspx?techpreview=yes#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
                 else
                     target = "http://www.remotepotato.com/changelog.aspx?techpreview=no#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
-                System.Diagnostics.Process.Start(target);
+ //               System.Diagnostics.Process.Start(target);
 
                 Settings.Default.LastUpdateInfoShownForMajVersion = thisVersionMajMinOnly.Major;
                 Settings.Default.LastUpdateInfoShownForMinVersion = thisVersionMajMinOnly.Minor;

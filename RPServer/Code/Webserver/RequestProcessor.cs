@@ -27,6 +27,10 @@ namespace RemotePotatoServer
 {
     class RequestProcessor : IDisposable
     {
+        private List<FileSystemWatcher> WTVwatcher = new List<FileSystemWatcher>();
+        private FileSystemEventHandler WTVfse;
+        private bool LiveTVScheduled = false;
+        private string LiveTVFilename = "";
 
         #region STATIC Methods - tracking Ips, strings, etc
         // Store ip, state data
@@ -64,7 +68,7 @@ namespace RemotePotatoServer
             }
 
             return true;
-            
+
         }
         #endregion
 
@@ -126,7 +130,7 @@ namespace RemotePotatoServer
                 txtResponse += "<li><a href=\"searchbytitle\">Search for a show</a></li>";
                 txtResponse += "<li><a href=\"recordmanual\">Manual Recording</a></li>";
             }
-            
+
             //txtResponse += "<li><a href=\"recordshow_onetime\">Record by show name</a></li>";
             txtResponse += "<li><a href=\"recordedtv\">Recorded TV</a></li>";
 
@@ -146,14 +150,14 @@ namespace RemotePotatoServer
             if (Settings.Default.EnableVideoLibrary)
                 txtResponse += "<li><a href=\"browsevideos\">Video Library</a></li>";
 
-            if (Settings.Default.SilverlightEnabled )
+            if (Settings.Default.SilverlightEnabled)
             {
                 txtResponse += "<li><a href=\"silverlight\">Enhanced View (Silverlight)</a></li>";
             }
 
             if (Settings.Default.EnableMediaCenterSupport)
                 txtResponse += "<li><a href=\"remotecontrol\">Remote Control</a></li>";
-            
+
             txtResponse += "<li><a href='info'>More Information</a></li>";
             txtResponse += "<li><a href='log-out'>Log Out</a></li>";
             txtResponse += "</ul>";
@@ -175,12 +179,12 @@ namespace RemotePotatoServer
             if (string.IsNullOrEmpty(strToken)) return false;
 
             bool result = AuthSessionHelper.Default.AuthenticateToken(strToken, currentClientIP);
-            
+
             if (result)
                 if (Settings.Default.DebugServer) spoolMessage("Webserver: Authentication Cookie OK.");
-            else
-                if (Settings.Default.DebugServer) spoolMessage("Webserver: No authentication cookie or bad authentication cookie.");
-            
+                else
+                    if (Settings.Default.DebugServer) spoolMessage("Webserver: No authentication cookie or bad authentication cookie.");
+
             return result;
         }
         #endregion
@@ -200,7 +204,7 @@ namespace RemotePotatoServer
             // Make the action LOWER CASE (important)
             txtActionOriginalCase = initialUrl;
             if (txtActionOriginalCase.StartsWith("open/"))
-                txtActionOriginalCase = txtActionOriginalCase.Replace("open/","");
+                txtActionOriginalCase = txtActionOriginalCase.Replace("open/", "");
 
             return initialUrl.ToLowerInvariant();
         }
@@ -242,575 +246,575 @@ namespace RemotePotatoServer
             try
             {
 #endif
-            // To store headers and styles
-            List<string> AdditionalStyles = new List<string>();
+                // To store headers and styles
+                List<string> AdditionalStyles = new List<string>();
 
-            // Set HTTP response version to 1.1 (experimental)
-            //  Context.Response.ProtocolVersion = new Version("1.1");
+                // Set HTTP response version to 1.1 (experimental)
+                //  Context.Response.ProtocolVersion = new Version("1.1");
 
-            BrowserSender browserSender = new BrowserSender(Context);
-            currentClientIP = Request.RemoteEndPoint.Address.ToString();
-            qsParams = Request.QueryString;
+                BrowserSender browserSender = new BrowserSender(Context);
+                currentClientIP = Request.RemoteEndPoint.Address.ToString();
+                qsParams = Request.QueryString;
 
-            if (Settings.Default.DebugServer) spoolMessage("Client Connected (" + Request.RemoteEndPoint.Address.ToString() + ")");
+                if (Settings.Default.DebugServer) spoolMessage("Client Connected (" + Request.RemoteEndPoint.Address.ToString() + ")");
 
-            if ((Settings.Default.DebugAdvanced) && (Settings.Default.DebugServer))
-            {
-                spoolMessage("Headers from client:");
-                for (int i = 0; i < Request.Headers.Count; ++i)
-                    spoolMessage(string.Format("{0}: {1}", Request.Headers.Keys[i], Request.Headers[i]));
-            }
+                if ((Settings.Default.DebugAdvanced) && (Settings.Default.DebugServer))
+                {
+                    spoolMessage("Headers from client:");
+                    for (int i = 0; i < Request.Headers.Count; ++i)
+                        spoolMessage(string.Format("{0}: {1}", Request.Headers.Keys[i], Request.Headers[i]));
+                }
 
-            // Split request into lines
-            string txtPostObjects = "";
-            if (Request.HttpMethod.Equals("POST"))
-            {
-                StreamReader sr = new StreamReader(Request.InputStream);
-                txtPostObjects = sr.ReadToEnd();
-            }
-            
-            // User agent - detect mobile
-            processUserAgentStringFromRequestHeaders();
+                // Split request into lines
+                string txtPostObjects = "";
+                if (Request.HttpMethod.Equals("POST"))
+                {
+                    StreamReader sr = new StreamReader(Request.InputStream);
+                    txtPostObjects = sr.ReadToEnd();
+                }
 
-            // Get action string from Url
-            string txtAction = GetActionFromBrowserRequest();
+                // User agent - detect mobile
+                processUserAgentStringFromRequestHeaders();
 
-            if (Settings.Default.DebugServer)
-            {
-                Functions.WriteLineToLogFile("From Client: " + txtAction);
-            }
+                // Get action string from Url
+                string txtAction = GetActionFromBrowserRequest();
 
-            // Build response
-            txtResponse = "";
-            txtPageTitle = Settings.Default.MainMenuTitle;
-            bool foo;
+                if (Settings.Default.DebugServer)
+                {
+                    Functions.WriteLineToLogFile("From Client: " + txtAction);
+                }
 
-            // R.I.P. Open server  (keep this for legacy compatibility)
-            if (txtAction.StartsWith("open"))
-                txtAction = txtAction.Substring(5);
+                // Build response
+                txtResponse = "";
+                txtPageTitle = Settings.Default.MainMenuTitle;
+                bool foo;
 
-            // Special cases / conversions
-            if (txtAction.ToLowerInvariant().Equals("apple-touch-icon.png"))
-                txtAction = "static/images/apple-touch-icon.png";
+                // R.I.P. Open server  (keep this for legacy compatibility)
+                if (txtAction.StartsWith("open"))
+                    txtAction = txtAction.Substring(5);
 
-            // Querystring authentication is one possible method that overrides all others if true: check for token (and renew)
-            if (txtAction.StartsWith("xml/checktoken")) // Special open method - check a token
-            {
-                bool ignore = CheckForTokenAuthentication();
-                string checkForTokenResult = AuthenticatedByToken ? "GOOD" : "BAD";
-                string xCheckResponse = "<?xml version=\"1.0\"?><checktokenresponse result=\"" + checkForTokenResult +  "\" />";
-                browserSender.SendXMLToBrowser(xCheckResponse);
-                return;
-            }
-            else if (!CheckForTokenAuthentication())
-            {
-                // invalid token
-                browserSender.SendGenericStatusCodePage("403", "Incorrect authentication");
-                spoolMessage("API: failed authentication via token.");
-                return;
-            }               
+                // Special cases / conversions
+                if (txtAction.ToLowerInvariant().Equals("apple-touch-icon.png"))
+                    txtAction = "static/images/apple-touch-icon.png";
 
-            // XML METHODS - no HTTP authentication required (uses token-based auth)
-            if (txtAction.StartsWith("xml"))
-            {
-                XMLresponse = "";
-                WebServiceProcess(txtAction, ref browserSender, ref txtPostObjects);
-                return;
-            }
-
-            // Any other non-authenticated methods
-            switch (txtAction)
-            {
-                // SPECIAL FILE NAME SHORTCUTS - NO AUTH REQUIRED **************
-                case "robots.txt":
-                    if (!browserSender.SendFileToBrowser("static\\robots.txt"))
-                        Functions.WriteLineToLogFile("Could not send robots.txt to browser");
+                // Querystring authentication is one possible method that overrides all others if true: check for token (and renew)
+                if (txtAction.StartsWith("xml/checktoken")) // Special open method - check a token
+                {
+                    bool ignore = CheckForTokenAuthentication();
+                    string checkForTokenResult = AuthenticatedByToken ? "GOOD" : "BAD";
+                    string xCheckResponse = "<?xml version=\"1.0\"?><checktokenresponse result=\"" + checkForTokenResult + "\" />";
+                    browserSender.SendXMLToBrowser(xCheckResponse);
                     return;
-                case "clientaccesspolicy.xml":
-                    if (!browserSender.SendFileToBrowser("static\\clientaccesspolicy.xml"))
-                        Functions.WriteLineToLogFile("Could not send clientaccesspolicy.xml to browser (presumably to Silverlight)");
+                }
+                else if (!CheckForTokenAuthentication())
+                {
+                    // invalid token
+                    browserSender.SendGenericStatusCodePage("403", "Incorrect authentication");
+                    spoolMessage("API: failed authentication via token.");
                     return;
-                case "silverlightsource":
-                    if (!browserSender.SendFileToBrowser("static\\silverlight\\SilverPotato.xap"))
-                        Functions.WriteLineToLogFile("Could not send SilverPotato XAP to browser");
+                }
+
+                // XML METHODS - no HTTP authentication required (uses token-based auth)
+                if (txtAction.StartsWith("xml"))
+                {
+                    XMLresponse = "";
+                    WebServiceProcess(txtAction, ref browserSender, ref txtPostObjects);
                     return;
-
-                //Ping is allowed
-                case "ping":
-                    Version v = Functions.ServerVersion;
-                    string xResponse = "<?xml version=\"1.0\"?><pingresponse result=\"PING_RESULT\" serverversion=\"SERVER_VERSION\" serverrevision=\"SERVER_REVISION\" serverosversionstring=\"SERVER_OS_VERSION_STRING\" serverosversion=\"SERVER_OS_VERSION\" servercapabilities=\"CAP_FLAGS\" />";
-                    xResponse = xResponse.Replace("PING_RESULT", Settings.Default.RequirePassword ? "NEED_PASSWORD" : "OK");
-                    xResponse = xResponse.Replace("SERVER_VERSION", v.Major.ToString() + "." +
-                    v.Minor.ToString() );  // This is culture invariant
-                    xResponse = xResponse.Replace("SERVER_OS_VERSION_STRING", Environment.OSVersion.VersionString);
-                    xResponse = xResponse.Replace("SERVER_OS_VERSION", Environment.OSVersion.Version.ToString(2) );
-                    xResponse = xResponse.Replace("SERVER_REVISION", v.Build.ToString());
-                    xResponse = xResponse.Replace("CAP_FLAGS", Functions.ServerCapabilities);
-                    browserSender.SendXMLToBrowser(xResponse);
-                    return;
-
-                // Fav Icon is allowed
-                case "favicon.ico":
-                    browserSender.SendFileToBrowser(HttpUtility.UrlDecode("static\\images\\remotepotatoicon.ico"));
-                    return;
-
-                default:
-                    break;
-            }
-
-            // Channel logos are allowed
-            if ((txtAction.StartsWith("logo")))
-            {
-                int hashlocation = txtAction.LastIndexOf("/");
-                if (hashlocation < 1)
-                {
-                    bool fooa = browserSender.Send404Page();
-                }
-                else
-                {
-                    txtAction = txtAction.Replace("logo/", "");
-                    string logoSvcID = HttpUtility.UrlDecode(txtAction);
-
-                    // Send logo to browser
-                    browserSender.SendLogoToBrowser(logoSvcID);
-                }
-                return;
-            }
-            
-            // Special case 'static' files that aren't => legacy support for streaming
-            if (txtAction.StartsWith("httplivestream"))
-            {
-                ProcessHTTPLSURL(txtAction, ref browserSender);
-                return;
-            }
-
-
-            // Static Files 
-            if ( (txtAction.StartsWith("static")) )
-            {
-                int hashlocation = txtAction.LastIndexOf("/");
-                if (hashlocation < 1)
-                {
-                    bool fooa = browserSender.Send404Page();
-                }
-                else
-                {
-                    // Send file
-                    browserSender.SendFileToBrowser(HttpUtility.UrlDecode(txtAction));
-                }
-                return;
-            }
-
-            // Skin files
-            if ( (txtAction.StartsWith("skin")))
-            {
-                int hashlocation = txtAction.LastIndexOf("/");
-                if (hashlocation < 1)
-                {
-                    bool fooa = browserSender.Send404Page();
-                }
-                else
-                {
-                    // Send file
-                    browserSender.SendFileToBrowser(HttpUtility.UrlDecode(txtAction), true, false);
-                }
-                return;
-            }
-
-            // Thumbnails are allowed
-            if (txtAction == "rectvthumbnail64")
-            {
-                GetRecTVThumbnail(ref browserSender, true);
-                return;
-            }
-            else if (txtAction == "rectvthumbnail")
-            {
-                GetRecTVThumbnail(ref browserSender, false);
-                return;
-            }
-
-            if (txtAction.StartsWith("getfilethumbnail64"))
-            {
-                GetFileThumbnailUsingQueryString(ref browserSender, true);
-                return;
-            }
-            else if (txtAction.StartsWith("getfilethumbnail"))
-            {
-                GetFileThumbnailUsingQueryString(ref browserSender, false);
-                return;
-            }
-
-            if (txtAction.StartsWith("filethumbnail"))
-            {
-                string txtSize = txtAction.Replace("filethumbnail/","");
-                FatAttitude.ThumbnailSizes size = (FatAttitude.ThumbnailSizes) Enum.Parse( (new FatAttitude.ThumbnailSizes().GetType() ), txtSize, true);
-
-                SendFileThumbnail(txtPostObjects, size, ref browserSender); 
-                return;
-            }
-            if (txtAction.StartsWith("musicalbumthumbnail"))
-            {
-                GetAlbumThumbnail(ref browserSender, txtAction.Contains("musicalbumthumbnail64") );
-                return;
-            }
-            if (txtAction.StartsWith("musicsongthumbnail"))
-            {
-                GetSongThumbnail(ref browserSender, txtAction.Contains("musicsongthumbnail64"));
-                return;
-            }
-     
-
-            // Silverlight is allowed (no longer contains password info)
-            bool showSilverlight = (txtAction.StartsWith("silverlight"));
-            if (Settings.Default.SilverlightIsDefault)
-                showSilverlight = showSilverlight | (txtAction.Trim().Equals(""));
-
-            if (showSilverlight)
-            {
-                string silverTemplate = FileCache.ReadTextFile("static\\silverlight\\default_template.htm");
-                browserSender.SendNormalHTMLPageToBrowser(silverTemplate);
-                return;
-            }
-
-
-            // MORE OPEN METHODS...
-            if (txtAction.StartsWith("streamsong"))
-            {
-
-                bool isBase64Encoded = (txtAction.StartsWith("streamsong64"));
-
-                if (!SendSongToBrowser(ref browserSender, isBase64Encoded,  true, false))
-                    browserSender.Send404Page();
-                return;
-            }
-
-            // MORE OPEN METHODS...
-            if (txtAction.StartsWith("downloadsong"))
-            {
-
-                bool isBase64Encoded = (txtAction.StartsWith("downloadsong64"));
-
-                if (!SendSongToBrowser(ref browserSender, isBase64Encoded, true, true))
-                    browserSender.Send404Page();
-                return;
-            }
-
-            // ********************************************************************************************
-            // Cookie Authentication Required for all Methods below here **********************************
-            // ********************************************************************************************
-
-            bool processMoreActions = false;
-            if (canProceedAuthenticatedByHTTPCookie())
-            {
-                processMoreActions = true;
-            }
-            else
-            {
-                spoolMessage("Webserver: requesting login.");
-
-                bool LoginSuccess = false;
-                string destURL = "";
-                string destQueryString = "";
-                ViewLoginPage(txtPostObjects, ref LoginSuccess, ref destURL, ref destQueryString);
-
-                // Successful login
-                if (LoginSuccess)
-                {
-                    processMoreActions = true;
-                    txtPageTitle = "";
-                    // Assign new (old) action and querystring for further processing
-                    txtAction = destURL;
-                    qsParams = HttpUtility.ParseQueryString(destQueryString);
-
-                    // We've missed the silverlight check (it's up above), so check again
-                    if (Settings.Default.SilverlightIsDefault)
-                    {
-                        string silverTemplate = FileCache.ReadTextFile("static\\silverlight\\default_template.htm");
-                        browserSender.SendNormalHTMLPageToBrowser(silverTemplate);
-                        return;
-                    }
-
                 }
 
-                
-            }
-
-            bool sentWholePage = false;
-            if (processMoreActions)
-            {
+                // Any other non-authenticated methods
                 switch (txtAction)
                 {
-                    // Legacy Streamsong  (secured)
-                    case "streamsong.mp3":
-                        if (!SendSongToBrowser(ref browserSender, false, true, false))
-                            browserSender.Send404Page();
+                    // SPECIAL FILE NAME SHORTCUTS - NO AUTH REQUIRED **************
+                    case "robots.txt":
+                        if (!browserSender.SendFileToBrowser("static\\robots.txt"))
+                            Functions.WriteLineToLogFile("Could not send robots.txt to browser");
                         return;
-                    case "streamsong":
-                        if (!SendSongToBrowser(ref browserSender, false, true, false))
-                            browserSender.Send404Page();
+                    case "clientaccesspolicy.xml":
+                        if (!browserSender.SendFileToBrowser("static\\clientaccesspolicy.xml"))
+                            Functions.WriteLineToLogFile("Could not send clientaccesspolicy.xml to browser (presumably to Silverlight)");
+                        return;
+                    case "silverlightsource":
+                        if (!browserSender.SendFileToBrowser("static\\silverlight\\SilverPotato.xap"))
+                            Functions.WriteLineToLogFile("Could not send SilverPotato XAP to browser");
                         return;
 
-                    // MANUAL RECORDING ======================================================
-                    case "recordmanual":
-                        foo = TryManualRecording();
-                        break;
+                    //Ping is allowed
+                    case "ping":
+                        Version v = Functions.ServerVersion;
+                        string xResponse = "<?xml version=\"1.0\"?><pingresponse result=\"PING_RESULT\" serverversion=\"SERVER_VERSION\" serverrevision=\"SERVER_REVISION\" serverosversionstring=\"SERVER_OS_VERSION_STRING\" serverosversion=\"SERVER_OS_VERSION\" servercapabilities=\"CAP_FLAGS\" />";
+                        xResponse = xResponse.Replace("PING_RESULT", Settings.Default.RequirePassword ? "NEED_PASSWORD" : "OK");
+                        xResponse = xResponse.Replace("SERVER_VERSION", v.Major.ToString() + "." +
+                        v.Minor.ToString());  // This is culture invariant
+                        xResponse = xResponse.Replace("SERVER_OS_VERSION_STRING", Environment.OSVersion.VersionString);
+                        xResponse = xResponse.Replace("SERVER_OS_VERSION", Environment.OSVersion.Version.ToString(2));
+                        xResponse = xResponse.Replace("SERVER_REVISION", v.Build.ToString());
+                        xResponse = xResponse.Replace("CAP_FLAGS", Functions.ServerCapabilities);
+                        browserSender.SendXMLToBrowser(xResponse);
+                        return;
 
-                        // Remote Control
-                    case "remotecontrol":
-                        foo = ViewRemoteControl();
-                        break;
-
-                    // Remote Control
-                    case "rc":
-                        bool haveSentHTMLPage = SendRemoteControlCommand(ref browserSender);
-                        if (haveSentHTMLPage) return;  // Don't continue; this method sends a blank page
-                        break;
-
-                    // RECORD A SERIES
-                    case "recordshow_series":
-                        foo = RecordSeries();
-                        break;
-
-                    // RECORD (FROM RecordingRequest): MULTIPURPOSE
-                    case "recordfromqueue":
-                        foo = RecordFromQueue();
-                        break;
-
-                        // PICS
-                    case "browsepics":
-                        ViewPicturesLibrary();
-                        break;
-
-                    case "viewpic":
-                        foo = ViewPicture(ref browserSender, ref sentWholePage);
-                        if (sentWholePage) return; // no more processing required
-                        break;
-
-                    case "picfolderaszip":
-                        foo = GetPicturesFolderAsZip(ref browserSender);
-                        return; // Don't continue, no Reponse left to output
-
-                    // VIDEOS
-                    case "browsevideos":
-                        ViewVideoLibrary();
-                        break;
-
-                    case "streamvideo":
-                        foo = StreamVideo();
-                        break;
-
-                    // MUSIC
-                    case "musicroot":
-                        ViewMusic();
-                        break;
-
-                    case "musicartists":
-                        ViewMusicArtists(false);
-                        break;
-
-                    case "musicartist":
-                        ViewMusicArtist();
-                        break;
-
-                    case "musicalbumartists":
-                        ViewMusicArtists(true);
-                        break;
-
-                    case "musicalbums":
-                        ViewMusicAlbums();
-                        break;
-
-                    case "musicalbum":
-                        ViewMusicAlbum();
-                        break;
-
-                    case "musicgenres":
-                        ViewMusicGenres();
-                        break;
-
-                    case "musicgenre":
-                        ViewMusicGenre();
-                        break;
-
-                    case "musicsong":
-                        ViewMusicSong();
-                        break;
-
-                    // LIST RECORDINGS
-                    case "scheduledrecordings":
-                        foo = ViewScheduledRecordings();
-                        break;
-
-                    case "log-out":
-                        DoLogOut();
-                        break;
-
-                    // LIST RECORDINGS
-                    case "recordedtv":
-                        foo = ViewRecordedTVList();
-                        AdditionalStyles.Add("rectv");
-                        break;
-
-                    // VIEW A SPECIFIC SERIES
-                    case "viewseriesrequest":
-                        foo = ViewSeriesRequest();
-                        AdditionalStyles.Add("showdetails");
-                        break;
-
-                    // MANAGE ALL SERIES
-                    case "viewseriesrequests":
-                        foo = ViewSeriesRequests();
-                        break;
-
-                    // VIEW AN EPG PAGE
-                    case "viewepglist":
-                        foo = ViewEPGList();
-                        AdditionalStyles.Add("epg-list");
-                        break;
-
-                    // VIEW AN EPG PAGE - GRID
-                    case "viewepggrid":
-                        Functions.WriteLineToLogFile("RP: (VEPG)");
-                        foo = ViewEPGGrid();
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Up
-                    case "epgnavup":
-                        foo = EPGGridChannelRetreat();
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Down
-                    case "epgnavdown":
-                        foo = EPGGridChannelAdvance();
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Right
-                    case "epgnavright":
-                        foo = EPGGridTimeWindowShiftByMinutes(EPGManager.TimespanMinutes);
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Left
-                    case "epgnavleft":
-                        foo = EPGGridTimeWindowShiftByMinutes(0 - EPGManager.TimespanMinutes);
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Left
-                    case "epgnavtop":
-                        foo = EPGGridChannelSetAbsolute(true, false);
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG Grid Left
-                    case "epgnavbottom":
-                        foo = EPGGridChannelSetAbsolute(false, true);
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-                    // Shift EPG To Page
-                    case "epgjumptopage":
-                        foo = EPGGridChannelJump();
-                        AdditionalStyles.Add("epg-grid");
-                        break;
-
-
-                    // VIEW AN EPG SHOW
-                    case "viewepgprogramme":
-                        foo = ViewEPGProgramme();
-                        AdditionalStyles.Add("showdetails");
-                        break;
-
-                    // STREAM A SHOW
-                    case "streamprogramme":
-                        foo = StreamRecordedProgramme();
-                        AdditionalStyles.Add("showdetails");
-                        break;
-
-
-                    // SEARCH BY TITLE
-                    case "searchbytitle":
-                        foo = SearchShowsByText();
-                        break;
-
-                    // DELETE A RECORDING
-                    case "deletefile":
-                        foo = DeleteFileFromFilePath(false);
-                        break;
-
-                    case "deletefile64":
-                        foo = DeleteFileFromFilePath(true);
-                        break;
-
-                    // CANCEL A RECORDING
-                    case "cancelseriesrequest":
-                        foo = CancelRequest();
-                        break;
-
-                    // CANCEL A RECORDING
-                    case "cancelrecording":
-                        foo = CancelRecording();
-                        break;
-
-
-                    // VIEW MOVIES
-                    case "movies":
-                        foo = ViewMovies();
-                        AdditionalStyles.Add("movies");
-                        break;
-
-                    // VIEW MOVIES
-                    case "viewmovie":
-                        foo = ViewMovie();
-                        AdditionalStyles.Add("showdetails");
-                        AdditionalStyles.Add("movies");
-                        break;
-
-                    case "info":
-                        txtResponse += "This is the Remote Potato Server v" + Functions.VersionText + " running on " + Environment.OSVersion.VersionString + ".";
-                        txtResponse += "<br/><br/>For help and support please visit the <a href='http://forums.fatattitude.com'>FatAttitude Forums</a>.";
-                        break;
-
-                    case "mainmenu":
-                        ShowMainMenu();
-                        break;
+                    // Fav Icon is allowed
+                    case "favicon.ico":
+                        browserSender.SendFileToBrowser(HttpUtility.UrlDecode("static\\images\\remotepotatoicon.ico"));
+                        return;
 
                     default:
-                        ShowMainMenu();
                         break;
+                }
+
+                // Channel logos are allowed
+                if ((txtAction.StartsWith("logo")))
+                {
+                    int hashlocation = txtAction.LastIndexOf("/");
+                    if (hashlocation < 1)
+                    {
+                        bool fooa = browserSender.Send404Page();
+                    }
+                    else
+                    {
+                        txtAction = txtAction.Replace("logo/", "");
+                        string logoSvcID = HttpUtility.UrlDecode(txtAction);
+
+                        // Send logo to browser
+                        browserSender.SendLogoToBrowser(logoSvcID);
+                    }
+                    return;
+                }
+
+                // Special case 'static' files that aren't => legacy support for streaming
+                if (txtAction.StartsWith("httplivestream"))
+                {
+                    ProcessHTTPLSURL(txtAction, ref browserSender);
+                    return;
+                }
+
+
+                // Static Files 
+                if ((txtAction.StartsWith("static")))
+                {
+                    int hashlocation = txtAction.LastIndexOf("/");
+                    if (hashlocation < 1)
+                    {
+                        bool fooa = browserSender.Send404Page();
+                    }
+                    else
+                    {
+                        // Send file
+                        browserSender.SendFileToBrowser(HttpUtility.UrlDecode(txtAction));
+                    }
+                    return;
+                }
+
+                // Skin files
+                if ((txtAction.StartsWith("skin")))
+                {
+                    int hashlocation = txtAction.LastIndexOf("/");
+                    if (hashlocation < 1)
+                    {
+                        bool fooa = browserSender.Send404Page();
+                    }
+                    else
+                    {
+                        // Send file
+                        browserSender.SendFileToBrowser(HttpUtility.UrlDecode(txtAction), true, false);
+                    }
+                    return;
+                }
+
+                // Thumbnails are allowed
+                if (txtAction == "rectvthumbnail64")
+                {
+                    GetRecTVThumbnail(ref browserSender, true);
+                    return;
+                }
+                else if (txtAction == "rectvthumbnail")
+                {
+                    GetRecTVThumbnail(ref browserSender, false);
+                    return;
+                }
+
+                if (txtAction.StartsWith("getfilethumbnail64"))
+                {
+                    GetFileThumbnailUsingQueryString(ref browserSender, true);
+                    return;
+                }
+                else if (txtAction.StartsWith("getfilethumbnail"))
+                {
+                    GetFileThumbnailUsingQueryString(ref browserSender, false);
+                    return;
+                }
+
+                if (txtAction.StartsWith("filethumbnail"))
+                {
+                    string txtSize = txtAction.Replace("filethumbnail/", "");
+                    FatAttitude.ThumbnailSizes size = (FatAttitude.ThumbnailSizes)Enum.Parse((new FatAttitude.ThumbnailSizes().GetType()), txtSize, true);
+
+                    SendFileThumbnail(txtPostObjects, size, ref browserSender);
+                    return;
+                }
+                if (txtAction.StartsWith("musicalbumthumbnail"))
+                {
+                    GetAlbumThumbnail(ref browserSender, txtAction.Contains("musicalbumthumbnail64"));
+                    return;
+                }
+                if (txtAction.StartsWith("musicsongthumbnail"))
+                {
+                    GetSongThumbnail(ref browserSender, txtAction.Contains("musicsongthumbnail64"));
+                    return;
+                }
+
+
+                // Silverlight is allowed (no longer contains password info)
+                bool showSilverlight = (txtAction.StartsWith("silverlight"));
+                if (Settings.Default.SilverlightIsDefault)
+                    showSilverlight = showSilverlight | (txtAction.Trim().Equals(""));
+
+                if (showSilverlight)
+                {
+                    string silverTemplate = FileCache.ReadTextFile("static\\silverlight\\default_template.htm");
+                    browserSender.SendNormalHTMLPageToBrowser(silverTemplate);
+                    return;
+                }
+
+
+                // MORE OPEN METHODS...
+                if (txtAction.StartsWith("streamsong"))
+                {
+
+                    bool isBase64Encoded = (txtAction.StartsWith("streamsong64"));
+
+                    if (!SendSongToBrowser(ref browserSender, isBase64Encoded, true, false))
+                        browserSender.Send404Page();
+                    return;
+                }
+
+                // MORE OPEN METHODS...
+                if (txtAction.StartsWith("downloadsong"))
+                {
+
+                    bool isBase64Encoded = (txtAction.StartsWith("downloadsong64"));
+
+                    if (!SendSongToBrowser(ref browserSender, isBase64Encoded, true, true))
+                        browserSender.Send404Page();
+                    return;
+                }
+
+                // ********************************************************************************************
+                // Cookie Authentication Required for all Methods below here **********************************
+                // ********************************************************************************************
+
+                bool processMoreActions = false;
+                if (canProceedAuthenticatedByHTTPCookie())
+                {
+                    processMoreActions = true;
+                }
+                else
+                {
+                    spoolMessage("Webserver: requesting login.");
+
+                    bool LoginSuccess = false;
+                    string destURL = "";
+                    string destQueryString = "";
+                    ViewLoginPage(txtPostObjects, ref LoginSuccess, ref destURL, ref destQueryString);
+
+                    // Successful login
+                    if (LoginSuccess)
+                    {
+                        processMoreActions = true;
+                        txtPageTitle = "";
+                        // Assign new (old) action and querystring for further processing
+                        txtAction = destURL;
+                        qsParams = HttpUtility.ParseQueryString(destQueryString);
+
+                        // We've missed the silverlight check (it's up above), so check again
+                        if (Settings.Default.SilverlightIsDefault)
+                        {
+                            string silverTemplate = FileCache.ReadTextFile("static\\silverlight\\default_template.htm");
+                            browserSender.SendNormalHTMLPageToBrowser(silverTemplate);
+                            return;
+                        }
+
+                    }
+
 
                 }
-            }
 
-            // Finalise response: convert to master page
-            string txtOutputPage = FileCache.ReadSkinTextFile("masterpage.htm");
+                bool sentWholePage = false;
+                if (processMoreActions)
+                {
+                    switch (txtAction)
+                    {
+                        // Legacy Streamsong  (secured)
+                        case "streamsong.mp3":
+                            if (!SendSongToBrowser(ref browserSender, false, true, false))
+                                browserSender.Send404Page();
+                            return;
+                        case "streamsong":
+                            if (!SendSongToBrowser(ref browserSender, false, true, false))
+                                browserSender.Send404Page();
+                            return;
 
-            // Commit response
-            txtOutputPage = txtOutputPage.Replace("**PAGECONTENT**", txtResponse);
-            txtResponse = "";
+                        // MANUAL RECORDING ======================================================
+                        case "recordmanual":
+                            foo = TryManualRecording();
+                            break;
 
-            // Style inclusion?  (this line must be before the Skin section, as the returned string includes **SKINFOLDER** to be replaced
-            txtOutputPage = txtOutputPage.Replace("**PAGEADDITIONALSTYLES**", AdditionalStyleLinks(AdditionalStyles));
-            // Orientation
-            txtOutputPage = txtOutputPage.Replace("**PAGEORIENTATION**", txtOutputPage.Contains("PAGEORIENTATION=LANDSCAPE") ? "landscape" : "portrait");
+                        // Remote Control
+                        case "remotecontrol":
+                            foo = ViewRemoteControl();
+                            break;
 
-            // Skin
-            txtOutputPage = txtOutputPage.Replace("**SKINFOLDER**", "/static/skins/" + Themes.ActiveThemeName);
-            txtOutputPage = txtOutputPage.Replace("**HEADER**", "Remote Potato");
-            // Default Page Title
-            txtOutputPage = txtOutputPage.Replace("**PAGETITLE**", txtPageTitle);
+                        // Remote Control
+                        case "rc":
+                            bool haveSentHTMLPage = SendRemoteControlCommand(ref browserSender);
+                            if (haveSentHTMLPage) return;  // Don't continue; this method sends a blank page
+                            break;
+
+                        // RECORD A SERIES
+                        case "recordshow_series":
+                            foo = RecordSeries();
+                            break;
+
+                        // RECORD (FROM RecordingRequest): MULTIPURPOSE
+                        case "recordfromqueue":
+                            foo = RecordFromQueue();
+                            break;
+
+                        // PICS
+                        case "browsepics":
+                            ViewPicturesLibrary();
+                            break;
+
+                        case "viewpic":
+                            foo = ViewPicture(ref browserSender, ref sentWholePage);
+                            if (sentWholePage) return; // no more processing required
+                            break;
+
+                        case "picfolderaszip":
+                            foo = GetPicturesFolderAsZip(ref browserSender);
+                            return; // Don't continue, no Reponse left to output
+
+                        // VIDEOS
+                        case "browsevideos":
+                            ViewVideoLibrary();
+                            break;
+
+                        case "streamvideo":
+                            foo = StreamVideo();
+                            break;
+
+                        // MUSIC
+                        case "musicroot":
+                            ViewMusic();
+                            break;
+
+                        case "musicartists":
+                            ViewMusicArtists(false);
+                            break;
+
+                        case "musicartist":
+                            ViewMusicArtist();
+                            break;
+
+                        case "musicalbumartists":
+                            ViewMusicArtists(true);
+                            break;
+
+                        case "musicalbums":
+                            ViewMusicAlbums();
+                            break;
+
+                        case "musicalbum":
+                            ViewMusicAlbum();
+                            break;
+
+                        case "musicgenres":
+                            ViewMusicGenres();
+                            break;
+
+                        case "musicgenre":
+                            ViewMusicGenre();
+                            break;
+
+                        case "musicsong":
+                            ViewMusicSong();
+                            break;
+
+                        // LIST RECORDINGS
+                        case "scheduledrecordings":
+                            foo = ViewScheduledRecordings();
+                            break;
+
+                        case "log-out":
+                            DoLogOut();
+                            break;
+
+                        // LIST RECORDINGS
+                        case "recordedtv":
+                            foo = ViewRecordedTVList();
+                            AdditionalStyles.Add("rectv");
+                            break;
+
+                        // VIEW A SPECIFIC SERIES
+                        case "viewseriesrequest":
+                            foo = ViewSeriesRequest();
+                            AdditionalStyles.Add("showdetails");
+                            break;
+
+                        // MANAGE ALL SERIES
+                        case "viewseriesrequests":
+                            foo = ViewSeriesRequests();
+                            break;
+
+                        // VIEW AN EPG PAGE
+                        case "viewepglist":
+                            foo = ViewEPGList();
+                            AdditionalStyles.Add("epg-list");
+                            break;
+
+                        // VIEW AN EPG PAGE - GRID
+                        case "viewepggrid":
+                            Functions.WriteLineToLogFile("RP: (VEPG)");
+                            foo = ViewEPGGrid();
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Up
+                        case "epgnavup":
+                            foo = EPGGridChannelRetreat();
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Down
+                        case "epgnavdown":
+                            foo = EPGGridChannelAdvance();
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Right
+                        case "epgnavright":
+                            foo = EPGGridTimeWindowShiftByMinutes(EPGManager.TimespanMinutes);
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Left
+                        case "epgnavleft":
+                            foo = EPGGridTimeWindowShiftByMinutes(0 - EPGManager.TimespanMinutes);
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Left
+                        case "epgnavtop":
+                            foo = EPGGridChannelSetAbsolute(true, false);
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG Grid Left
+                        case "epgnavbottom":
+                            foo = EPGGridChannelSetAbsolute(false, true);
+                            AdditionalStyles.Add("epg-grid");
+                            break;
+
+                        // Shift EPG To Page
+                        case "epgjumptopage":
+                            foo = EPGGridChannelJump();
+                            AdditionalStyles.Add("epg-grid");
+                            break;
 
 
-            // Copyright / Timestamp 
-            txtOutputPage = txtOutputPage.Replace("**TIMEANDVERSIONSTRING**", DateTime.Now.ToLongTimeString() + ", v" + Functions.VersionText);
+                        // VIEW AN EPG SHOW
+                        case "viewepgprogramme":
+                            foo = ViewEPGProgramme();
+                            AdditionalStyles.Add("showdetails");
+                            break;
 
-            if (!browserSender.SendNormalHTMLPageToBrowser(txtOutputPage))
-            {
-                spoolMessage("Webserver failed to send data.");
-            }
+                        // STREAM A SHOW
+                        case "streamprogramme":
+                            foo = StreamRecordedProgramme();
+                            AdditionalStyles.Add("showdetails");
+                            break;
+
+
+                        // SEARCH BY TITLE
+                        case "searchbytitle":
+                            foo = SearchShowsByText();
+                            break;
+
+                        // DELETE A RECORDING
+                        case "deletefile":
+                            foo = DeleteFileFromFilePath(false);
+                            break;
+
+                        case "deletefile64":
+                            foo = DeleteFileFromFilePath(true);
+                            break;
+
+                        // CANCEL A RECORDING
+                        case "cancelseriesrequest":
+                            foo = CancelRequest();
+                            break;
+
+                        // CANCEL A RECORDING
+                        case "cancelrecording":
+                            foo = CancelRecording();
+                            break;
+
+
+                        // VIEW MOVIES
+                        case "movies":
+                            foo = ViewMovies();
+                            AdditionalStyles.Add("movies");
+                            break;
+
+                        // VIEW MOVIES
+                        case "viewmovie":
+                            foo = ViewMovie();
+                            AdditionalStyles.Add("showdetails");
+                            AdditionalStyles.Add("movies");
+                            break;
+
+                        case "info":
+                            txtResponse += "This is the Remote Potato Server v" + Functions.VersionText + " running on " + Environment.OSVersion.VersionString + ".";
+                            txtResponse += "<br/><br/>For help and support please visit the <a href='http://forums.fatattitude.com'>FatAttitude Forums</a>.";
+                            break;
+
+                        case "mainmenu":
+                            ShowMainMenu();
+                            break;
+
+                        default:
+                            ShowMainMenu();
+                            break;
+
+                    }
+                }
+
+                // Finalise response: convert to master page
+                string txtOutputPage = FileCache.ReadSkinTextFile("masterpage.htm");
+
+                // Commit response
+                txtOutputPage = txtOutputPage.Replace("**PAGECONTENT**", txtResponse);
+                txtResponse = "";
+
+                // Style inclusion?  (this line must be before the Skin section, as the returned string includes **SKINFOLDER** to be replaced
+                txtOutputPage = txtOutputPage.Replace("**PAGEADDITIONALSTYLES**", AdditionalStyleLinks(AdditionalStyles));
+                // Orientation
+                txtOutputPage = txtOutputPage.Replace("**PAGEORIENTATION**", txtOutputPage.Contains("PAGEORIENTATION=LANDSCAPE") ? "landscape" : "portrait");
+
+                // Skin
+                txtOutputPage = txtOutputPage.Replace("**SKINFOLDER**", "/static/skins/" + Themes.ActiveThemeName);
+                txtOutputPage = txtOutputPage.Replace("**HEADER**", "Remote Potato");
+                // Default Page Title
+                txtOutputPage = txtOutputPage.Replace("**PAGETITLE**", txtPageTitle);
+
+
+                // Copyright / Timestamp 
+                txtOutputPage = txtOutputPage.Replace("**TIMEANDVERSIONSTRING**", DateTime.Now.ToLongTimeString() + ", v" + Functions.VersionText);
+
+                if (!browserSender.SendNormalHTMLPageToBrowser(txtOutputPage))
+                {
+                    spoolMessage("Webserver failed to send data.");
+                }
 
 #if !DEBUG
             }
@@ -821,10 +825,10 @@ namespace RemotePotatoServer
                 spoolMessage("EXCEPTION OCCURRED: " + e.Message);
 
                 BrowserSender exceptionBrowserSender = new BrowserSender(Context);
-                exceptionBrowserSender.SendNormalHTMLPageToBrowser("<h1>Remote Potato Error</h1>An error occurred and remote potato was unable to serve this web page.<br /><br />Check the debug logs for more information.");                
+                exceptionBrowserSender.SendNormalHTMLPageToBrowser("<h1>Remote Potato Error</h1>An error occurred and remote potato was unable to serve this web page.<br /><br />Check the debug logs for more information.");
             }
 #endif
-            
+
         }
 
         /// <summary>
@@ -840,7 +844,7 @@ namespace RemotePotatoServer
                 return true;
             }
 
-            if (! Request.QueryString.HasParameter("token")) return true;
+            if (!Request.QueryString.HasParameter("token")) return true;
 
 
             if (AuthSessionHelper.Default.AuthenticateToken(Request.QueryString["token"], currentClientIP))
@@ -1241,6 +1245,14 @@ namespace RemotePotatoServer
                 }
                 else if (action.StartsWith("xml/livetvstop"))
                 {
+                    foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
+                    {
+                        DirectoryInfo di = new DirectoryInfo(recTVFolder);
+                        FileInfo[] files = di.GetFiles("RMCLiveTV*.wtv");
+                        for (int index = 0; index < files.Length; index++)
+                            files[index].Delete();
+                    }
+
                     XMLresponse = XMLHelper.Serialize<string>("LiveTV does not really stop.");
                 }
                 else if (action.StartsWith("xml/livetv"))
@@ -1255,16 +1267,20 @@ namespace RemotePotatoServer
                     // GET SERVICE ID (Channel) and length
                     action = action.Replace("xml/livetv/", "");
 
-                    string serviceID = action.Substring(0,action.IndexOf("length="));
+                    string serviceID = action.Substring(0, action.IndexOf("uniqueandroid="));
+
+                    action = action.Replace(serviceID, "");
+                    action = action.Replace("uniqueandroid=", "");
+
+                    string UniqueAndroidID = action.Substring(0, action.IndexOf("length="));
 
                     // DURATION
                     Int32 tryDuration;
-                    Int32.TryParse(action.Substring(action.IndexOf("length=")+7), out tryDuration);
+                    Int32.TryParse(action.Substring(action.IndexOf("length=") + 7), out tryDuration);
+                    DateTime tryStartTime = DateTime.Now;
 
                     //  Schedule manual recording
-                    {
                         // DATE TIME
-                        DateTime tryStartTime = DateTime.Now;
 
                         if ((tryDuration == 0) | (tryDuration > 720)) { failedValidation = true; failedValidationReason += "Invalid duration, must be between 1 and 720 minutes.<br>"; }
 
@@ -1273,7 +1289,7 @@ namespace RemotePotatoServer
                         do
                         {
                             Random r = new Random();
-                            filenameID = filenameID + r.Next(0, int.MaxValue);
+                            filenameID = filenameID + UniqueAndroidID+ r.Next(0, int.MaxValue);
                             foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
                             {
                                 string[] filePaths = Directory.GetFiles(recTVFolder, filenameID + "*.wtv");
@@ -1287,12 +1303,12 @@ namespace RemotePotatoServer
 
                         // Create a new recording request
                         newRR = new RecordingRequest(tryStartTime.ToUniversalTime(), long.Parse(serviceID), tryDuration, filenameID);
-                    }
 
                     // Passed validation?
                     if (failedValidation)
                     {
                         txtResponse += "<p class='recorderror'>Error in recording request: " + failedValidationReason + "</p>";
+                        XMLresponse = XMLHelper.Serialize<string>(txtResponse);
                     }
                     else
                     {
@@ -1300,32 +1316,71 @@ namespace RemotePotatoServer
 
                         if (RecordFromQueue())
                         {
-                            int WaitTimeForFileToAppear = 10; // seconds
-                            DateTime Begin = DateTime.Now;
+                            int waittimeforfiletoappear = 15; // seconds
+                            DateTime begin = DateTime.Now;
+                            bool found = false;
                             do
                             {
-                                string[] filePaths = { "" };
-                                foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
+                                string[] filepaths = { "" };
+                                foreach (string rectvfolder in Settings.Default.RecordedTVFolders)
                                 {
-                                    filePaths = Directory.GetFiles(recTVFolder, filenameID + "*.wtv");
-                                    if (filePaths.Length > 0) break;
+                                    filepaths = Directory.GetFiles(rectvfolder, filenameID + "*.wtv");
+                                    if (filepaths.Length > 0) break;
                                 }
 
-                                if (filePaths.Length > 0)
+                                if (filepaths.Length > 0)
                                 {
-                                    XMLresponse = XMLHelper.Serialize<string>(filePaths[0]);
+                                    XMLresponse = XMLHelper.Serialize<string>(filepaths[0]);
+                                    found = true;
                                     break;
                                 }
-                                else
-                                {
-                                    XMLresponse = XMLHelper.Serialize<string>("Error: live tv manual recording not found, probably all tuners are all busy within the timeframe now untill " + tryDuration + " minutes from now");
-                                }
-                                if (DateTime.Compare(Begin.AddSeconds(WaitTimeForFileToAppear), DateTime.Now) < 0) break;
+                                if (DateTime.Compare(begin.AddSeconds(waittimeforfiletoappear), DateTime.Now) < 0) break;
                             } while (true);
-
+                            if (!found) 
+                            {
+                                List<string> errors = new List<string>();
+                                errors.Add("All tuners are busy somewhere in between now and " + tryDuration + " minutes from now");
+                                DateRange dateRange = new DateRange(DateTime.UtcNow, DateTime.UtcNow.AddMinutes(tryDuration));
+                                List<RPRecording> recsToday = EPGManager.AllRecordingsRunningInTimeFrame(dateRange);
+                                //List<RPRecording> oldLiveTVrecs = EPGManager.AllRecordingsContainsTitle("RMCLiveTV");
+                                foreach (RPRecording rec in recsToday)
+                                {
+                                    //if (rec.TVProgramme().StartTime <= (tryStartTime.Ticks + tryDuration * TimeSpan.TicksPerMinute))
+                                    {
+                                        errors.Add(rec.Id.ToString());
+                                        errors.Add(rec.Title);
+                                        errors.Add(rec.TVProgramme().TVService().Callsign);
+                                        errors.Add(rec.TVProgramme().StartTime.ToString());
+                                        errors.Add(rec.TVProgramme().StopTime.ToString());
+                                        //errors.Add(rec.TVProgramme().Filename);
+                                    }
+                                }
+                                XMLresponse = XMLHelper.Serialize<List<string>>(errors);
+                            }
                             //I'm aware this is not as it should be done, should wait for event (for file to appear) instead...
-                        }
+                            //WTVfse = new FileSystemEventHandler(OnChanged);
+                            //foreach (string location in Settings.Default.RecordedTVFolders)
+                            //{
+                            //    FileSystemWatcher w = new FileSystemWatcher();
+                            //    w.Path = location;
+                            //    /* Watch for changes in LastAccess and LastWrite times, and
+                            //       the renaming of files or directories. */
+                            //    w.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+                            //       | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                            //    // Only watch filter.
+                            //    w.Filter = filenameID + "*.wtv";
 
+                            //    w.Created += WTVfse;
+                            //    WTVwatcher.Add(w);
+                            //}
+                            //// Begin watching.
+                            //foreach (FileSystemWatcher w in WTVwatcher)
+                            //{
+                            //    w.EnableRaisingEvents = true;
+                            //}
+                            //do { } while (!LiveTVScheduled);
+                            //XMLresponse = XMLHelper.Serialize<string>(LiveTVFilename);
+                        }
                     }
 
 
@@ -1705,13 +1760,25 @@ namespace RemotePotatoServer
                    browserSender.SendDataToBrowser("application/zip", DataResponse);
                    DataResponse = null;  // release memory immediately
                } */
-        
 
+        // Define the event handlers.
+        private void OnChanged(object source, FileSystemEventArgs e)  //static removed is this ok?
+        {
+            if (e.ChangeType == WatcherChangeTypes.Created)
+            {
+                LiveTVFilename = e.FullPath;
+                LiveTVScheduled = true;
+                foreach (FileSystemWatcher w in WTVwatcher)
+                {
+                    w.Created -= WTVfse;
+                }
+            }
+        }
         private string WebSvcCancelRequest(string ID)
         {
             if (!EPGManager.isWMCOnline)
                 return "TV is not configured.";
-           
+
             // Parameters
             long requestID;
             try { requestID = long.Parse(ID); }
@@ -1810,7 +1877,7 @@ namespace RemotePotatoServer
         {
             foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
             {
-                txtFilename = txtFilename.Replace(@"\",@"/");
+                txtFilename = txtFilename.Replace(@"\", @"/");
                 string recTVFolderInv = recTVFolder.Replace(@"\", @"/");
 
                 if (txtFilename.ToLowerInvariant().StartsWith(recTVFolderInv.ToLowerInvariant()))
@@ -1824,7 +1891,7 @@ namespace RemotePotatoServer
 
             // Replace slashes for compatibility
             // security - must be in rec tv path
-            if (! fileNameStartsWithAnyRecordedTVFolder(filename))
+            if (!fileNameStartsWithAnyRecordedTVFolder(filename))
             {
                 Functions.WriteLineToLogFile("Error - Deletion of '" + filename + "' not in any Recorded TV Folder.");
                 return "Error - not in Recorded TV folder";
@@ -1852,7 +1919,7 @@ namespace RemotePotatoServer
             int ID;
             if (txtAction.StartsWith("httplivestream/"))
             {
-                txtAction = txtAction.Replace("httplivestream/","");
+                txtAction = txtAction.Replace("httplivestream/", "");
 
                 int nextSlash = txtAction.IndexOf("/");
                 if (nextSlash == -1)
@@ -1862,15 +1929,15 @@ namespace RemotePotatoServer
                 }
 
                 string strMediaStreamerID = txtAction.Substring(0, nextSlash);
-                
-                if (! int.TryParse(strMediaStreamerID, out ID))
+
+                if (!int.TryParse(strMediaStreamerID, out ID))
                 {
                     browserSender.Send404Page();
                     return;
                 }
 
                 // Make txtAction the final portion
-                txtAction = txtAction.Replace(ID.ToString() + "/","");
+                txtAction = txtAction.Replace(ID.ToString() + "/", "");
             }
             else
             {
@@ -1907,7 +1974,7 @@ namespace RemotePotatoServer
                     return;
                 }
 
-                byte[] TSdata = new byte[]{};
+                byte[] TSdata = new byte[] { };
                 string txtError = "";
                 if (StreamingManager.Default.SegmentFromStreamer(ID, iSegNumber, ref TSdata, ref txtError))
                 {
@@ -1923,7 +1990,7 @@ namespace RemotePotatoServer
 
         }
 
-        
+
         #endregion
 
         #region Task Processors - HTML
@@ -1936,7 +2003,7 @@ namespace RemotePotatoServer
         }
         private bool SendSongToBrowser(ref BrowserSender browserSender, bool isBase64Encoded, bool sendChunked, bool isDownload)
         {
-            if (! (qsParams.HasParameter("id"))) return false;
+            if (!(qsParams.HasParameter("id"))) return false;
 
             string songID = HttpUtility.UrlDecode(qsParams["id"]);
 
@@ -1997,7 +2064,7 @@ namespace RemotePotatoServer
                 return;
             }
 
-            
+
             string itemID = HttpUtility.UrlDecode(qsParams["id"]);
             if (isBase64Encoded)
                 itemID = Functions.DecodeFromBase64(itemID);
@@ -2030,7 +2097,7 @@ namespace RemotePotatoServer
 
             // This can fail with non-ASCII
             string qsFN = qsParams["filename"];
-            string fileName = HttpUtility.UrlDecode( qsFN );
+            string fileName = HttpUtility.UrlDecode(qsFN);
             if (isBase64Encoded)
                 fileName = Functions.DecodeFromBase64(fileName, Encoding.UTF8);  // http uses UTF8 encoding
 
@@ -2055,18 +2122,18 @@ namespace RemotePotatoServer
                 }
             }
 
-            if (! foundFilePath)
+            if (!foundFilePath)
             {
                 bool foo = browserSender.Send404Page();
                 return;
             }
 
-            
-            SendFileThumbnail(filePath, FatAttitude.ThumbnailSizes.Medium, ref browserSender);
-            
 
-            
-            }        
+            SendFileThumbnail(filePath, FatAttitude.ThumbnailSizes.Medium, ref browserSender);
+
+
+
+        }
         private void GetFileThumbnailUsingQueryString(ref BrowserSender browserSender, bool isBase64Encoded)
         {
             // Any parameters?
@@ -2083,19 +2150,19 @@ namespace RemotePotatoServer
             string size = qsParams["size"];
 
             string qsFN = qsParams["filename"];
-            string fileName = HttpUtility.UrlDecode( qsFN );
+            string fileName = HttpUtility.UrlDecode(qsFN);
             if (isBase64Encoded)
                 fileName = Functions.DecodeFromBase64(fileName, Encoding.UTF8);  // http uses UTF8 encoding
-           
+
             FatAttitude.ThumbnailSizes tSize = (FatAttitude.ThumbnailSizes)Enum.Parse(typeof(FatAttitude.ThumbnailSizes), size, true);
-            
+
             SendFileThumbnail(fileName, tSize, ref browserSender);
         }
         private void SendFileThumbnail(string fileName, FatAttitude.ThumbnailSizes thumbSize, ref BrowserSender browserSender)
         {
             // Find file or folder?
             if (
-                (! File.Exists(fileName)) && (! Directory.Exists(fileName)) 
+                (!File.Exists(fileName)) && (!Directory.Exists(fileName))
                 )
             {
                 bool foo = browserSender.Send404Page();
@@ -2111,8 +2178,8 @@ namespace RemotePotatoServer
                 return;
             }
 
-            byte[] outputdata =  ImageResizer.ImageToByteArray(thumb, ImageFormat.Jpeg);
-            
+            byte[] outputdata = ImageResizer.ImageToByteArray(thumb, ImageFormat.Jpeg);
+
             // Send to browser
             bool foo2 = browserSender.SendDataToBrowser("image/jpeg", outputdata);
         }
@@ -2171,9 +2238,9 @@ namespace RemotePotatoServer
                 // DURATION
                 Int32 tryDuration = 0;
                 if (Int32.TryParse(qsParams["duration"], out tryDuration))
-                if ((tryDuration == 0) | (tryDuration > 720)) { failedValidation = true; failedValidationReason += "Invalid duration, must be between 1 and 720 minutes.<br>"; }
+                    if ((tryDuration == 0) | (tryDuration > 720)) { failedValidation = true; failedValidationReason += "Invalid duration, must be between 1 and 720 minutes.<br>"; }
 
-                
+
                 // Create a new recording request
                 newRR = new RecordingRequest(tryStartTime.ToUniversalTime(), long.Parse(serviceID), tryDuration, Settings.Default.DefaultManualRecordingName);
             }
@@ -2242,7 +2309,7 @@ namespace RemotePotatoServer
                 bSender.Send404Page();
             }
 
-            
+
             return true;
         }
         private bool ViewPicture(ref BrowserSender bSender, ref bool sentCompletePage)
@@ -2286,7 +2353,7 @@ namespace RemotePotatoServer
                 // Link
                 string strLinkToFullImage = "viewpic?FN=" + qsParams["FN"] + "&size=full";
                 HTMLLink lnk = new HTMLLink(strLinkToFullImage, image.ToString());
-                
+
                 // Commit to form
                 sbHTML.Append(lnk.ToString());
 
@@ -2873,13 +2940,13 @@ namespace RemotePotatoServer
                             foundEventInThisSection = true;
                         }
 
-                        
+
                         // Output the program details
                         txtRecList += "\r\n<div class='rectvlistthumbnailcontainer'>";
                         txtRecList += Functions.LinkTagOpen("viewepgprogramme?getfromrecordedtvfiles=true&programmeid=" + tvp.Id);
 
                         // Display the thumbnail
-                        txtRecList += "<img src=\"/rectvthumbnail64?filename=" + HttpUtility.UrlEncode(HttpUtility.HtmlEncode( Functions.EncodeToBase64( tvp.Filename) )) + "\" class=\"rectvlistthumbnail\" />";
+                        txtRecList += "<img src=\"/rectvthumbnail64?filename=" + HttpUtility.UrlEncode(HttpUtility.HtmlEncode(Functions.EncodeToBase64(tvp.Filename))) + "\" class=\"rectvlistthumbnail\" />";
                         txtRecList += "<br />";
 
                         // Display the title
@@ -2956,7 +3023,7 @@ namespace RemotePotatoServer
                         txtSchedList += dateCounter.ToPrettyDayNameAndDate() + ":";
 
                     txtSchedList += "<ul class='scheduledrecordingdaygroup'>";
-                    
+
                     foreach (RPRecording rec in recordings)
                     {
                         TVProgramme tvp = rec.TVProgramme();
@@ -3006,7 +3073,7 @@ namespace RemotePotatoServer
 
             // Get request with this ID
             RPRequest rpr;
-            if (! EPGManager.AllRequests.TryGetValue(requestID, out rpr))
+            if (!EPGManager.AllRequests.TryGetValue(requestID, out rpr))
             {
                 txtResponse += "This series or keyword recording no longer exists.";
                 return false;
@@ -3018,10 +3085,10 @@ namespace RemotePotatoServer
 
             // Get TV Programmes that the request is making...
             List<RPRecording> recs = rpr.Recordings();
-            
+
             // UPCOMING SHOWINGS
             tblSeries = tblSeries.Replace("**UPCOMINGSHOWINGS**", ListOfRecordingsAsHTML(ref recs, DateRangeType.FutureOnly, false, true, true, true));
-           //tblSeries = tblSeries.Replace("**PASTSHOWINGS**", ListOfRecordingsAsHTML(ref recs, DateRangeType.PastOnly, false, true, true, true));
+            //tblSeries = tblSeries.Replace("**PASTSHOWINGS**", ListOfRecordingsAsHTML(ref recs, DateRangeType.PastOnly, false, true, true, true));
             tblSeries = tblSeries.Replace("**PASTSHOWINGS**", "");
 
             // Commit to displaying show info
@@ -3087,7 +3154,7 @@ namespace RemotePotatoServer
                 // Get associated TV Programme
                 TVProgramme tvp = rec.TVProgramme();
                 if (tvp == null) continue;
-                
+
                 TVService tvs = tvp.TVService();
                 if (tvs == null) continue;
 
@@ -3109,13 +3176,13 @@ namespace RemotePotatoServer
                         txtShowings += "<ul>";
                         hasShownAnyEvents = true;
                     }
-                    
+
                     txtShowings += "<li class='";
                     // style
-                    if ( (rec.State ==  RPRecordingStates.Scheduled) ||
-                        (rec.State == RPRecordingStates.Recording ) || 
-                        (rec.State == RPRecordingStates.Recorded) )
-                            txtShowings += "upcomingwillrecord";
+                    if ((rec.State == RPRecordingStates.Scheduled) ||
+                        (rec.State == RPRecordingStates.Recording) ||
+                        (rec.State == RPRecordingStates.Recorded))
+                        txtShowings += "upcomingwillrecord";
                     else
                         txtShowings += "upcomingwontrecord";
                     txtShowings += "'>";
@@ -3123,7 +3190,7 @@ namespace RemotePotatoServer
                     if (showTitle) txtShowings += tvp.Title + ": ";
                     if (showStartTime) txtShowings += tvp.ToPrettyDate() + ", " + tvp.StartTimeDT().ToLocalTime().ToShortTimeString();
 
-                    if (showChannel) 
+                    if (showChannel)
                         if (tvs != null)
                             txtShowings += " (" + tvs.Callsign + ")";
                     if (linkToPage) txtShowings += "</a>";
@@ -3205,7 +3272,7 @@ namespace RemotePotatoServer
             txtResponse += "Cancelling " + rec.Title + ":";
 
             // What kind of recording?  If it's a OneTime or manual, then cancel the request too.
-            if ( (rec.RequestType == RPRequestTypes.OneTime) || (rec.RequestType == RPRequestTypes.Manual) )
+            if ((rec.RequestType == RPRequestTypes.OneTime) || (rec.RequestType == RPRequestTypes.Manual))
             {
                 RPRequest rq = rec.Request();
                 if (rq != null)
@@ -3220,12 +3287,12 @@ namespace RemotePotatoServer
                     }
                 }
             }
-            
+
             // Now cancel the recording itself
             try
             {
                 EPGManager.mcData.CancelRecording(rec.Id);
-                txtResponse += "<br /><br />This recording of " +  rec.Title +  " was cancelled.";
+                txtResponse += "<br /><br />This recording of " + rec.Title + " was cancelled.";
             }
             catch (Exception e)
             {
@@ -3625,8 +3692,8 @@ namespace RemotePotatoServer
             {
                 SendRemoteControlCommandDesktop(ref bs);
                 return true;
-                
-                
+
+
             }
         }
         private bool SendRemoteControlCommandMobile(ref BrowserSender bs)
@@ -3643,7 +3710,7 @@ namespace RemotePotatoServer
                 {
                     // First command - always displayed within an iFrame, even on iPhone
                     string txtHTML = FileCache.ReadSkinTextFile("page_remote_command.htm");
-                    
+
                     strResponse = "Click a button.";
 
                     // Replace Caption within iFrame with response
@@ -3817,9 +3884,9 @@ namespace RemotePotatoServer
         }
         private void ViewLoginPage(string PostObjects, ref bool DidLoginSuccessfully, ref string destURL, ref string destQueryString)
         {
-            
+
             txtPageTitle = "Login";
-            
+
             // Always display date dropdowns
             string requestForm = FileCache.ReadSkinTextFile("page_login.htm");
 
@@ -3854,7 +3921,7 @@ namespace RemotePotatoServer
                     )
                 {
                     strHeader = "Incorrect details, please try again.";
-                    
+
                 }
                 else
                 {
@@ -3870,7 +3937,7 @@ namespace RemotePotatoServer
                     Response.Redirect("/");
 
                     DidLoginSuccessfully = true;
-                    return ;  // logged in
+                    return;  // logged in
                 }
             }
 
@@ -3881,7 +3948,7 @@ namespace RemotePotatoServer
             requestForm = null;
 
             DidLoginSuccessfully = false;
-            return ; // not logged in
+            return; // not logged in
 
         }
         private bool EPGGridChannelAdvance()
@@ -4409,7 +4476,7 @@ namespace RemotePotatoServer
             }
 
             CommonEPG.TVService tvs = tvp.TVService();
-            if ( (!getFromFile) & ( tvs == null) )
+            if ((!getFromFile) & (tvs == null))
             {
                 txtResponse += "Could not find the TV channel for this programme in the EPG.";
                 return false;
@@ -4441,9 +4508,9 @@ namespace RemotePotatoServer
                 if (dtOriginalAirDate.ToLocalTime().Year != DateTime.Now.Year)
                     strOriginalAirDate += " " + dtOriginalAirDate.ToLocalTime().Year.ToString();
             }
-            tblShow = tblShow.Replace("**ORIGINALAIRDATE**", strOriginalAirDate );
+            tblShow = tblShow.Replace("**ORIGINALAIRDATE**", strOriginalAirDate);
 
-            
+
             if (tvs != null)
                 tblShow = tblShow.Replace("**CHANNEL**", tvs.Callsign);
             else
@@ -4510,8 +4577,8 @@ namespace RemotePotatoServer
                 tblShow = tblShow.Replace("**RECORDINGTYPE**", "This information is retrieved from a recorded TV file.");
 
                 string txtDeleteLink = string.IsNullOrEmpty(tvp.Filename) ? "" :
-                    " <a " + Functions.LinkConfirmClick("Are you sure?  This will permanently delete the file from disk.") + " href='deletefile64?filename=" + HttpUtility.UrlEncode( Functions.EncodeToBase64(tvp.Filename) )  + "'>" + "(Delete Show)</a>";
-                
+                    " <a " + Functions.LinkConfirmClick("Are you sure?  This will permanently delete the file from disk.") + " href='deletefile64?filename=" + HttpUtility.UrlEncode(Functions.EncodeToBase64(tvp.Filename)) + "'>" + "(Delete Show)</a>";
+
                 tblShow = tblShow.Replace("**RECORDINGSTATE**", "This show was recorded." + txtDeleteLink);
 
                 StringBuilder sbStreamLinks = new StringBuilder(250);
@@ -4519,7 +4586,7 @@ namespace RemotePotatoServer
                 sbStreamLinks.AppendLine("<a href=\"streamprogramme?quality=1&framesize=0.4&programmeid=" + tvp.Id.ToString() + "\">normal</a> | ");
                 sbStreamLinks.AppendLine("<a href=\"streamprogramme?quality=2&framesize=0.5&programmeid=" + tvp.Id.ToString() + "\">medium</a> | ");
                 sbStreamLinks.AppendLine("<a href=\"streamprogramme?quality=3&framesize=0.5&programmeid=" + tvp.Id.ToString() + "\">high</a>");
-                tblShow = tblShow.Replace("**STREAMLINK**", sbStreamLinks.ToString() ); // no streaming
+                tblShow = tblShow.Replace("**STREAMLINK**", sbStreamLinks.ToString()); // no streaming
             }
             else
             {
@@ -4534,7 +4601,7 @@ namespace RemotePotatoServer
 
                     // Info about the recording state & optional link to cancel recording.
                     string txtAboutShowRecording = rec.State.ToPrettyString();
-                    
+
                     // If it's not already happened
                     if (
                         (rec.State == RPRecordingStates.Scheduled) ||
@@ -4656,7 +4723,7 @@ namespace RemotePotatoServer
             TVProgramme tvp = EPGManager.VideoFileToTVProgramme(FN);
             return StreamVideoUsingTVProgramme(tvp, 1, 0, 320, 240);
         }
-        
+
         private bool StreamRecordedProgramme()
         {
             if (!(qsParams.HasParameter("programmeid")))
@@ -4718,7 +4785,7 @@ namespace RemotePotatoServer
 
             // Get tvp
             CommonEPG.TVProgramme tvp = null;
-            if (! RecTV.Default.RecordedTVProgrammes.TryGetValue(programmeID, out tvp))
+            if (!RecTV.Default.RecordedTVProgrammes.TryGetValue(programmeID, out tvp))
             {
                 txtResponse += "Could not find this show.";
                 return false;
@@ -4780,8 +4847,8 @@ namespace RemotePotatoServer
                 StringBuilder sbStreamURL = new StringBuilder(30);
                 sbStreamURL.Append(@"mms://");
                 sbStreamURL.Append(Request.Url.Host);
-                
-                sbStreamURL.Append(":" + rs.Port.ToString() );
+
+                sbStreamURL.Append(":" + rs.Port.ToString());
                 sbStreamURL.Append(@"/tvshow.wmv");
 
                 tblShow = tblShow.Replace("**STREAMURL**", sbStreamURL.ToString());
@@ -4791,7 +4858,7 @@ namespace RemotePotatoServer
                 //tblShow = tblShow.Replace("**STOPSTREAMLINK**", "<a href=\"stopstreamprogramme?programmeid=" + tvp.Id.ToString() + "\">Stop streaming</a>");
                 tblShow = tblShow.Replace("**STOPSTREAMLINK**", "");
 
-                
+
             }
             else // NOT OK
             {
@@ -4852,12 +4919,12 @@ namespace RemotePotatoServer
             newRR.Prepadding = Convert.ToInt32(Settings.Default.DefaultPrePadding);
             newRR.FirstRunOnly = Settings.Default.DefaultRecordFirstRunOnly;
 
-            string schedDetails = "Attempting to schedule recording... ";    
-                /*as follows:<br><ul><li>Recording Type: " +
-                newRR.RequestTypeAsString + "</li><li>Show Name: " + newRR.ShowName + "</li><li>Channel Callsign: " +
-                newRR.ChannelCallSign + "</li><li>Start Date/Time : " + newRR.StartTime.ToLocalTime().ToLongDateString() +
-                ", " + newRR.StartTime.ToLocalTime().ToShortTimeString() +
-                "</li></ul>"; */
+            string schedDetails = "Attempting to schedule recording... ";
+            /*as follows:<br><ul><li>Recording Type: " +
+            newRR.RequestTypeAsString + "</li><li>Show Name: " + newRR.ShowName + "</li><li>Channel Callsign: " +
+            newRR.ChannelCallSign + "</li><li>Start Date/Time : " + newRR.StartTime.ToLocalTime().ToLongDateString() +
+            ", " + newRR.StartTime.ToLocalTime().ToShortTimeString() +
+            "</li></ul>"; */
 
             spoolMessage(schedDetails.Replace("<br>", Environment.NewLine)); // to screen / logfile
             txtResponse += "<br />" + schedDetails; // to browser

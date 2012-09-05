@@ -50,7 +50,7 @@ namespace FatAttitude.MediaStreamer
             EncodingParameters = mrq.CustomParameters;
             if (request.LiveTV)
             {
-                EncodingParameters.SegmentDuration = 30;
+                EncodingParameters.SegmentDuration = 10;
             }
             else
             {
@@ -96,6 +96,7 @@ namespace FatAttitude.MediaStreamer
             // Arguments
             ConstructArguments();
             shellRunner.Arguments = cmdArguments.ToString();
+
         }
         public void Abort()
         {
@@ -154,8 +155,15 @@ namespace FatAttitude.MediaStreamer
                     //byteHoldingBuffer.Clear();
                     //AwaitingSegmentNumber++;
                     //switchToNextSegment();
-                    SendDebugMessage("Transcoder sleeping " + (request.ActualSegmentDuration)*.15 + " seconds.");
-                    Thread.Sleep((request.ActualSegmentDuration) * 150); // s.t. minimal redundant video decoding takes place
+                    //TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
+                    //TimeSpan tsOld = ts;
+                    //while (!((ts.TotalSeconds - tsOld.TotalSeconds)<100) && ((ts.TotalSeconds - tsOld.TotalSeconds) < 0.15 * request.ActualSegmentDuration))  // first condition: prevent ts that are obviously out of range
+                    //{
+                    //    SendDebugMessage("Transcoder waiting for next " + request.ActualSegmentDuration + " second block. Old duration: "+ tsOld.TotalSeconds+ " Current duration: " + ts.TotalSeconds);
+                    //    ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
+                    //}
+                    //SendDebugMessage("Transcoder sleeping " + (request.ActualSegmentDuration) * .15 + " seconds.");
+                    //Thread.Sleep((request.ActualSegmentDuration) * 150); // s.t. minimal redundant video decoding takes place
                     beginNextSegment();
                     this.Start(incomingSegment.Number, ref txtResult);
                 }
@@ -582,6 +590,27 @@ namespace FatAttitude.MediaStreamer
         //}
 
         #endregion
+
+        #region probing
+
+        public TimeSpan GetMediaDuration(string fileName)
+        {
+            MediaInfoGrabber grabber = new MediaInfoGrabber(Functions2.ToolkitFolder, Path.Combine(Functions2.StreamBaseFolder, "probe_results"), fileName);
+            grabber.DebugMessage += new EventHandler<FatAttitude.GenericEventArgs<string>>(grabber_DebugMessage);
+            grabber.GetInfo();
+            grabber.DebugMessage -= grabber_DebugMessage;
+
+            TimeSpan duration = (grabber.Info.Success) ? grabber.Info.Duration : new TimeSpan(0);
+
+            return duration;
+        }
+
+        void grabber_DebugMessage(object sender, FatAttitude.GenericEventArgs<string> e)
+        {
+            Functions2.WriteLineToLogFile(e.Value);
+        }
+
+#endregion
     }
 
 

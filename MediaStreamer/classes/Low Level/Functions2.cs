@@ -547,7 +547,6 @@ namespace FatAttitude.MediaStreamer
             return reader.ReadToEnd();
         }
 
-
     }
 }
 
