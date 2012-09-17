@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RPKeySender")]
 [assembly: AssemblyDescription("Sends keystrokes to simulate a remote control")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("RPKeySender")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
 [assembly: AssemblyTrademark("")]

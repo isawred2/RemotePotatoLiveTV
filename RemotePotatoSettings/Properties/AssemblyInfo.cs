@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RemotePotatoSettings")]
 [assembly: AssemblyDescription("Shared settings assembly for Remote Potato")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("RemotePotatoSettings")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
 [assembly: AssemblyTrademark("")]

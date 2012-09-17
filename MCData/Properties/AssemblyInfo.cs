@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MSEPGDataSource")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("MSEPGDataSource")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
 [assembly: AssemblyTrademark("")]

@@ -160,7 +160,7 @@ namespace FatAttitude.MediaStreamer
         {
             if (Request.LiveTV)
             {
-                SECONDS_BEFORE_AUTO_PAUSE = 100;
+                SECONDS_BEFORE_AUTO_PAUSE = (Request.CustomParameters.SegmentDuration)*9;
             }
             else
             {

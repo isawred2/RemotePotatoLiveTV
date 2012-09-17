@@ -18,13 +18,15 @@ namespace FatAttitude.MediaStreamer
 
         // Private members
         public bool IsRunning;
+        private bool isLiveTV;
 
         private Process runningProcess;
         Thread thrdReadStandardOut;
         object RunningProcessLock = new object();
 
-        public ShellCmdRunner()
+        public ShellCmdRunner(bool isLiveTV)
         {
+            this.isLiveTV=isLiveTV;
         }
 
         public bool Start(ref string txtResult)
@@ -59,7 +61,7 @@ namespace FatAttitude.MediaStreamer
                 Debug.Print("Running: " + psi.FileName + " " + psi.Arguments);
                 runningProcess.StartInfo = psi;
                 runningProcess.Start();
-                runningProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                runningProcess.PriorityClass = ProcessPriorityClass.High;//BelowNormal;
                 IsRunning = true;
 
                 /*StdOutBuffer = new byte[200000] ;
@@ -255,7 +257,7 @@ namespace FatAttitude.MediaStreamer
             {
                 TimeSpan timeSinceReadOutput = DateTime.Now.Subtract(lastReadStandardOutput);
 
-                if (timeSinceReadOutput.TotalSeconds >= ASSUME_FFMPEG_FINISHED_AFTER_TIMEOUT)
+                if (!isLiveTV && timeSinceReadOutput.TotalSeconds >= ASSUME_FFMPEG_FINISHED_AFTER_TIMEOUT)  // we never want LiveTV to time out
                 {
                     EndTimeoutDetection();
                     DoStandardOutputTimeOut();

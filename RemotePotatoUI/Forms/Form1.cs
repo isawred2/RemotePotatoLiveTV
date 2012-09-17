@@ -37,12 +37,34 @@ namespace RemotePotatoServer
 
             InitializeComponent();
 
+            using (Timer t = new Timer())
+            {
+                t.Tick += delegate
+                {
+                    if (Settings.Default.RestartAuto && !ServerIsRunning)
+                    {
+                        // Save settings
+                        Settings.Default.Save();
+#if DEBUG
+                    // try to run as app
+                   StartWebServer (false);
+#else
+                        // try to run as service
+                        StartWebServer(true);
+#endif
+                    }
+
+                };
+                t.Interval = 10000;
+                this.Load += delegate { t.Start(); };
+            }
+
         }
 
-        
-        
+
+
         private void Form1_Load(object sender, EventArgs e)
-        {           
+        {
             // Info
             Functions.WriteLineToLogFile("Remote Potato Settings UI v" + UIFunctions.VersionText + " - starting up.");
 
@@ -65,6 +87,7 @@ namespace RemotePotatoServer
 #if DEBUG
             ToggleServer();
 #endif
+
         }
         void ShowInterfaceForEnabledModules()
         {
@@ -239,7 +262,7 @@ namespace RemotePotatoServer
             // Check for updates
             CheckForAppUpdatesIfTimeElapsed();
 
-            
+
 
             // Setup wizard?
             ShowSetupWizardIfNeverShown();
@@ -261,7 +284,7 @@ namespace RemotePotatoServer
 
             // Tech Preview only
             // Button to send favorites to Media Center
-           // btnSendFavoritesToMediaCenter.Visible = Settings.Default.IsTechPreview;
+            // btnSendFavoritesToMediaCenter.Visible = Settings.Default.IsTechPreview;
             btnSendFavoritesToMediaCenter.Visible = false;
 
             // Recent Browsers
@@ -287,22 +310,26 @@ namespace RemotePotatoServer
         private void ShowUpdateInfoIfAppropriate()
         {
 
+            ////
+            return;
+            ////
+
             Version lastVersionShown = new Version(Settings.Default.LastUpdateInfoShownForMajVersion, Settings.Default.LastUpdateInfoShownForMinVersion);
             Version thisVersionMajMinOnly = new Version(Functions.ServerVersion.Major, Functions.ServerVersion.Minor);
 
             if (thisVersionMajMinOnly > lastVersionShown)
             {
                 string target;
-                if (Settings.Default.IsTechPreview )
+                if (Settings.Default.IsTechPreview)
                     target = "http://www.remotepotato.com/changelog.aspx?techpreview=yes#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
                 else
                     target = "http://www.remotepotato.com/changelog.aspx?techpreview=no#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
- //               System.Diagnostics.Process.Start(target);
+                //               System.Diagnostics.Process.Start(target);
 
                 Settings.Default.LastUpdateInfoShownForMajVersion = thisVersionMajMinOnly.Major;
                 Settings.Default.LastUpdateInfoShownForMinVersion = thisVersionMajMinOnly.Minor;
             }
-       
+
         }
         private void WarnIfStreamingPackNotInstalled()
         {
@@ -320,19 +347,19 @@ namespace RemotePotatoServer
             }
 
 
-            
+
         }
         bool WarnIfLegacyAppRunning()
         {
-                if (Functions.isProcessRunning("RemotePotato"))
-                {
-                    RPMessageBox.ShowAlert("An older version of Remote Potato is still installed and currently running.\r\nPlease stop and/or uninstall the older version to continue.");
-                    return true;
-                }
+            if (Functions.isProcessRunning("RemotePotato"))
+            {
+                RPMessageBox.ShowAlert("An older version of Remote Potato is still installed and currently running.\r\nPlease stop and/or uninstall the older version to continue.");
+                return true;
+            }
             return false;
         }
         #endregion
-        
+
         // Settings: Property changed (call methods)
         void Default_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -347,7 +374,7 @@ namespace RemotePotatoServer
                     break;
             }
             */
-            
+
         }
 
         #region Status display / spool
@@ -406,22 +433,22 @@ namespace RemotePotatoServer
             e.Cancel = true;  // Handle App exit manually
 
             if (ServerIsRunning)
-            if (ServerRunningType == ServerRunningTypes.ServiceRunning)
-            {
-
-                if (!Settings.Default.ShownServiceRunsInBackgroundWarning)
+                if (ServerRunningType == ServerRunningTypes.ServiceRunning)
                 {
-                    Settings.Default.ShownServiceRunsInBackgroundWarning = true;
-                    RPMessageBox.Show("Remote Potato Server will continue to run in the background, regardless of whether you are logged into this computer.\r\n\r\nYou can stop the service using this settings application or the Windows Services dialog.\r\n\r\nIf you wish to prevent the Remote Potato Server from starting automatically with Windows, you should un-check the box marked 'Start Remote Potato server with Windows'.");
-                }
 
-            
-            }
-            else if (ServerRunningType == ServerRunningTypes.ApplicationRunning)
-            {
-                // Stop server
-                webserverTC.Stop();
-            }
+                    if (!Settings.Default.ShownServiceRunsInBackgroundWarning)
+                    {
+                        Settings.Default.ShownServiceRunsInBackgroundWarning = true;
+                        RPMessageBox.Show("Remote Potato Server will continue to run in the background, regardless of whether you are logged into this computer.\r\n\r\nYou can stop the service using this settings application or the Windows Services dialog.\r\n\r\nIf you wish to prevent the Remote Potato Server from starting automatically with Windows, you should un-check the box marked 'Start Remote Potato server with Windows'.");
+                    }
+
+
+                }
+                else if (ServerRunningType == ServerRunningTypes.ApplicationRunning)
+                {
+                    // Stop server
+                    webserverTC.Stop();
+                }
 
             ExitProgram();
 
@@ -432,18 +459,18 @@ namespace RemotePotatoServer
         // Tab Control tab changing, e.g. to save channels
         TabPage currentTabPage = null;
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-       {
-           if (currentTabPage == tpChannels)
-           {
-               ChanMgrPromptIfDirty();
-           }
+        {
+            if (currentTabPage == tpChannels)
+            {
+                ChanMgrPromptIfDirty();
+            }
 
-           currentTabPage = tabControl1.SelectedTab;
-       }
+            currentTabPage = tabControl1.SelectedTab;
+        }
         // Form Control events
         private void ShowDebugLog()
         {
-           System.Diagnostics.Process.Start("explorer.exe", "/select, " + Functions.DebugLogFileFN);
+            System.Diagnostics.Process.Start("explorer.exe", "/select, " + Functions.DebugLogFileFN);
         }
         // Expert Display
         private void showOptionsIfAppropriate()
@@ -454,23 +481,23 @@ namespace RemotePotatoServer
                  (Image)RemotePotatoServer.Properties.Resources.imgGearGreen :
                  (Image)RemotePotatoServer.Properties.Resources.imgGearBlack;
 
-           if (showingExpert)
-           {
-               pnlOptions.Visible = true;
-               this.Height = 455;
-           }
-           else
-           {
-               pnlOptions.Visible = false;
-               this.Height = 76;
-           }
+            if (showingExpert)
+            {
+                pnlOptions.Visible = true;
+                this.Height = 455;
+            }
+            else
+            {
+                pnlOptions.Visible = false;
+                this.Height = 76;
+            }
         }
         private void btnShowHideOptions_Click(object sender, EventArgs e)
         {
             bool sShowExpert = Settings.Default.ShowExpert;
             sShowExpert = !sShowExpert;
             Settings.Default.ShowExpert = sShowExpert;
-            
+
             showOptionsIfAppropriate();
         }
 
@@ -494,7 +521,7 @@ namespace RemotePotatoServer
         {
             get
             {
-                return (! (ServiceManager.RPServiceAccountName == "LocalSystem"));
+                return (!(ServiceManager.RPServiceAccountName == "LocalSystem"));
             }
         }
         // Start with Windows
@@ -508,7 +535,7 @@ namespace RemotePotatoServer
             if (initialising) return;
 
             string ErrorText = string.Empty;
-            if (! ServiceManager.SetRPServiceStartupType((cbStartWithWindows.Checked), ref ErrorText) )
+            if (!ServiceManager.SetRPServiceStartupType((cbStartWithWindows.Checked), ref ErrorText))
             {
                 RPMessageBox.ShowAlert("Could not change service startup type: " + ErrorText);
                 UpdateStartWithWindowsCheckbox();  // (un)tick checkbox
@@ -534,7 +561,7 @@ namespace RemotePotatoServer
         }
         void WarnIfIRHelperSettoRunButNotRunning()
         {
-            if (RegRunHelper.IsRPKeySenderSetToRunOnStartup) 
+            if (RegRunHelper.IsRPKeySenderSetToRunOnStartup)
             {
                 bool isIRRunning = false;
                 try
@@ -544,13 +571,13 @@ namespace RemotePotatoServer
                 }
                 catch (System.Threading.WaitHandleCannotBeOpenedException)
                 {
-                    isIRRunning = false;   
+                    isIRRunning = false;
                 }
                 catch (Exception ex)
                 {
                     Functions.WriteLineToLogFile("Error checking if RP IR Helper app is running:");
                     Functions.WriteExceptionToLogFile(ex);
-                    
+
                     isIRRunning = false;
                 }
 
@@ -715,7 +742,7 @@ namespace RemotePotatoServer
                 return;
 
             // If we've never nagged, set the flag and don't nag yet
-            if (! Settings.Default.HaveEverNagged)
+            if (!Settings.Default.HaveEverNagged)
             {
                 Settings.Default.DateLastNagged = DateTime.Now;
                 Settings.Default.HaveEverNagged = true;
@@ -745,7 +772,7 @@ namespace RemotePotatoServer
 
         #region Web Server
         // Server on / off
-        
+
         private void btnToggleServer_Click(object sender, EventArgs e)
         {
             btnToggleServer.Enabled = false;
@@ -802,7 +829,7 @@ namespace RemotePotatoServer
 
             // No URL reserved - ask first...  (then try to start server again)
             if (
-                (Settings.Default.LastSetSecurityForPort != Settings.Default.Port) )
+                (Settings.Default.LastSetSecurityForPort != Settings.Default.Port))
             {
                 ReserveURLForPort(true);
                 return;
@@ -841,22 +868,22 @@ namespace RemotePotatoServer
                 webserverTC.Stop();
                 return;
             }
-                
+
             if (ServerRunningType == ServerRunningTypes.ServiceRunning)
             {
-                if (! ServiceManager.StopRemotePotatoService())
+                if (!ServiceManager.StopRemotePotatoService())
                     RPMessageBox.ShowAlert("Could not stop service.");
             }
         }
         private void btnShowConnectionInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormConnectionInformation fConnectInfo = new FormConnectionInformation( (!ServerIsRunning) );
+            FormConnectionInformation fConnectInfo = new FormConnectionInformation((!ServerIsRunning));
             fConnectInfo.ShowDialog();
         }
 
-        
-        
-        
+
+
+
         bool ValidateSecuritySettings()
         {
             if (Settings.Default.RequirePassword)
@@ -901,7 +928,7 @@ namespace RemotePotatoServer
         void serverTC_IsRunningChanged(object sender, EventArgs e)  // App running state (owned by this form) changed
         {
             DisplayServerStatusInGUICallBack d = new DisplayServerStatusInGUICallBack(DisplayServerStatusInGUI);
-            this.Invoke(d, new object[] {  });
+            this.Invoke(d, new object[] { });
 
             if (!webserverTC.IsRunning)
             {
@@ -917,7 +944,7 @@ namespace RemotePotatoServer
                 }
             }
 
-        }   
+        }
         void ServiceManager_ServiceStatusChanged(object sender, EventArgs e)   // Service running state changed
         {
             SafeDisplayServerStatusInGUI();
@@ -1018,28 +1045,28 @@ namespace RemotePotatoServer
 
         private void btnFlushCache_Click(object sender, EventArgs e)
         {
-           FileCache.FlushCache(true, true);
-           RPMessageBox.Show("The file cache has been emptied of all files.", "Flush Cache");
+            FileCache.FlushCache(true, true);
+            RPMessageBox.Show("The file cache has been emptied of all files.", "Flush Cache");
         }
 
-       private void cbCacheTextFiles_CheckedChanged(object sender, EventArgs e)
-       {
-           if (!cbCacheTextFiles.Checked)
-           {
-               FileCache.FlushCache(false, true);
-           }
-       }
+        private void cbCacheTextFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbCacheTextFiles.Checked)
+            {
+                FileCache.FlushCache(false, true);
+            }
+        }
 
-       private void cbCacheBinaryFiles_CheckedChanged(object sender, EventArgs e)
-       {
-           if (!cbCacheBinaryFiles.Checked)
-           {
-               FileCache.FlushCache(true, false);
-           }
-       }
+        private void cbCacheBinaryFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbCacheBinaryFiles.Checked)
+            {
+                FileCache.FlushCache(true, false);
+            }
+        }
 
-        
-       #endregion
+
+        #endregion
 
 
         #region Mobile User Agents
@@ -1077,7 +1104,7 @@ namespace RemotePotatoServer
             {
                 agents.AppendLine(agent);
             }
-            
+
             txtMobileUserAgents.Text = agents.ToString().Trim();
         }
         private void btnRevertMobileUserAgents_Click_1(object sender, EventArgs e)
@@ -1097,7 +1124,7 @@ namespace RemotePotatoServer
             Settings.Default.Save();
 
             RPMessageBox.Show("Mobile user agents list saved.");
-        } 
+        }
         #endregion
 
         #region Navigation Linklabels
@@ -1114,7 +1141,7 @@ namespace RemotePotatoServer
         {
             GoToDonateWebPage();
         }
-        
+
         private void btnAboutSupport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string target = "http://remotepotatoforums.fatattitude.com";
@@ -1130,7 +1157,8 @@ namespace RemotePotatoServer
                 string logPath = Path.Combine(dir, "static/skins/");
                 System.Diagnostics.Process.Start(@logPath);
             }
-            catch {
+            catch
+            {
                 RPMessageBox.ShowAlert("Sorry, but the folder could not be found.");
             }
         }
@@ -1139,7 +1167,7 @@ namespace RemotePotatoServer
             string target = "http://mychannellogos.com";
             System.Diagnostics.Process.Start(target);
         }
-       
+
 
         private void btnShowAppFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -1147,7 +1175,7 @@ namespace RemotePotatoServer
             System.Diagnostics.Process.Start(@dir);
         }
 
-        
+
 
         #endregion
 
@@ -1195,9 +1223,9 @@ namespace RemotePotatoServer
                 fPleaseWait.CloseMe();
                 fPleaseWait = null;
             }
-        } 
+        }
         #endregion
- 
+
         #region Deployment / Updates / Backups
         private void CheckForAppUpdatesIfTimeElapsed()
         {
@@ -1212,7 +1240,7 @@ namespace RemotePotatoServer
             }
             else
             {
-                
+
                 TimeSpan elapsed = (DateTime.Now - Settings.Default.LastCheckedForAppUpdates);
                 int daysElapsed = Convert.ToInt32(elapsed.TotalDays);
                 if (daysElapsed > Convert.ToInt32(Settings.Default.DaysBetweenAppUpdateCheck))
@@ -1227,8 +1255,8 @@ namespace RemotePotatoServer
                     Functions.WriteLineToLogFile("Skipping App update check - only " + daysElapsed.ToString() + " days since last check.");
                 }
             }
-            
-            
+
+
         }
         private void btnCheckVersion_Click(object sender, EventArgs e)
         {
@@ -1258,13 +1286,15 @@ namespace RemotePotatoServer
                     RPMessageBox.Show("Cannot check for updates right now - no Internet connection was found.\r\n\r\nPlease connect to the Internet and try again.");
                 return;
             }
-
+            /////
+            return;
+            //////
             // Check for an update
             RemotePotatoServer.UI.UpdateChecker checker = new RemotePotatoServer.UI.UpdateChecker();
             Version newestVersion = new Version();
             string newestVersionDescription = string.Empty;
 
-            bool isUpdate = checker.IsUpdateAvailable(UIFunctions.ProductCode, Functions.ServerVersion, ref newestVersion, ref newestVersionDescription );
+            bool isUpdate = checker.IsUpdateAvailable(UIFunctions.ProductCode, Functions.ServerVersion, ref newestVersion, ref newestVersionDescription);
             Functions.WriteLineToLogFile("UpdateCheck: Current version is " + Functions.ServerVersion.ToString() + ", available version is " + newestVersion.ToString());
             if (isUpdate)
             {
@@ -1314,7 +1344,7 @@ namespace RemotePotatoServer
         }
         private void btnDeleteDLLCache_Click(object sender, EventArgs e)
         {
-// TODO: delete
+            // TODO: delete
         }
 
         #endregion
@@ -1323,7 +1353,7 @@ namespace RemotePotatoServer
         private void cmbSilverlightStreamingQuality_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (initialising) return;
-            
+
             Settings.Default.SilverlightStreamingQuality = cmbSilverlightStreamingQuality.SelectedIndex;
         }
 
@@ -1375,7 +1405,7 @@ namespace RemotePotatoServer
                 LocalChannelCache.Add(tvc);
             }
 
-            if (! Settings.Default.DoneVeryFirstChannelListSort)
+            if (!Settings.Default.DoneVeryFirstChannelListSort)
             {
                 SortLocalChannelsByNumber();
                 Settings.Default.DoneVeryFirstChannelListSort = true;
@@ -1421,7 +1451,7 @@ namespace RemotePotatoServer
                 return null;
             }
 
-            ListViewItem lviItem= new ListViewItem();
+            ListViewItem lviItem = new ListViewItem();
 
             TVService tvc = LocalChannelCache[userIndex];
 
@@ -1430,7 +1460,7 @@ namespace RemotePotatoServer
 
             ListViewItem.ListViewSubItem lvsiChanNum = new ListViewItem.ListViewSubItem();
             lvsiChanNum.Text = tvc.ChannelNumberString();
-            
+
             ListViewItem.ListViewSubItem lvsiCallsign = new ListViewItem.ListViewSubItem();
             lvsiCallsign.Text = tvc.Callsign;
 
@@ -1446,14 +1476,14 @@ namespace RemotePotatoServer
             lviItem.UseItemStyleForSubItems = true;
 
             // Assign item
-           return lviItem;
+            return lviItem;
         }
         private void lvChannelManager_ItemCheck(object sender, ItemCheckEventArgs e)
         {
 
             if (PopulatingChannelManagerListView == true) return;
             // Toggle the TVChannel object#
-            if (! (LocalChannelCache.Count > e.Index)) return;
+            if (!(LocalChannelCache.Count > e.Index)) return;
             TVService editChannel = LocalChannelCache[e.Index];
 
             if (editChannel.IsFavorite != (e.NewValue == CheckState.Checked))
@@ -1469,7 +1499,7 @@ namespace RemotePotatoServer
             if (movingAnItem) return;
 
             populateSelectedChannelInfo();
-        
+
 
         }
         private void lvChannelManager_MouseUp(object sender, MouseEventArgs e)
@@ -1528,7 +1558,7 @@ namespace RemotePotatoServer
             if (!GetLVIAndTVChannelForSelectedIndex(ref lvi, ref tvc, ref SelectedIndex))
                 return;
 
-            int newIndex = lvChannelManager.Items.Count ;
+            int newIndex = lvChannelManager.Items.Count;
 
             attemptMoveLviToNewIndex(lvi, newIndex);
             attemptMoveCachedChannelToNewIndex(tvc, newIndex);
@@ -1559,8 +1589,8 @@ namespace RemotePotatoServer
             if (newIndex > lvChannelManager.Items.Count) newIndex = lvChannelManager.Items.Count;
 
             lvChannelManager.Items.Insert(newIndex, lvi);
-            
-            
+
+
             lvi.Selected = true;
             lvi.Focused = true;
             movingAnItem = false;
@@ -1603,7 +1633,7 @@ namespace RemotePotatoServer
         public void SortLocalChannelsByNumber()
         {
             CommonEPG.Comparers.TVCServiceNumComparer numComparer = new CommonEPG.Comparers.TVCServiceNumComparer();
-            LocalChannelCache.Sort(numComparer);    
+            LocalChannelCache.Sort(numComparer);
         }
         public void SortLocalChannelsByCallsign()
         {
@@ -1683,7 +1713,7 @@ namespace RemotePotatoServer
 
             RefreshChannelManagerListViewSelectedItem();
         }
-        private string currentlySelectedChannelMappingInfo = "";  
+        private string currentlySelectedChannelMappingInfo = "";
         private void btnShowChannelLogoMappingInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             RPMessageBox.Show(currentlySelectedChannelMappingInfo, "Logo Mapping Information");
@@ -1730,7 +1760,7 @@ namespace RemotePotatoServer
         }
         private void btnRevertChannelList_Click(object sender, EventArgs e)
         {
-            if (RPMessageBox.ShowQuestion("Are you sure?  This will erase any unsaved changes to your favourites or channel order.","Update channels from Media Center") == DialogResult.Yes)
+            if (RPMessageBox.ShowQuestion("Are you sure?  This will erase any unsaved changes to your favourites or channel order.", "Update channels from Media Center") == DialogResult.Yes)
                 RevertChannelList();
         }
 
@@ -1859,7 +1889,7 @@ namespace RemotePotatoServer
         // TESTING
         private void btnTestButton_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         #region Firewall
@@ -1870,7 +1900,7 @@ namespace RemotePotatoServer
         void OfferToAddFirewallRulesIfNotAlreadyOffered()
         {
             if (
-                (Settings.Default.HaveOfferedWindowsFirewallForPort != Convert.ToInt32(Settings.Default.Port)) 
+                (Settings.Default.HaveOfferedWindowsFirewallForPort != Convert.ToInt32(Settings.Default.Port))
                )
             {
                 Settings.Default.HaveOfferedWindowsFirewallForPort = Convert.ToInt32(Settings.Default.Port);
@@ -1907,8 +1937,9 @@ namespace RemotePotatoServer
             this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", Settings.Default, "CheckForAppUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", Settings.Default, "DaysBetweenAppUpdateCheck", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBox8.DataBindings.Add(new System.Windows.Forms.Binding("Checked", Settings.Default, "CheckForAppUpdates", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-           // this.txtPassword.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", Settings.Default, "RequirePassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-           // this.txtPassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", Settings.Default, "UserPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.RestartAuto.DataBindings.Add(new System.Windows.Forms.Binding("Checked", Settings.Default, "RestartAuto", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            // this.txtPassword.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", Settings.Default, "RequirePassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            // this.txtPassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", Settings.Default, "UserPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtManualRecordingName.DataBindings.Add(new System.Windows.Forms.Binding("Text", Settings.Default, "DefaultManualRecordingName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.nudPrePadding.DataBindings.Add(new System.Windows.Forms.Binding("Value", Settings.Default, "DefaultPrePadding", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", Settings.Default, "DefaultPostPadding", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1958,7 +1989,7 @@ namespace RemotePotatoServer
 
             this.cbDefaultRecordFirstRunOnly.DataBindings.Add(new System.Windows.Forms.Binding("Checked", Settings.Default, "DefaultRecordFirstRunOnly", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             ShowHideMediaCenterRelatedControls();
-            
+
         }
         void ShowHideMediaCenterRelatedControls()
         {
@@ -1979,7 +2010,7 @@ namespace RemotePotatoServer
         }
         #endregion
 
-        
+
 
 
         private void cbDebugFullAPI_Click(object sender, EventArgs e)
@@ -2051,10 +2082,19 @@ namespace RemotePotatoServer
 
         #endregion
 
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initialising) return;
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
 
         // Help
 
-   
+
     }
 
 

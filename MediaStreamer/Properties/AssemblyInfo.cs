@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MediaStreamer")]
 [assembly: AssemblyDescription("Media Streaming class")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("MediaStreamer")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
 [assembly: AssemblyTrademark("")]

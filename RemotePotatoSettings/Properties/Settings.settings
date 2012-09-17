@@ -74,17 +74,6 @@
     <Setting Name="DebugBasic" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MobileUserAgents" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;iPhone&lt;/string&gt;
-  &lt;string&gt;BlackBerry&lt;/string&gt;
-  &lt;string&gt;Palm&lt;/string&gt;
-  &lt;string&gt;PPC&lt;/string&gt;
-  &lt;string&gt;IEMobile&lt;/string&gt;
-  &lt;string&gt;Android&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
     <Setting Name="RecentUserAgents" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -235,12 +224,6 @@
     <Setting Name="CacheBinaryFileMaxLengthBytes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12000</Value>
     </Setting>
-    <Setting Name="RecordedTVFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;C:\&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
     <Setting Name="SilverlightStoreCacheLocally" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -319,44 +302,6 @@
     <Setting Name="DeinterlaceRecTVByDefault" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ImageFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;bmp&lt;/string&gt;
-  &lt;string&gt;gif&lt;/string&gt;
-  &lt;string&gt;jpg&lt;/string&gt;
-  &lt;string&gt;jpeg&lt;/string&gt;
-  &lt;string&gt;tiff&lt;/string&gt;
-  &lt;string&gt;tif&lt;/string&gt;
-  &lt;string&gt;png&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
-    <Setting Name="VideoFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;avi&lt;/string&gt;
-  &lt;string&gt;mpeg&lt;/string&gt;
-  &lt;string&gt;flv&lt;/string&gt;
-  &lt;string&gt;mov&lt;/string&gt;
-  &lt;string&gt;mp4&lt;/string&gt;
-  &lt;string&gt;wmv&lt;/string&gt;
-  &lt;string&gt;wtv&lt;/string&gt;
-  &lt;string&gt;dvr-ms&lt;/string&gt;
-  &lt;string&gt;m4v&lt;/string&gt;
-  &lt;string&gt;3gp&lt;/string&gt;
-  &lt;string&gt;m2ts&lt;/string&gt;
-  &lt;string&gt;mpg&lt;/string&gt;
-  &lt;string&gt;m2v&lt;/string&gt;
-  &lt;string&gt;ts&lt;/string&gt;
-  &lt;string&gt;vob&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
-    <Setting Name="MusicFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;mp3&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
     <Setting Name="EnableMediaCenterSupport" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -368,18 +313,6 @@
     </Setting>
     <Setting Name="EnablePictureLibrary" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="VideoLibraryFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;C:\&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
-    <Setting Name="PictureLibraryFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;C:\&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="UseExplorerLibraryForPictureFolders" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -422,6 +355,76 @@
     </Setting>
     <Setting Name="StreamingVolumePercent" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">110</Value>
+    </Setting>
+    <Setting Name="RestartAuto" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MobileUserAgents" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;iPhone&lt;/string&gt;
+  &lt;string&gt;BlackBerry&lt;/string&gt;
+  &lt;string&gt;Palm&lt;/string&gt;
+  &lt;string&gt;PPC&lt;/string&gt;
+  &lt;string&gt;IEMobile&lt;/string&gt;
+  &lt;string&gt;Android&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="RecordedTVFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;C:\&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="ImageFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;bmp&lt;/string&gt;
+  &lt;string&gt;gif&lt;/string&gt;
+  &lt;string&gt;jpg&lt;/string&gt;
+  &lt;string&gt;jpeg&lt;/string&gt;
+  &lt;string&gt;tiff&lt;/string&gt;
+  &lt;string&gt;tif&lt;/string&gt;
+  &lt;string&gt;png&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="VideoFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;avi&lt;/string&gt;
+  &lt;string&gt;mpeg&lt;/string&gt;
+  &lt;string&gt;flv&lt;/string&gt;
+  &lt;string&gt;mov&lt;/string&gt;
+  &lt;string&gt;mp4&lt;/string&gt;
+  &lt;string&gt;wmv&lt;/string&gt;
+  &lt;string&gt;wtv&lt;/string&gt;
+  &lt;string&gt;dvr-ms&lt;/string&gt;
+  &lt;string&gt;m4v&lt;/string&gt;
+  &lt;string&gt;3gp&lt;/string&gt;
+  &lt;string&gt;m2ts&lt;/string&gt;
+  &lt;string&gt;mpg&lt;/string&gt;
+  &lt;string&gt;m2v&lt;/string&gt;
+  &lt;string&gt;ts&lt;/string&gt;
+  &lt;string&gt;vob&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="MusicFileExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;mp3&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="VideoLibraryFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;C:\&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="PictureLibraryFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;C:\&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

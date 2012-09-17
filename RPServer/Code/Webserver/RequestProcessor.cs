@@ -1248,9 +1248,29 @@ namespace RemotePotatoServer
                     foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
                     {
                         DirectoryInfo di = new DirectoryInfo(recTVFolder);
-                        FileInfo[] files = di.GetFiles("RMCLiveTV*.wtv");
-                        for (int index = 0; index < files.Length; index++)
-                            files[index].Delete();
+                        FileInfo[] files = null;
+                        try
+                        {
+                            files = di.GetFiles("RMCLiveTV*.wtv");
+                        }
+                        catch (Exception e)
+                        {
+                            if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("You probably have a path defined in Recorded TV (RP settings) that does not exist. Exception " + e.ToString());
+                        }
+                        if (files != null)
+                        {
+                            for (int index = 0; index < files.Length; index++)
+                            {
+                                try
+                                {
+                                    files[index].Delete();
+                                }
+                                catch (Exception e)
+                                {
+                                    //file was currently being read or something, just ignore
+                                }
+                            }
+                        }
                     }
 
                     XMLresponse = XMLHelper.Serialize<string>("LiveTV does not really stop.");
@@ -1280,63 +1300,88 @@ namespace RemotePotatoServer
                     DateTime tryStartTime = DateTime.Now;
 
                     //  Schedule manual recording
-                        // DATE TIME
+                    // DATE TIME
 
-                        if ((tryDuration == 0) | (tryDuration > 720)) { failedValidation = true; failedValidationReason += "Invalid duration, must be between 1 and 720 minutes.<br>"; }
+                    if ((tryDuration == 0) | (tryDuration > 720)) { failedValidation = true; failedValidationReason += "Invalid duration, must be between 1 and 720 minutes.<br>"; }
 
-                        // In the unliklely event a file already exist with a certain random nr, try again:
-                        bool randomFileAlreadyExists = false;
-                        do
+                    // In the unliklely event a file already exist with a certain random nr, try again:
+                    bool randomFileAlreadyExists = false;
+                    do
+                    {
+                        Random r = new Random();
+                        filenameID = filenameID + UniqueAndroidID + r.Next(0, int.MaxValue);
+                        string[] filePaths = null;
+                        foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
                         {
-                            Random r = new Random();
-                            filenameID = filenameID + UniqueAndroidID+ r.Next(0, int.MaxValue);
-                            foreach (string recTVFolder in Settings.Default.RecordedTVFolders)
+                            try
                             {
-                                string[] filePaths = Directory.GetFiles(recTVFolder, filenameID + "*.wtv");
-                                if (filePaths.Length > 0)
-                                {
-                                    randomFileAlreadyExists = true;
-                                    break;
-                                }
+                                filePaths = Directory.GetFiles(recTVFolder, filenameID + "*.wtv");
                             }
-                        } while (randomFileAlreadyExists);
+                            catch (Exception e)
+                            {
+                                if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("You probably have a path defined in Recorded TV (RP settings) that does not exist. Exception " + e.ToString());
+                            }
+                            if (filePaths.Length > 0)
+                            {
+                                randomFileAlreadyExists = true;
+                                break;
+                            }
+                        }
+                    } while (randomFileAlreadyExists);
 
-                        // Create a new recording request
-                        newRR = new RecordingRequest(tryStartTime.ToUniversalTime(), long.Parse(serviceID), tryDuration, filenameID);
+                    // Create a new recording request
+                    newRR = new RecordingRequest(tryStartTime.ToUniversalTime(), long.Parse(serviceID), tryDuration, filenameID);
 
                     // Passed validation?
                     if (failedValidation)
                     {
+                        if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("FailedValidation");
                         txtResponse += "<p class='recorderror'>Error in recording request: " + failedValidationReason + "</p>";
                         XMLresponse = XMLHelper.Serialize<string>(txtResponse);
                     }
                     else
                     {
+                        if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("Not FailedValidation");
                         qsParams.Add("queueid", RecordingQueue.AddToQueue(newRR));
 
                         if (RecordFromQueue())
                         {
-                            int waittimeforfiletoappear = 15; // seconds
+                            if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("RecordFromQueue=True");
+                            int waittimeforfiletoappear = 20; // seconds
+                            //int waittimeforfiletoappear = 200; // seconds, testing whether setting needs high value for certain tv card like Ceton
                             DateTime begin = DateTime.Now;
                             bool found = false;
+                            string[] filepaths = null;
                             do
                             {
-                                string[] filepaths = { "" };
-                                foreach (string rectvfolder in Settings.Default.RecordedTVFolders)
-                                {
-                                    filepaths = Directory.GetFiles(rectvfolder, filenameID + "*.wtv");
-                                    if (filepaths.Length > 0) break;
-                                }
+                                    foreach (string rectvfolder in Settings.Default.RecordedTVFolders)
+                                    {
+                                        if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("Checking " + rectvfolder + " for " + filenameID + "*.wtv");
+                                        try
+                                        {
+                                            filepaths = Directory.GetFiles(rectvfolder, filenameID + "*.wtv");
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("You probably have a path defined in Recorded TV (RP settings) that does not exist. Exception " + e.ToString());
+                                        }
+                                        if (filepaths != null && filepaths.Length > 0)
+                                        {
+                                            if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("Found recording tv folder..." + filepaths[0]);
+                                            break;
+                                        }
+                                    }
 
-                                if (filepaths.Length > 0)
+                                if (filepaths != null && filepaths.Length > 0)
                                 {
                                     XMLresponse = XMLHelper.Serialize<string>(filepaths[0]);
                                     found = true;
                                     break;
                                 }
-                                if (DateTime.Compare(begin.AddSeconds(waittimeforfiletoappear), DateTime.Now) < 0) break;
+
+                                if (DateTime.Compare(begin.AddSeconds(waittimeforfiletoappear), DateTime.Now) < 0) break;//not found after 20 seconds
                             } while (true);
-                            if (!found) 
+                            if (!found)
                             {
                                 List<string> errors = new List<string>();
                                 errors.Add("All tuners are busy somewhere in between now and " + tryDuration + " minutes from now");
@@ -1345,6 +1390,7 @@ namespace RemotePotatoServer
                                 //List<RPRecording> oldLiveTVrecs = EPGManager.AllRecordingsContainsTitle("RMCLiveTV");
                                 foreach (RPRecording rec in recsToday)
                                 {
+                                    if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("Recording:"+rec.Title);
                                     //if (rec.TVProgramme().StartTime <= (tryStartTime.Ticks + tryDuration * TimeSpan.TicksPerMinute))
                                     {
                                         errors.Add(rec.Id.ToString());
@@ -1380,6 +1426,10 @@ namespace RemotePotatoServer
                             //}
                             //do { } while (!LiveTVScheduled);
                             //XMLresponse = XMLHelper.Serialize<string>(LiveTVFilename);
+                        }
+                        else
+                        {
+                            if (Settings.Default.DebugAdvanced) Functions.WriteLineToLogFile("RecordFromQueue=False");
                         }
                     }
 

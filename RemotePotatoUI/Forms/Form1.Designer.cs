@@ -61,6 +61,7 @@
             this.btnEditUsers = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.RestartAuto = new System.Windows.Forms.CheckBox();
             this.label42 = new System.Windows.Forms.Label();
             this.btnHelpIRHelper = new System.Windows.Forms.LinkLabel();
             this.cbStartRPKeySenderWithWindows = new System.Windows.Forms.CheckBox();
@@ -652,6 +653,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.RestartAuto);
             this.groupBox6.Controls.Add(this.label42);
             this.groupBox6.Controls.Add(this.btnHelpIRHelper);
             this.groupBox6.Controls.Add(this.cbStartRPKeySenderWithWindows);
@@ -661,6 +663,17 @@
             this.groupBox6.Size = new System.Drawing.Size(302, 100);
             this.groupBox6.TabIndex = 25;
             this.groupBox6.TabStop = false;
+            // 
+            // RestartAuto
+            // 
+            this.RestartAuto.AutoSize = true;
+            this.RestartAuto.Location = new System.Drawing.Point(18, 36);
+            this.RestartAuto.Name = "RestartAuto";
+            this.RestartAuto.Size = new System.Drawing.Size(244, 17);
+            this.RestartAuto.TabIndex = 16;
+            this.RestartAuto.Text = "Restart server after 10 seconds when stopped";
+            this.RestartAuto.UseVisualStyleBackColor = true;
+            this.RestartAuto.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // label42
             // 
@@ -675,7 +688,7 @@
             // btnHelpIRHelper
             // 
             this.btnHelpIRHelper.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnHelpIRHelper.Location = new System.Drawing.Point(181, 62);
+            this.btnHelpIRHelper.Location = new System.Drawing.Point(244, 57);
             this.btnHelpIRHelper.Name = "btnHelpIRHelper";
             this.btnHelpIRHelper.Size = new System.Drawing.Size(15, 14);
             this.btnHelpIRHelper.TabIndex = 14;
@@ -687,7 +700,7 @@
             // cbStartRPKeySenderWithWindows
             // 
             this.cbStartRPKeySenderWithWindows.AutoSize = true;
-            this.cbStartRPKeySenderWithWindows.Location = new System.Drawing.Point(18, 62);
+            this.cbStartRPKeySenderWithWindows.Location = new System.Drawing.Point(18, 77);
             this.cbStartRPKeySenderWithWindows.Name = "cbStartRPKeySenderWithWindows";
             this.cbStartRPKeySenderWithWindows.Size = new System.Drawing.Size(165, 17);
             this.cbStartRPKeySenderWithWindows.TabIndex = 9;
@@ -698,7 +711,7 @@
             // cbStartWithWindows
             // 
             this.cbStartWithWindows.AutoSize = true;
-            this.cbStartWithWindows.Location = new System.Drawing.Point(18, 39);
+            this.cbStartWithWindows.Location = new System.Drawing.Point(18, 54);
             this.cbStartWithWindows.Name = "cbStartWithWindows";
             this.cbStartWithWindows.Size = new System.Drawing.Size(223, 17);
             this.cbStartWithWindows.TabIndex = 8;
@@ -2496,6 +2509,7 @@
             this.checkBox3.TabIndex = 8;
             this.checkBox3.Text = "Debug Basic";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // cbDebugCache
             // 
@@ -3146,6 +3160,7 @@
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.NumericUpDown nudStreamingVolumePercent;
+        private System.Windows.Forms.CheckBox RestartAuto;
     }
 }
 

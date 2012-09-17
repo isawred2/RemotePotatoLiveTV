@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RPServer")]
 [assembly: AssemblyDescription("Remote Potato Server - Remote Access Windows Media Center")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("RPServer")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
 [assembly: AssemblyTrademark("")]

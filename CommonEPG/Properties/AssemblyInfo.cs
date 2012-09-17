@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CommonEPG")]
 [assembly: AssemblyDescription("Common EPG and logo interface for RemotePotato")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("CommonEPG")]
 [assembly: AssemblyCopyright("©FatAttitude Ltd")]
 [assembly: AssemblyTrademark("")]

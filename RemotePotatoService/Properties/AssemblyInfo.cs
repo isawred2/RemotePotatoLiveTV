@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RemotePotatoService")]
 [assembly: AssemblyDescription("Remote Internet access to Windows 7 Media Center")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("RemotePotatoService")]
-[assembly: AssemblyCopyright("Copyright © FatAttitude 2011")]
+[assembly: AssemblyCopyright("Copyright © FatAttitude 2011 and MyFrem 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

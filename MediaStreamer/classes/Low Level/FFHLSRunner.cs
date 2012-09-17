@@ -50,7 +50,7 @@ namespace FatAttitude.MediaStreamer
             EncodingParameters = mrq.CustomParameters;
             if (request.LiveTV)
             {
-                EncodingParameters.SegmentDuration = 10;
+                EncodingParameters.SegmentDuration = 60;
             }
             else
             {
@@ -80,7 +80,7 @@ namespace FatAttitude.MediaStreamer
         }
         void Initialise()
         {
-            shellRunner = new ShellCmdRunner();
+            shellRunner = new ShellCmdRunner(request.LiveTV);
             shellRunner.ProcessFinished += new EventHandler<GenericEventArgs<processfinishedEventArgs>>(shellRunner_ProcessFinished);
             shellRunner.FileName = Path.Combine(PathToTools, "ffmpeg.exe");
             shellRunner.StandardErrorReceivedLine += new EventHandler<GenericEventArgs<string>>(shellRunner_StandardErrorReceivedLine);
@@ -125,6 +125,7 @@ namespace FatAttitude.MediaStreamer
         #endregion
 
         #region Incoming Events
+
         void shellRunner_ProcessFinished(object sender, GenericEventArgs<processfinishedEventArgs> e)
         {
             if (sender != shellRunner) return;
@@ -164,8 +165,29 @@ namespace FatAttitude.MediaStreamer
                     //}
                     //SendDebugMessage("Transcoder sleeping " + (request.ActualSegmentDuration) * .15 + " seconds.");
                     //Thread.Sleep((request.ActualSegmentDuration) * 150); // s.t. minimal redundant video decoding takes place
-                    beginNextSegment();
-                    this.Start(incomingSegment.Number, ref txtResult);
+
+                    //TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
+                    //int sleepTime = EncodingParameters.SegmentDuration - (int) ts.TotalSeconds % EncodingParameters.SegmentDuration;
+                    //sleepTime += EncodingParameters.SegmentDuration / 12; //just make sure enough waited that transcoder starts on file that incremented>segmentduration
+                    //sleepTime = sleepTime / 2; 
+                    //SendDebugMessage("Sleeping " + sleepTime + " seconds.");
+                    //Thread.Sleep(sleepTime*1000); // We assume ffmpeg stopped because of EOF, therefore wait before opening file again for transcoding
+
+                    //do
+                    //{
+                    //    Thread.Sleep(1000);
+                    //    TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
+                    //    SecondsNew = ts.TotalSeconds;
+                    //    SendDebugMessage("Waiting for difference between " + SecondsNew + " and " + SecondsOld + " to be greater than " + EncodingParameters.SegmentDuration);
+                    //    if (SecondsNew - SecondsOld > EncodingParameters.SegmentDuration)
+                    //    {
+                            beginNextSegment();
+                            this.Start(incomingSegment.Number, ref txtResult);
+                    //        break;
+                    //    }
+                    //}
+                    //while (true);
+                    //SecondsOld = SecondsNew;
                 }
             }
             else
@@ -348,7 +370,7 @@ namespace FatAttitude.MediaStreamer
             if (request.LiveTV)
             args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
                 //args = @"{THREADS} {H264PROFILE} {H264LEVEL} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {DEINTERLACE} -f mpegts -vcodec libx264 {VIDEOBITRATE} {AUDIOBITRATE} ";
-            // see http://smorgasbork.com/component/content/article/35-linux/98-high-bitrate-real-time-mpeg-2-encoding-with-ffmpeg as well
+            // see for efficiency: http://smorgasbork.com/component/content/article/35-linux/98-high-bitrate-real-time-mpeg-2-encoding-with-ffmpeg as well
             else // never change a winning team:
             args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
 

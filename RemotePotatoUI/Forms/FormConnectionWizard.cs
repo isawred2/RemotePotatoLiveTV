@@ -730,12 +730,13 @@ namespace RemotePotatoServer
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            ////
+            /////
+            //if (RPMessageBox.ShowQuestion("Remote Potato for iOS allows you to stream all your music, pictures and video directly to your iPhone or iPad.\r\n\r\nWould you like to read more about the app now?","Remote Potato for iPhone/iPad") == System.Windows.Forms.DialogResult.Yes)
+            //    ShowIOSAppWebPage();
 
-            if (RPMessageBox.ShowQuestion("Remote Potato for iOS allows you to stream all your music, pictures and video directly to your iPhone or iPad.\r\n\r\nWould you like to read more about the app now?","Remote Potato for iPhone/iPad") == System.Windows.Forms.DialogResult.Yes)
-                ShowIOSAppWebPage();
-
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
+            //this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            //this.Close();
 
             
 

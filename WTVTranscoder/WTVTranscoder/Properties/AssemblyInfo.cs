@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WTVTranscoder")]
 [assembly: AssemblyDescription("Transcodes and streams SBE source files (.wtv and .dvr-ms)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("WTVTranscoder")]
 [assembly: AssemblyCopyright("Copyright © FatAttitude 2010")]
 [assembly: AssemblyTrademark("")]

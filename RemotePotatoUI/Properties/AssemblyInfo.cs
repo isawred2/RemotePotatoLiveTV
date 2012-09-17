@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RemotePotato UI")]
 [assembly: AssemblyDescription("User interface to Remote Potato")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FatAttitude")]
+[assembly: AssemblyCompany("MyFrem")]
 [assembly: AssemblyProduct("RemotePotato")]
-[assembly: AssemblyCopyright("Copyright © FatAttitude 2010")]
+[assembly: AssemblyCopyright("Copyright © FatAttitude 2010 and MyFrem 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
