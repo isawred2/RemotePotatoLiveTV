@@ -181,8 +181,8 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\bin\Debug\Toub.MediaCenter.Dvrms.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\bin\Debug\Microsoft.WindowsAPICodePack.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\Interop.WMPLib.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\RPServer.csproj.ResolveComReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\RPServer.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\RPServer.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPServer\obj\Debug\RPServer.csprojResolveAssemblyReference.cache

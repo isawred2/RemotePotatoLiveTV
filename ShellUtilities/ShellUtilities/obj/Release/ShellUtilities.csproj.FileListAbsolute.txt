@@ -25,6 +25,6 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ResolveAssemblyReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache

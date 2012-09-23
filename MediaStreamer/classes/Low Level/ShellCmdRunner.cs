@@ -61,7 +61,7 @@ namespace FatAttitude.MediaStreamer
                 Debug.Print("Running: " + psi.FileName + " " + psi.Arguments);
                 runningProcess.StartInfo = psi;
                 runningProcess.Start();
-                runningProcess.PriorityClass = ProcessPriorityClass.High;//BelowNormal;
+                runningProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
                 IsRunning = true;
 
                 /*StdOutBuffer = new byte[200000] ;

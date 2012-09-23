@@ -829,7 +829,6 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\Toub.MediaCenter.Dvrms.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\Microsoft.WindowsAPICodePack.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\ResolveAssemblyReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.Form1.resources
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.FormChannelImportingOptions.resources
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.FormConnectionInformation.resources
@@ -843,7 +842,7 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.frmPleaseWait.resources
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.ucConnectionSummary.resources
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoServer.Properties.Resources.resources
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\GenerateResource.read.1.tlog
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\GenerateResource.write.1.tlog
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.exe
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.csprojResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.csproj.GenerateResource.Cache

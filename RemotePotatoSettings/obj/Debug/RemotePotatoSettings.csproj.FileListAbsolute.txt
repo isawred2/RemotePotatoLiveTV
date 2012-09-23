@@ -1,6 +1,5 @@
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Debug\RemotePotatoSettings.dll.config
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Debug\RemotePotatoSettings.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Debug\RemotePotatoSettings.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Debug\RemotePotatoSettings.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Debug\RemotePotatoSettings.pdb

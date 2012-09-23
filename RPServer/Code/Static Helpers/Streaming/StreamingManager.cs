@@ -351,12 +351,25 @@ namespace RemotePotatoServer
             sbIndexFile.AppendLine("#EXT-X-ALLOW-CACHE:YES"); // allow client to cache files
 
 
-            double dNumberSegments = mediaDuration.TotalSeconds / Convert.ToDouble(msSegmentDuration);
+            double dNumberSegments = mediaDuration.TotalSeconds / Convert.ToDouble(msSegmentDuration);  //FORMULA TON HERE
             int WholeNumberSegments = Convert.ToInt32(Math.Floor(dNumberSegments));
             int i;
+            int OldSegmentDuration = 2;
+            int SegmentDuration;
             for (i = 0; i < WholeNumberSegments; i++)
             {
-                sbIndexFile.AppendLine("#EXTINF:" + msSegmentDuration.ToString() + ",");
+                if (ms.Request.LiveTV)
+                {
+                    SegmentDuration = Math.Min(msSegmentDuration,ms.Request.InitialWaitTimeBeforeLiveTVStarts+i*ms.Request.SegmentIncreasingStepsLiveTV); //make segments q second bigger untill 60 seconds reached
+
+                    // start with 4 seconds first then gradually increase up to 1 minute of segmentlength
+                    sbIndexFile.AppendLine("#EXTINF:" + SegmentDuration.ToString() + ",");
+//                    sbIndexFile.AppendLine("#EXTINF:4,");
+                }
+                else
+                {
+                    sbIndexFile.AppendLine("#EXTINF:" + msSegmentDuration.ToString() + ",");
+                }
                 string strSegID = "seg-" + i.ToString() + ".ts";
                 sbIndexFile.AppendLine(strSegID);
             }

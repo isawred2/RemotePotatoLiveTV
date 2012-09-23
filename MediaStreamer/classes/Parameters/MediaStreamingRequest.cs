@@ -19,6 +19,8 @@ namespace FatAttitude.MediaStreamer
 
         public bool LiveTV { get; set; }
         public Int32 DurationLiveTVBlocks { get; set; }
+        public int InitialWaitTimeBeforeLiveTVStarts {get; set;}
+
         //public double AVSyncDifference { get; set; } // for livetv
         //public static bool EOSDetected { get; set; }
 
@@ -33,6 +35,7 @@ namespace FatAttitude.MediaStreamer
 
             LiveTV = false;
             DurationLiveTVBlocks = 1; //minutes
+            InitialWaitTimeBeforeLiveTVStarts = 60;//seconds
             //AVSyncDifference = 0.0; // for livetv
             //EOSDetected = false;
         }
@@ -43,10 +46,20 @@ namespace FatAttitude.MediaStreamer
         {
             get
             {
+                if (LiveTV) return 60;//LiveTV, since there are freezes/overlaps every segmentduration this seems ok for max duration.
                 if (!UseCustomParameters) return DEFAULT_SEGMENT_DURATION;
                 return CustomParameters.SegmentDuration;
             }
-        }   
+        }
+
+        public int SegmentIncreasingStepsLiveTV 
+        {            
+            get
+            {
+                return (int)    InitialWaitTimeBeforeLiveTVStarts/2;
+            }
+        }
+ 
 
         public static MediaStreamingRequest RequestWithDesktopProfileLevel(int desktopProfileLevel)
         {

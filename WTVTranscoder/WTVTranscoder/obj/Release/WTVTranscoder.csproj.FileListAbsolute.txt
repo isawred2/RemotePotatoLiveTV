@@ -27,6 +27,5 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Release\WTVTranscoder.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Release\DirectShowLib-2005.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Release\WindowsMediaLib.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\ResolveAssemblyReference.cache
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.pdb
