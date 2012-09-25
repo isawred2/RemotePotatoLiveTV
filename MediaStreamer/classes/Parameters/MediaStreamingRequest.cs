@@ -56,7 +56,7 @@ namespace FatAttitude.MediaStreamer
         {            
             get
             {
-                return (int)    InitialWaitTimeBeforeLiveTVStarts/2;
+                return (int)10;// InitialWaitTimeBeforeLiveTVStarts / 2;
             }
         }
  

@@ -7,4 +7,3 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Debug\RPKeySender.exe
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Debug\RPKeySender.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Debug\RPKeySender.csproj.GenerateResource.Cache
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Debug\RPKeySender.csprojResolveAssemblyReference.cache

@@ -350,11 +350,24 @@ namespace RemotePotatoServer
             sbIndexFile.AppendLine("#EXT-X-TARGETDURATION:" + msSegmentDuration.ToString());  // maximum duration of any one file, in seconds
             sbIndexFile.AppendLine("#EXT-X-ALLOW-CACHE:YES"); // allow client to cache files
 
+            double dNumberSegments;
+            if (ms.Request.LiveTV)
+            {
+                int q = ms.Request.InitialWaitTimeBeforeLiveTVStarts;
+                int r = ms.Request.SegmentIncreasingStepsLiveTV;
+                double StartAtSegmentWhereCalculatedSegmentDurationIsMax = (msSegmentDuration - q) / r;
+                double StartAtSecondsWhereCalculatedSegmentDurationIsMax = (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, msSegmentDuration)
+                    - q) * (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, msSegmentDuration) + q - r) / (2 * r);
 
-            double dNumberSegments = mediaDuration.TotalSeconds / Convert.ToDouble(msSegmentDuration);  //FORMULA TON HERE
+                dNumberSegments = (mediaDuration.TotalSeconds - StartAtSecondsWhereCalculatedSegmentDurationIsMax) / msSegmentDuration + StartAtSegmentWhereCalculatedSegmentDurationIsMax;
+            }
+            else //never change a winning team:
+            {
+                dNumberSegments = mediaDuration.TotalSeconds / Convert.ToDouble(msSegmentDuration);
+            }
             int WholeNumberSegments = Convert.ToInt32(Math.Floor(dNumberSegments));
             int i;
-            int OldSegmentDuration = 2;
+//            int OldSegmentDuration = 2;
             int SegmentDuration;
             for (i = 0; i < WholeNumberSegments; i++)
             {
@@ -375,7 +388,15 @@ namespace RemotePotatoServer
             }
 
             // Duration of final segment?
-            double dFinalSegTime = mediaDuration.TotalSeconds % Convert.ToDouble(msSegmentDuration);
+            double dFinalSegTime;
+            if (ms.Request.LiveTV)
+            {
+                dFinalSegTime= (dNumberSegments - WholeNumberSegments)*msSegmentDuration; // TODO: should also take inot account special case where totalduration smalller than when mssegmentduration segments appear
+            }
+            else
+            {
+                dFinalSegTime = mediaDuration.TotalSeconds % Convert.ToDouble(msSegmentDuration);
+            }
             int iFinalSegTime = Convert.ToInt32(dFinalSegTime);
             sbIndexFile.AppendLine("#EXTINF:" + iFinalSegTime.ToString() + ",");
             string strFinalSegID = "seg-" + i.ToString() + ".ts";

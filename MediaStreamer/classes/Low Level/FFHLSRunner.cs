@@ -65,31 +65,32 @@ namespace FatAttitude.MediaStreamer
         int NewStartAtSeconds = 0;
         int oldStartAtSegment = -1;
         int lastStartAtSeconds = 0;
-        int lastSegmentHavingDurationLessThan60 = -1;
         public bool Start(int _startAtSegment, ref string txtResult)
         {
             AwaitingSegmentNumber = _startAtSegment; // need to set this pretty sharpish
             if (request.LiveTV)
-            {       SegmentDuration = Math.Min(EncodingParameters.SegmentDuration,request.InitialWaitTimeBeforeLiveTVStarts+_startAtSegment*request.SegmentIncreasingStepsLiveTV); //starting at 16 seconds make segments q second bigger untill 60 seconds reached
-                    StartAtSeconds = (SegmentDuration * SegmentDuration - request.SegmentIncreasingStepsLiveTV * SegmentDuration -
-                            request.InitialWaitTimeBeforeLiveTVStarts * request.InitialWaitTimeBeforeLiveTVStarts +
-                            request.SegmentIncreasingStepsLiveTV * request.InitialWaitTimeBeforeLiveTVStarts) / (2 * request.SegmentIncreasingStepsLiveTV); //This is the general quadratic solution to the valuse x=4,y=0, x=4+a, y=4, x=4+2a, y=4+4+a etc. Thanks Ton en Rein!!
-                    if (SegmentDuration >= EncodingParameters.SegmentDuration)
-                        {
-                            StartAtSeconds = StartAtSeconds + (_startAtSegment - lastSegmentHavingDurationLessThan60 -1) * EncodingParameters.SegmentDuration; //FORMULA TON HERE
-                        }
-                        else
-                        {
-                            lastSegmentHavingDurationLessThan60 = _startAtSegment;
-                        }
+            {
+                SegmentDuration = Math.Min(EncodingParameters.SegmentDuration, request.InitialWaitTimeBeforeLiveTVStarts + _startAtSegment * request.SegmentIncreasingStepsLiveTV); //starting at 16 seconds make segments q second bigger untill 60 seconds reached
+                int q = request.InitialWaitTimeBeforeLiveTVStarts;
+                int r = request.SegmentIncreasingStepsLiveTV;
+                int x = SegmentDuration;
+                StartAtSeconds = (x - q) * (x + q - r) / (2 * r); //This is the general quadratic solution to the valuse x=4,y=0, x=4+a, y=4, x=4+2a, y=4+4+a etc. Thanks Ton en Rein!!
+                double StartAtSegmentWhereCalculatedSegmentDurationIsMax = (EncodingParameters.SegmentDuration - q) / r;
+                double StartAtSecondsWhereCalculatedSegmentDurationIsMax = (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, EncodingParameters.SegmentDuration)
+                    - q) * (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, EncodingParameters.SegmentDuration) + q - r) / (2 * r);
+                if (_startAtSegment >= StartAtSegmentWhereCalculatedSegmentDurationIsMax)
+                {
+                    StartAtSeconds = (int)(StartAtSecondsWhereCalculatedSegmentDurationIsMax + (_startAtSegment - (int)(StartAtSegmentWhereCalculatedSegmentDurationIsMax)) * EncodingParameters.SegmentDuration);
+                }
                 //                }
-                SendDebugMessage("SegmentDuration: ********* " + SegmentDuration+"start at: "+StartAtSeconds);
+                SendDebugMessage("SegmentDuration: ********* " + SegmentDuration + "start at: " + StartAtSeconds);
                 //StartAtSeconds = NextStartAtSeconds;
                 //SegmentDuration = Math.Min(2 * SegmentDuration, EncodingParameters.SegmentDuration);
                 //NextStartAtSeconds = StartAtSeconds + SegmentDuration;
             }
             else
             {
+                SegmentDuration = EncodingParameters.SegmentDuration;
                 StartAtSeconds = _startAtSegment * EncodingParameters.SegmentDuration;
             }
 
@@ -100,7 +101,7 @@ namespace FatAttitude.MediaStreamer
                 Abort();
             }
 
-            Initialise();
+            Initialise(_startAtSegment);
 
             IsReStarting = false;
             SendDebugMessage("Running: " + shellRunner.FileName);
@@ -109,7 +110,7 @@ namespace FatAttitude.MediaStreamer
             IsRunning = shellRunner.Start(ref txtResult);
             return IsRunning;
         }
-        void Initialise()
+        void Initialise(int startAtSegment)
         {
             shellRunner = new ShellCmdRunner(request.LiveTV);
             shellRunner.ProcessFinished += new EventHandler<GenericEventArgs<processfinishedEventArgs>>(shellRunner_ProcessFinished);
@@ -125,7 +126,7 @@ namespace FatAttitude.MediaStreamer
             segmentArguments = new CommandArguments();
 
             // Arguments
-            ConstructArguments();
+            ConstructArguments(startAtSegment);
             shellRunner.Arguments = cmdArguments.ToString();
 
         }
@@ -395,11 +396,11 @@ namespace FatAttitude.MediaStreamer
          * -ar 48000
          * -ac 2 
          */
-        void ConstructArguments()
+        void ConstructArguments(int startAtSegment)
         {
             string args;
             if (request.LiveTV)
-                args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
+                args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {MINVIDEOBITRATE} {MAXVIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
             //args = @"{THREADS} {H264PROFILE} {H264LEVEL} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {DEINTERLACE} -f mpegts -vcodec libx264 {VIDEOBITRATE} {AUDIOBITRATE} ";
             // see for efficiency: http://smorgasbork.com/component/content/article/35-linux/98-high-bitrate-real-time-mpeg-2-encoding-with-ffmpeg as well
             else // never change a winning team:
@@ -473,10 +474,26 @@ namespace FatAttitude.MediaStreamer
             string strAudioSync = "-async " + AudioSyncAmount.ToString();
             strFFMpegTemplate = strFFMpegTemplate.Replace("{AUDIOSYNC}", strAudioSync);
 
+            int maxDuration = EncodingParameters.SegmentDuration;
+            int currentSegmentDuration = Math.Min(EncodingParameters.SegmentDuration, request.InitialWaitTimeBeforeLiveTVStarts + startAtSegment * request.SegmentIncreasingStepsLiveTV); ;
+            int videobitrate = 0;
+            int audiobitrate = 0;
             // Video bitrate
             if (request.LiveTV)
             {
-                string strVideoBitRateOptions = "-bufsize " + "50Mi" + " -b " + EncodingParameters.VideoBitRate;  //cmdArguments.AddArgCouple("-maxrate", VideoBitRate);
+                if (maxDuration == 0)
+                {
+                }
+                else
+                {
+                    videobitrate = (int)(toInteger(EncodingParameters.VideoBitRate) * (Math.Sin((Math.PI) * currentSegmentDuration / (2 * maxDuration))));//sin seems to be a nice fast climbing function
+//                    audiobitrate = (int)(toInteger(EncodingParameters.AudioBitRate) * (Math.Sin((Math.PI) * currentSegmentDuration / (2 * maxDuration))));
+                    audiobitrate = toInteger(EncodingParameters.AudioBitRate);
+                    //videobitrate = (int)(toInteger(EncodingParameters.VideoBitRate) * (currentSegmentDuration / maxDuration)); //linear
+                    //audiobitrate = (int)(toInteger(EncodingParameters.AudioBitRate) * (currentSegmentDuration / maxDuration));
+                    SendDebugMessage("VideoBitRate now:  " + videobitrate);
+                }
+                string strVideoBitRateOptions = "-bufsize " + "50Mi -b " + videobitrate;  //cmdArguments.AddArgCouple("-maxrate", VideoBitRate);
                 strFFMpegTemplate = strFFMpegTemplate.Replace("{VIDEOBITRATE}", strVideoBitRateOptions);
             }
             else
@@ -488,13 +505,13 @@ namespace FatAttitude.MediaStreamer
             if (request.LiveTV)
             {
                 // Max video bitrate (optional)
-                string strMaxVideoBitRate = "-maxrate " + EncodingParameters.VideoBitRate;
+                string strMaxVideoBitRate = "-maxrate " + videobitrate;
                 strFFMpegTemplate = strFFMpegTemplate.Replace("{MAXVIDEOBITRATE}", strMaxVideoBitRate);
-                string strMinVideoBitRate = "-minrate " + EncodingParameters.VideoBitRate;
+                string strMinVideoBitRate = "-minrate " + videobitrate;
                 strFFMpegTemplate = strFFMpegTemplate.Replace("{MINVIDEOBITRATE}", strMinVideoBitRate);
-                string strMaxAudioBitRate = "-maxrate " + EncodingParameters.AudioBitRate;
+                string strMaxAudioBitRate = "-maxrate " + audiobitrate;
                 strFFMpegTemplate = strFFMpegTemplate.Replace("{MAXAUDIOBITRATE}", strMaxAudioBitRate);
-                string strMinAudioBitRate = "-maxrate " + EncodingParameters.AudioBitRate;
+                string strMinAudioBitRate = "-maxrate " + audiobitrate;
                 strFFMpegTemplate = strFFMpegTemplate.Replace("{MINAUDIOBITRATE}", strMinAudioBitRate);
 
                 string strVideoBitRateDeviation = "";
@@ -534,8 +551,16 @@ namespace FatAttitude.MediaStreamer
             strFFMpegTemplate = strFFMpegTemplate.Replace("{AUDIOCODEC}", strAudioCodecOptions);
 
             // Audio Bitrate
-            string strAudioBitRate = "-ab " + EncodingParameters.AudioBitRate;
-            strFFMpegTemplate = strFFMpegTemplate.Replace("{AUDIOBITRATE}", strAudioBitRate);
+            if (request.LiveTV)
+            {
+                string strAudioBitRate = "-ab " + audiobitrate;
+                strFFMpegTemplate = strFFMpegTemplate.Replace("{AUDIOBITRATE}", strAudioBitRate);
+            }
+            else
+            {
+                string strAudioBitRate = "-ab " + EncodingParameters.AudioBitRate;
+                strFFMpegTemplate = strFFMpegTemplate.Replace("{AUDIOBITRATE}", strAudioBitRate);
+            }
 
             // Audio sample rate
             string strAudioSampleRate = "-ar " + EncodingParameters.AudioSampleRate;
@@ -652,6 +677,20 @@ namespace FatAttitude.MediaStreamer
 
         #endregion
 
+        #region helpers
+        private static int toInteger(string input)
+        {
+            if (input.IndexOf("k") == -1)
+            {
+                return Convert.ToInt32(input);
+            }
+            else
+            {
+                input = input.Replace("k", "");
+                return Convert.ToInt32(input) * 1024;
+            }
+        }
+        #endregion
         #region probing
 
         public TimeSpan GetMediaDuration(string fileName)
