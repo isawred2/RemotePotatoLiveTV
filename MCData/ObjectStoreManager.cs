@@ -621,11 +621,16 @@ namespace CommonEPG
             {
                 // Not scheduled - cancel
                 if (rec.RequestedProgram != null)
+                {
                     rec.RequestedProgram.Cancel();
+                    recScheduler.Schedule();
+                    rec.RequestedProgram.Refresh();
+
+                }
                 else
                     return false;
             }
-            else if (recState == Microsoft.MediaCenter.Pvr.RecordingState.Recording)  
+            else if (recState == Microsoft.MediaCenter.Pvr.RecordingState.Recording)
             {
                 if (rec.RequestedProgram != null)
                 {

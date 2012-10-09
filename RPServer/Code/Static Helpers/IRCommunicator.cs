@@ -24,6 +24,7 @@ namespace RemotePotatoServer
             }
             else
             {
+                SendStringToServer(txtCmd); //send it anyway, somehow it returns false, evn though it is running; have to solve this
                 return "HELPER_NOT_RUNNING";
             }
         }

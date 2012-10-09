@@ -258,6 +258,111 @@ namespace RPKeySender
             SendKeyUp(VK.VK_MENU);
                      */
                     break;
+
+                case MCCommands.AlphaA:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_A);
+                    break;
+
+                case MCCommands.AlphaB:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_B);
+                    break;
+
+                case MCCommands.AlphaC:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_C);
+                    break;
+
+                case MCCommands.AlphaD:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_D);
+                    break;
+
+                case MCCommands.AlphaE:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_E);
+                    break;
+
+                case MCCommands.AlphaF:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_F);
+                    break;
+
+                case MCCommands.AlphaG:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_G);
+                    break;
+
+                case MCCommands.AlphaH:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_H);
+                    break;
+
+                case MCCommands.AlphaI:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_I);
+                    break;
+
+                case MCCommands.AlphaJ:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_J);
+                    break;
+
+                case MCCommands.AlphaK:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_K);
+                    break;
+
+                case MCCommands.AlphaL:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_L);
+                    break;
+
+                case MCCommands.AlphaM:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_M);
+                    break;
+
+                case MCCommands.AlphaN:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_N);
+                    break;
+
+                case MCCommands.AlphaO:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_O);
+                    break;
+
+                case MCCommands.AlphaP:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_P);
+                    break;
+
+                case MCCommands.AlphaQ:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_Q);
+                    break;
+
+                case MCCommands.AlphaR:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_R);
+                    break;
+
+                case MCCommands.AlphaS:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_S);
+                    break;
+
+                case MCCommands.AlphaT:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_T);
+                    break;
+
+                case MCCommands.AlphaU:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_U);
+                    break;
+
+                case MCCommands.AlphaV:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_V);
+                    break;
+
+                case MCCommands.AlphaW:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_W);
+                    break;
+
+                case MCCommands.AlphaX:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_X);
+                    break;
+
+                case MCCommands.AlphaY:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_Y);
+                    break;
+
+                case MCCommands.AlphaZ:
+                    InputSimulator.SimulateKeyPress(VirtualKeyCode.VK_Z);
+                    break;
+
             }
         }
 

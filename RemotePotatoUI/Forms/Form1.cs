@@ -37,6 +37,23 @@ namespace RemotePotatoServer
 
             InitializeComponent();
 
+            if (Settings.Default.RestartAuto)
+            {
+#if DEBUG
+#else
+                // service
+                ServiceManager.SetRecoveryOptions();
+#endif
+            }
+            else
+            {
+#if DEBUG
+#else
+                // service
+                ServiceManager.ResetRecoveryOptions();
+#endif
+            }
+
             using (Timer t = new Timer())
             {
                 t.Tick += delegate
@@ -55,7 +72,7 @@ namespace RemotePotatoServer
                     }
 
                 };
-                t.Interval = 10000;
+                t.Interval = 10000;// 10 seconds
                 this.Load += delegate { t.Start(); };
             }
 
@@ -2085,6 +2102,25 @@ namespace RemotePotatoServer
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             if (initialising) return;
+            if (Settings.Default.RestartAuto)
+            {
+#if DEBUG
+#else
+                // service
+                ServiceManager.SetRecoveryOptions();
+#endif
+            }
+            else
+            {
+#if DEBUG
+#else
+                // service
+                ServiceManager.ResetRecoveryOptions();
+#endif
+            }
+
+            
+
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)

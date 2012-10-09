@@ -2,6 +2,7 @@
 using System.Threading;
 using System.ServiceProcess;
 using System.Management;
+using System.Diagnostics;
 
 namespace RemotePotatoServer
 {
@@ -77,6 +78,65 @@ namespace RemotePotatoServer
                 }
             }
         }
+
+        public static void SetRecoveryOptions()
+        {
+                RecoveryOptions( "failure \"Remote Potato Service\" reset= 0 actions= restart/10000");
+        }
+        public static void ResetRecoveryOptions()
+        {
+                RecoveryOptions( "failure \"Remote Potato Service\" reset= 0 actions=\"\"");
+        }
+        private static void RecoveryOptions(String Options)
+        {
+            //        sc failure [servicename] reset= 0 actions= restart/60000
+            //Note that you need to include service name in quotation marks, if it contains spaces.
+            bool isRunning;
+            ServiceController svcRP = null;
+            try
+            {
+                svcRP = new ServiceController("Remote Potato Service");
+                isRunning = (svcRP.Status == ServiceControllerStatus.Running);
+                    if (!isRunning)
+                    {
+                        svcRP.Start();
+                        svcRP.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(10));
+                    }
+                    int exitCode;
+                    using (var process = new Process())
+                    {
+                        var startInfo = process.StartInfo;
+                        startInfo.FileName = "sc";
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                        // tell Windows that the service should restart if it fails
+                        startInfo.Arguments = Options;
+
+                        process.Start();
+                        process.WaitForExit();
+
+                        exitCode = process.ExitCode;
+
+                        process.Close();
+                    }
+
+                    if (exitCode != 0)
+                        throw new InvalidOperationException();
+
+            }
+            catch (Exception ex)
+            {
+                Functions.WriteLineToLogFile("Service: Could not start or stop service:");
+                Functions.WriteExceptionToLogFile(ex);
+                return;
+            }
+            finally
+            {
+                svcRP = null;
+            }
+        }
+
+
         public static bool StartRemotePotatoService()
         {
             return StartorStopRemotePotatoService(true);

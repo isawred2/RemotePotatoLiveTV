@@ -70,11 +70,12 @@ namespace FatAttitude.MediaStreamer
             AwaitingSegmentNumber = _startAtSegment; // need to set this pretty sharpish
             if (request.LiveTV)
             {
+                // Start up slowly
                 SegmentDuration = Math.Min(EncodingParameters.SegmentDuration, request.InitialWaitTimeBeforeLiveTVStarts + _startAtSegment * request.SegmentIncreasingStepsLiveTV); //starting at 16 seconds make segments q second bigger untill 60 seconds reached
                 int q = request.InitialWaitTimeBeforeLiveTVStarts;
                 int r = request.SegmentIncreasingStepsLiveTV;
                 int x = SegmentDuration;
-                StartAtSeconds = (x - q) * (x + q - r) / (2 * r); //This is the general quadratic solution to the valuse x=4,y=0, x=4+a, y=4, x=4+2a, y=4+4+a etc. Thanks Ton en Rein!!
+                StartAtSeconds = (x - q) * (x + q - r) / (2 * r); //This is the general quadratic solution to the valuse x=4,y=0, x=4+a, y=4, x=4+2a, y=4+4+a etc. 
                 double StartAtSegmentWhereCalculatedSegmentDurationIsMax = (EncodingParameters.SegmentDuration - q) / r;
                 double StartAtSecondsWhereCalculatedSegmentDurationIsMax = (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, EncodingParameters.SegmentDuration)
                     - q) * (Math.Min(q + (int)StartAtSegmentWhereCalculatedSegmentDurationIsMax * r, EncodingParameters.SegmentDuration) + q - r) / (2 * r);
@@ -84,9 +85,6 @@ namespace FatAttitude.MediaStreamer
                 }
                 //                }
                 SendDebugMessage("SegmentDuration: ********* " + SegmentDuration + "start at: " + StartAtSeconds);
-                //StartAtSeconds = NextStartAtSeconds;
-                //SegmentDuration = Math.Min(2 * SegmentDuration, EncodingParameters.SegmentDuration);
-                //NextStartAtSeconds = StartAtSeconds + SegmentDuration;
             }
             else
             {
@@ -175,51 +173,8 @@ namespace FatAttitude.MediaStreamer
                     string txtResult = "";
                     SendDebugMessage("FF Runner: Restart runner for the final segment and following segments");
 
-                    //// for liveTV resolve AV sync issue:
-                    //LiveTVHelpers lth = new LiveTVHelpers();
-                    //DirectoryInfo TempDir = new DirectoryInfo(Store.ToString());
-                    //TempDir = TempDir.Parent;
-                    //EncodingParameters.AVSyncDifference = lth.GetMediaSyncDifference(PathToTools, TempDir.FullName, InputFile); //for LiveTV
-
-                    //CurrentOverallPosition += CurrentPosition;
-                    //SendDebugMessage("*******************Now at "+CurrentOverallPosition.ToString()+" seconds");
-
-                    //bw.Dispose();
-                    //byteHoldingBuffer.Clear();
-                    //AwaitingSegmentNumber++;
-                    //switchToNextSegment();
-                    //TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
-                    //TimeSpan tsOld = ts;
-                    //while (!((ts.TotalSeconds - tsOld.TotalSeconds)<100) && ((ts.TotalSeconds - tsOld.TotalSeconds) < 0.15 * request.ActualSegmentDuration))  // first condition: prevent ts that are obviously out of range
-                    //{
-                    //    SendDebugMessage("Transcoder waiting for next " + request.ActualSegmentDuration + " second block. Old duration: "+ tsOld.TotalSeconds+ " Current duration: " + ts.TotalSeconds);
-                    //    ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
-                    //}
-                    //SendDebugMessage("Transcoder sleeping " + (request.ActualSegmentDuration) * .15 + " seconds.");
-                    //Thread.Sleep((request.ActualSegmentDuration) * 150); // s.t. minimal redundant video decoding takes place
-
-                    //TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
-                    //int sleepTime = EncodingParameters.SegmentDuration - (int) ts.TotalSeconds % EncodingParameters.SegmentDuration;
-                    //sleepTime += EncodingParameters.SegmentDuration / 12; //just make sure enough waited that transcoder starts on file that incremented>segmentduration
-                    //sleepTime = sleepTime / 2; 
-                    //SendDebugMessage("Sleeping " + sleepTime + " seconds.");
-                    //Thread.Sleep(sleepTime*1000); // We assume ffmpeg stopped because of EOF, therefore wait before opening file again for transcoding
-
-                    //do
-                    //{
-                    //    Thread.Sleep(1000);
-                    //    TimeSpan ts = GetMediaDuration(request.InputFile);  // Use FFMPEG
-                    //    SecondsNew = ts.TotalSeconds;
-                    //    SendDebugMessage("Waiting for difference between " + SecondsNew + " and " + SecondsOld + " to be greater than " + EncodingParameters.SegmentDuration);
-                    //    if (SecondsNew - SecondsOld > EncodingParameters.SegmentDuration)
-                    //    {
                     beginNextSegment();
                     this.Start(incomingSegment.Number, ref txtResult);
-                    //        break;
-                    //    }
-                    //}
-                    //while (true);
-                    //SecondsOld = SecondsNew;
                 }
             }
             else
@@ -401,7 +356,6 @@ namespace FatAttitude.MediaStreamer
             string args;
             if (request.LiveTV)
                 args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {MINVIDEOBITRATE} {MAXVIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";
-            //args = @"{THREADS} {H264PROFILE} {H264LEVEL} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {DEINTERLACE} -f mpegts -vcodec libx264 {VIDEOBITRATE} {AUDIOBITRATE} ";
             // see for efficiency: http://smorgasbork.com/component/content/article/35-linux/98-high-bitrate-real-time-mpeg-2-encoding-with-ffmpeg as well
             else // never change a winning team:
                 args = @"{THREADS} {H264PROFILE} {H264LEVEL} -flags +loop -g 30 -keyint_min 1 -bf 0 -b_strategy 0 -flags2 -wpred-dct8x8 -cmp +chroma -deblockalpha 0 -deblockbeta 0 -refs 1 {MOTIONSEARCHRANGE} {SUBQ} {PARTITIONS} -trellis 0 -coder 0 -sc_threshold 40 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -rc_eq 'blurCplx^(1-qComp)' {MAPPINGS} {STARTTIME} {INPUTFILE} {AUDIOSYNC} {ASPECT} {FRAMESIZE} {DEINTERLACE} -y -f mpegts -vcodec libx264 {VIDEOBITRATE} {VIDEOBITRATEDEVIATION} -qmax 48 -qmin 2 -r 25 {AUDIOCODEC} {AUDIOBITRATE} {AUDIOSAMPLERATE} {AUDIOCHANNELS} {VOLUMELEVEL}";

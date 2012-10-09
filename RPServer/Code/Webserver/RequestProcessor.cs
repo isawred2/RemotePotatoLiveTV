@@ -1277,6 +1277,9 @@ namespace RemotePotatoServer
                 }
                 else if (action.StartsWith("xml/livetv"))
                 {
+                    //ToDo: Have to define an API that conforms to the rest of the API
+                    //
+
                     RecordingRequest newRR = null;
 
                     bool failedValidation = false;
@@ -1403,7 +1406,7 @@ namespace RemotePotatoServer
                                 }
                                 XMLresponse = XMLHelper.Serialize<List<string>>(errors);
                             }
-                            //I'm aware this is not as it should be done, should wait for event (for file to appear) instead...
+                            //Could wait for event (for file to appear) instead...
                             //WTVfse = new FileSystemEventHandler(OnChanged);
                             //foreach (string location in Settings.Default.RecordedTVFolders)
                             //{
