@@ -1,0 +1,25 @@
+----- 10-10-2012 22:47:56: Job 'VS2012RPLiveTV': ANALYSIS started by On File Change on computer 'QUAD' (GoodSync 9.0.2.4 on Windows 7) -----
+VS2012RPLiveTV: ~stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV (C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV) =forced-PropDels=> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012, SavePrevVers, CleanupPrevVers=30d, CleanupOldGens=12m, TmpDest, EstReq, CopyLocked, DetectMovesAndRenames, DetectFolderMoves, FileLinksDrill, CaseSens, Reconnect=3, ChangeLimit=10
+Exclude Hidden, Exclude System, Exclude licens*.rfo|cache.rfo|mru.rfo|mpp*.rfo|RoboForm Online Account.rfp|name *._gstmp|/System Volume Information|Thumbs.db|.DS_Store 
+Left: Reading State File C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\_gsdata_\_file_state._gs
+Locking folder C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV for write
+Left: Files: 1.980 (excluded 3). Folders: 294 (excluded 2). C: NTFS, Free: 49,9 GB, Total: 195 GB
+Right: Reading State File D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\_gsdata_\_file_state._gs
+Locking folder D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012 for write
+Right: Files: 1.980 (excluded 0). Folders: 294 (excluded 1). D: NTFS, Free: 159 GB, Total: 931 GB
+Changes: 4, Conflicts: 0, CopyTime: 0, CopyState: 0, Errors: 0
+Left to Right: Rename/Move File/Folder: 4 
+----- 10-10-2012 22:47:59: Analysis Completed. Time 00:00:03, Speed: 760 files/s -----
+===== 10-10-2012 22:47:59: Job 'VS2012RPLiveTV': SYNC started by On File Change on computer 'QUAD' =====
+VS2012RPLiveTV: ~stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV (C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV) =forced-PropDels=> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012, SavePrevVers, CleanupPrevVers=30d, CleanupOldGens=12m, TmpDest, EstReq, CopyLocked, DetectMovesAndRenames, DetectFolderMoves, FileLinksDrill, CaseSens, Reconnect=3, ChangeLimit=10
+Move D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\Setup2.isl -> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\RemotePotatoSetup.isl
+Move D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\Setup2.isproj -> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\RemotePotatoSetup.isproj
+Move D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\Setup2.isl -> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\RemotePotatoSetup.isl: already done
+Move D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\Setup2.isproj -> D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\Server\Setup2\RemotePotatoSetup.isproj: already done
+Save State File C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\_gsdata_\_file_state._gs
+Save State File D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\_gsdata_\_file_state._gs
+Delete lock file C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\_gsdata_\lock.gsl
+Delete lock file D:\Dropbox\mydoc2\programmeren\remote potato\RPLiveTV-VS2012\_gsdata_\lock.gsl
+Items Synced OK: 4, Errors: 0
+===== 10-10-2012 22:47:59: Sync Completed. Time: 00:00:00, Speed: 5,99 MB/s =====
+
