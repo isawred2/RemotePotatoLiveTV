@@ -1,0 +1,49 @@
+----- 8-10-2012 23:53:31: Job 'RPLiveTVServerSource': ANALYSIS started by On File Change on computer 'QUAD' (GoodSync 9.0.2.4 on Windows 7) -----
+RPLiveTVServerSource: C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV =forced-PropDels=> D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE, SavePrevVers, CleanupPrevVers=30d, CleanupOldGens=12m, TmpDest, EstReq, CopyLocked, DetectMovesAndRenames, DetectFolderMoves, FileLinksDrill, CaseSens, Reconnect=3, CopyCreateTime
+Exclude licens*.rfo|cache.rfo|mru.rfo|mpp*.rfo|RoboForm Online Account.rfp|name *._gstmp|/System Volume Information|Thumbs.db|.DS_Store 
+Left: Reading State File C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\_gsdata_\_file_state._gs
+Locking folder C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV for write
+Left: Files: 4.200 (excluded 0). Folders: 552 (excluded 1). C: NTFS, Free: 51,7 GB, Total: 195 GB
+Right: Reading State File D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\_gsdata_\_file_state._gs
+Locking folder D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE for write
+Right: Files: 4.202 (excluded 0). Folders: 552 (excluded 1). D: NTFS, Free: 160 GB, Total: 931 GB
+On disk file:///D: space required for sync is 0,98 MB, you have 160 GB
+Changes: 21, Conflicts: 0, CopyTime: 0, CopyState: 0, Errors: 0
+Left to Right: Copy File: 18 Delete File: 3 
+----- 8-10-2012 23:53:32: Analysis Completed. Time 00:00:01, Speed: 4.756 files/s -----
+===== 8-10-2012 23:53:33: Job 'RPLiveTVServerSource': SYNC started by On File Change on computer 'QUAD' =====
+RPLiveTVServerSource: C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV =forced-PropDels=> D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE, SavePrevVers, CleanupPrevVers=30d, CleanupOldGens=12m, TmpDest, EstReq, CopyLocked, DetectMovesAndRenames, DetectFolderMoves, FileLinksDrill, CaseSens, Reconnect=3, CopyCreateTime
+Delete File 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.dll'
+Delete File 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.dll.config'
+Delete File 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.pdb'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.dll' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\bin\Release\CommonEPG.dll'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.pdb' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\bin\Release\CommonEPG.pdb'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.csproj.FileListAbsolute.txt' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\obj\Release\CommonEPG.csproj.FileListAbsolute.txt'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.dll' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\obj\Release\CommonEPG.dll'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.pdb' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\obj\Release\CommonEPG.pdb'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\CommonEPG\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache'
+Copy New 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\CSC9D20.tmp' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\obj\Release\CSC9D20.tmp'
+- ERROR: Error copying file: The system cannot find the file specified. (error 2)
+Copying C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.csproj.FileListAbsolute.txt: Size mismatch: Expected 3.100, Transferred 3.897: will correct state info
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.csproj.FileListAbsolute.txt' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.csproj.FileListAbsolute.txt'
+Copying C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.dll: Size mismatch: Expected 0, Transferred 39.424: will correct state info
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.dll' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.dll'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.pdb' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.pdb'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\bin\Release\RemotePotatoUI.vshost.exe' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoUI\bin\Release\RemotePotatoUI.vshost.exe'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.csproj.FileListAbsolute.txt' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\RemotePotatoUI\obj\Release\RemotePotatoUI.csproj.FileListAbsolute.txt'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Release\WTVTranscoder.dll' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\bin\Release\WTVTranscoder.dll'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\bin\Release\WTVTranscoder.pdb' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\bin\Release\WTVTranscoder.pdb'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.csproj.FileListAbsolute.txt' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.csproj.FileListAbsolute.txt'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.dll' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.dll'
+Copy Over 'C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.pdb' -> 'D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\Server\WTVTranscoder\WTVTranscoder\obj\Release\WTVTranscoder.pdb'
+Save State File C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\_gsdata_\_file_state._gs
+Save State File D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\_gsdata_\_file_state._gs
+Delete lock file C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\_gsdata_\lock.gsl
+Sync had errors, delete stamp file C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\_gsdata_\_insync.gsl
+Delete lock file D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\_gsdata_\lock.gsl
+Sync had errors, delete stamp file D:\Dropbox\mydoc2\programmeren\remote potato\RPaddinAndroidMCE\_gsdata_\_insync.gsl
+Sync finished with 1 errors. Click Errors button to see sync errors
+Items Synced OK: 20, Errors: 1
+===== 8-10-2012 23:53:34: Sync Completed. Time: 00:00:01, Speed: 5,28 MB/s =====
+
