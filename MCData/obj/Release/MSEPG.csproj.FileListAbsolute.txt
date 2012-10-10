@@ -32,3 +32,12 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\BDATunePIA.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\mcstoredb.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Release\MSEPG.csprojResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\MSEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\MSEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\BDATunePIA.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\mcstoredb.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\bin\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Release\MSEPG.csprojResolveAssemblyReference.cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Release\MSEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\MCData\obj\Release\MSEPG.pdb

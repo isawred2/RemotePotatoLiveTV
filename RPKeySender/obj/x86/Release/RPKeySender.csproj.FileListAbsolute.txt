@@ -48,3 +48,12 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.exe
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.csproj.GenerateResource.Cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.exe.config
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.exe
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\RPKeySender.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\bin\Release\InputSimulator.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.Form1.resources
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.Properties.Resources.resources
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.csproj.GenerateResource.Cache
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.exe
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RPKeySender\obj\x86\Release\RPKeySender.pdb

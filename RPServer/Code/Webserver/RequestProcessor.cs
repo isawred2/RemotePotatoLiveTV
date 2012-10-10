@@ -28,9 +28,6 @@ namespace RemotePotatoServer
     class RequestProcessor : IDisposable
     {
         private List<FileSystemWatcher> WTVwatcher = new List<FileSystemWatcher>();
-        private FileSystemEventHandler WTVfse;
-        private bool LiveTVScheduled = false;
-        private string LiveTVFilename = "";
 
         #region STATIC Methods - tracking Ips, strings, etc
         // Store ip, state data
@@ -1265,7 +1262,7 @@ namespace RemotePotatoServer
                                 {
                                     files[index].Delete();
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     //file was currently being read or something, just ignore
                                 }
@@ -1815,18 +1812,18 @@ namespace RemotePotatoServer
                } */
 
         // Define the event handlers.
-        private void OnChanged(object source, FileSystemEventArgs e)  //static removed is this ok?
-        {
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-                LiveTVFilename = e.FullPath;
-                LiveTVScheduled = true;
-                foreach (FileSystemWatcher w in WTVwatcher)
-                {
-                    w.Created -= WTVfse;
-                }
-            }
-        }
+        //private void OnChanged(object source, FileSystemEventArgs e)  //static removed is this ok?
+        //{
+        //    if (e.ChangeType == WatcherChangeTypes.Created)
+        //    {
+        //        LiveTVFilename = e.FullPath;
+        //        LiveTVScheduled = true;
+        //        foreach (FileSystemWatcher w in WTVwatcher)
+        //        {
+        //            w.Created -= WTVfse;
+        //        }
+        //    }
+        //}
         private string WebSvcCancelRequest(string ID)
         {
             if (!EPGManager.isWMCOnline)

@@ -15,3 +15,7 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\bin\Release\CommonEPG.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\CommonEPG\obj\Release\CommonEPG.pdb

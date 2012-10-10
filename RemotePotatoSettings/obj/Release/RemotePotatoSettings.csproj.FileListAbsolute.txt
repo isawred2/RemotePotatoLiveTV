@@ -25,3 +25,8 @@ C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.pdb
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.dll
 C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.dll.config
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\bin\Release\RemotePotatoSettings.pdb
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.dll
+C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\RemotePotatoSettings\obj\Release\RemotePotatoSettings.pdb

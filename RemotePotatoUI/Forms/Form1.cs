@@ -331,21 +331,21 @@ namespace RemotePotatoServer
             return;
             ////
 
-            Version lastVersionShown = new Version(Settings.Default.LastUpdateInfoShownForMajVersion, Settings.Default.LastUpdateInfoShownForMinVersion);
-            Version thisVersionMajMinOnly = new Version(Functions.ServerVersion.Major, Functions.ServerVersion.Minor);
+            //Version lastVersionShown = new Version(Settings.Default.LastUpdateInfoShownForMajVersion, Settings.Default.LastUpdateInfoShownForMinVersion);
+            //Version thisVersionMajMinOnly = new Version(Functions.ServerVersion.Major, Functions.ServerVersion.Minor);
 
-            if (thisVersionMajMinOnly > lastVersionShown)
-            {
-                string target;
-                if (Settings.Default.IsTechPreview)
-                    target = "http://www.remotepotato.com/changelog.aspx?techpreview=yes#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
-                else
-                    target = "http://www.remotepotato.com/changelog.aspx?techpreview=no#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
-                //               System.Diagnostics.Process.Start(target);
+            //if (thisVersionMajMinOnly > lastVersionShown)
+            //{
+            //    string target;
+            //    if (Settings.Default.IsTechPreview)
+            //        target = "http://www.remotepotato.com/changelog.aspx?techpreview=yes#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
+            //    else
+            //        target = "http://www.remotepotato.com/changelog.aspx?techpreview=no#v" + thisVersionMajMinOnly.Major.ToString() + "." + thisVersionMajMinOnly.Minor.ToString();
+            //    //               System.Diagnostics.Process.Start(target);
 
-                Settings.Default.LastUpdateInfoShownForMajVersion = thisVersionMajMinOnly.Major;
-                Settings.Default.LastUpdateInfoShownForMinVersion = thisVersionMajMinOnly.Minor;
-            }
+            //    Settings.Default.LastUpdateInfoShownForMajVersion = thisVersionMajMinOnly.Major;
+            //    Settings.Default.LastUpdateInfoShownForMinVersion = thisVersionMajMinOnly.Minor;
+            //}
 
         }
         private void WarnIfStreamingPackNotInstalled()
@@ -1307,27 +1307,27 @@ namespace RemotePotatoServer
             return;
             //////
             // Check for an update
-            RemotePotatoServer.UI.UpdateChecker checker = new RemotePotatoServer.UI.UpdateChecker();
-            Version newestVersion = new Version();
-            string newestVersionDescription = string.Empty;
+            //RemotePotatoServer.UI.UpdateChecker checker = new RemotePotatoServer.UI.UpdateChecker();
+            //Version newestVersion = new Version();
+            //string newestVersionDescription = string.Empty;
 
-            bool isUpdate = checker.IsUpdateAvailable(UIFunctions.ProductCode, Functions.ServerVersion, ref newestVersion, ref newestVersionDescription);
-            Functions.WriteLineToLogFile("UpdateCheck: Current version is " + Functions.ServerVersion.ToString() + ", available version is " + newestVersion.ToString());
-            if (isUpdate)
-            {
-                if (RPMessageBox.ShowQuestionWithTimeout("A newer version of Remote Potato is available.\r\n\r\nDetails: \"" + newestVersionDescription + "\"\r\n\r\nDo you want to download to install?\r\n\r\nThis message will disappear after 20 seconds.", "Update available", 20000) == DialogResult.Yes)
-                {
-                    RPMessageBox.Show("Please follow the links in the web page that is about to open to download the newest version of Remote Potato.\r\n\r\nIMPORTANT: Remember to uninstall this version before installing the newest version!");
-                    System.Diagnostics.Process.Start("http://www.remotepotato.com/downloads.aspx");
-                    // Update
-                    //ApplicationDeployment.CurrentDeployment.UpdateAsync();
-                }
-            }
-            else
-            {
-                if (!silent)
-                    RPMessageBox.Show("This version of Remote Potato is up-to-date.", "Update Check");
-            }
+            //bool isUpdate = checker.IsUpdateAvailable(UIFunctions.ProductCode, Functions.ServerVersion, ref newestVersion, ref newestVersionDescription);
+            //Functions.WriteLineToLogFile("UpdateCheck: Current version is " + Functions.ServerVersion.ToString() + ", available version is " + newestVersion.ToString());
+            //if (isUpdate)
+            //{
+            //    if (RPMessageBox.ShowQuestionWithTimeout("A newer version of Remote Potato is available.\r\n\r\nDetails: \"" + newestVersionDescription + "\"\r\n\r\nDo you want to download to install?\r\n\r\nThis message will disappear after 20 seconds.", "Update available", 20000) == DialogResult.Yes)
+            //    {
+            //        RPMessageBox.Show("Please follow the links in the web page that is about to open to download the newest version of Remote Potato.\r\n\r\nIMPORTANT: Remember to uninstall this version before installing the newest version!");
+            //        System.Diagnostics.Process.Start("http://www.remotepotato.com/downloads.aspx");
+            //        // Update
+            //        //ApplicationDeployment.CurrentDeployment.UpdateAsync();
+            //    }
+            //}
+            //else
+            //{
+            //    if (!silent)
+            //        RPMessageBox.Show("This version of Remote Potato is up-to-date.", "Update Check");
+            //}
         }
         #endregion
 

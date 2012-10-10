@@ -18,7 +18,6 @@ namespace FatAttitude.MediaStreamer
         public bool Transcode { get; set; }
         public bool IsRunning;
         int StartAtSeconds = 0;
-        int lengthLiveTVSegment;
 
         // Private
         SegmentStore Store;
@@ -62,9 +61,6 @@ namespace FatAttitude.MediaStreamer
         #region Top Level - Start/Stop/IsRunning
         public bool IsReStarting = false;
         int SegmentDuration;
-        int NewStartAtSeconds = 0;
-        int oldStartAtSegment = -1;
-        int lastStartAtSeconds = 0;
         public bool Start(int _startAtSegment, ref string txtResult)
         {
             AwaitingSegmentNumber = _startAtSegment; // need to set this pretty sharpish
