@@ -1,42 +1,12 @@
-C:\Users\carl\Visual Studio\Projects\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
-C:\Users\carl\Visual Studio\Projects\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
-C:\Users\carl\Visual Studio\Projects\ShellUtilities\ShellUtilities\obj\Release\ResolveAssemblyReference.cache
-C:\Users\carl\Visual Studio\Projects\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
-C:\Users\carl\Visual Studio\Projects\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoServer\GitHub\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\UltraID3Lib.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
-D:\Users\Carl\Visual Studio\Projects\RemotePotatoGitHub\remotepotato\Visual Studio\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\UltraID3Lib.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\UltraID3Lib.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2012\Projects\remotepotato-4333062-LivetTV\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\ShellUtilities.pdb
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\UltraID3Lib.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\CommonEPG.pdb
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.pdb
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\bin\Release\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.csprojResolveAssemblyReference.cache
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.dll
+C:\Users\Piet\RPLiveTVopGitHub\Server\ShellUtilities\ShellUtilities\obj\Release\ShellUtilities.pdb

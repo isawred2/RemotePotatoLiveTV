@@ -1,5 +1,0 @@
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\LiveTV\obj\x86\Release\ResolveAssemblyReference.cache
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\LiveTV\bin\Release\LiveTV.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\LiveTV\bin\Release\LiveTV.pdb
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\LiveTV\obj\x86\Release\LiveTV.dll
-C:\Users\stefan verhagen\Documents\Visual Studio 2010\Projects\remotepotato-4333062-LivetTV\Server\LiveTV\obj\x86\Release\LiveTV.pdb
